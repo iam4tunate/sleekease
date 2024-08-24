@@ -1,16 +1,8 @@
-import { Heart, Minus, Plus, Trash, Trash2 } from 'lucide-react';
-import PRODUCT from '../assets/product.png';
+import { Heart, Minus, Plus, Trash2 } from 'lucide-react';
 
 export default function CartItem() {
-  function formatProductName(name: string) {
-    const formatedName = name.substring(0, 62);
-    // if (name >= 62) {
-    //   return name;
-    // }
-    return `${formatedName}...`;
-  }
   return (
-    <div className='flex flex-col last-of-type:border-b-0 border-b border-dark border-opacity-20 pb-8 mb-8 last-of-type:pb-0 last-of-type:mb-0'>
+    <div className='flex flex-col last-of-type:border-b-0 border-b border-dark border-opacity-20 pb-5 mb-5 last-of-type:pb-0 last-of-type:mb-0 gap-2'>
       <div className='flex items-start justify-between'>
         <div className='flex gap-x-4'>
           <img
@@ -19,13 +11,12 @@ export default function CartItem() {
             className='w-24 h-24 rounded-md object-cover'
           />
           <div className='flex flex-col gap-y-1.5'>
-            <p className='text-sm font-poppinsMedium'>
-              {formatProductName(`100% Cotton 4 Pcs Men's Fashion Short
-                  Sleeve T-shirt`)}
+            <p className='text-sm capitalize font-poppinsMedium'>
+              Masters Polo
             </p>
-            <span className='text-sm opacity-70 font-poppinsSemibold'>2XL</span>
-            <p className='hidden max-sm:flex font-poppinsSemibold py-0.5'>
-              ₦11,677
+            <span className='text-sm opacity-70 font-'>2XL</span>
+            <p className='hidden max-sm:flex font-poppinsSemibold opacity-90 py-0.5'>
+              12,000 Naira
             </p>
             <div className='w-fit flex items-center gap-x-4 border py-1.5 px-3 rounded-md'>
               <Minus size={16} />
@@ -34,16 +25,14 @@ export default function CartItem() {
             </div>
           </div>
         </div>
-        <p className='max-sm:hidden font-poppinsSemibold text-base opacity-90 pl-3'>
-          ₦11,677
+        <p className='max-sm:hidden font-poppinsSemibold opacity-90 pl-3'>
+          12,000 Naira
         </p>
       </div>
       <div className='self-end flex items-center'>
-        <div className='cursor-pointer text-sm opacity-80 font-poppinsMedium'>
-          Move to Wishlist
-        </div>
+        <Heart size={20} className='text-primary text-xl' />
         <div className='bg-black bg-opacity-20 w-[2px] inline-block h-5 mx-4' />
-        <Trash2 size={17} color='red' className='text-xl text-red' />
+        <Trash2 size={20} color='red' className='text-xl text-red' />
       </div>
     </div>
   );

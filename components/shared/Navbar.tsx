@@ -1,12 +1,37 @@
 'use client';
 import Link from 'next/link';
-import { CircleUserRound, Logs, Search, ShoppingBag } from 'lucide-react';
+import {
+  CircleUserRound,
+  Heart,
+  LogOut,
+  Logs,
+  PackageOpen,
+  ShoppingBag,
+  User,
+} from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
+import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
+import {
+  GiArmoredPants,
+  GiBilledCap,
+  GiHoodie,
+  GiMonclerJacket,
+} from 'react-icons/gi';
+import { IoShirt } from 'react-icons/io5';
+import { TbJacket } from 'react-icons/tb';
 
 export default function Navbar() {
   return (
     <nav className=''>
       <div className='bg-gray-100'>
-        <div className='container padX py-3 text-sm max-sm:text-xs font-poppinsMedium flex flex-wrap gap-x-6 gap-y-1.5 items-center justify-between'>
+        <div className='container padX py-4 text-sm max-sm:text-xs font-poppinsMedium flex flex-wrap gap-x-6 gap-y-1.5 items-center justify-between'>
           <p className=''>Welcome to our store</p>
           <p className='flex items-center gap-x-4 max-sm:gap-x-3'>
             Log in{' '}
@@ -16,41 +41,103 @@ export default function Navbar() {
         </div>
       </div>
       <div className='container padX py-4 w-full'>
-        <div className='grid grid-cols-[20%_50%_30%] max-lg:grid-cols-[15%_60%_15%] max-md:flex max-md:gap-x-4 items-center justify-between'>
+        <div className='flex items-center justify-between'>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className='flex items-center gap-x-1 bg-gray-100 py-2 rounded-sm px-4 max-sm:px-2 cursor-pointer'>
+                <Logs size={20} className='' />
+                <span className='text-sm font-poppinsMedium max-sm:hidden'>
+                  Categories
+                </span>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className='w-44'>
+              <DropdownMenuLabel className='hidden max-sm:flex'>
+                Categories
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup className='space-y-1'>
+                <Link href='/shop/hoodies'>
+                  <DropdownMenuItem>
+                    <GiHoodie className='mr-2 h-4 w-4' />
+                    <span>Hoodies</span>
+                  </DropdownMenuItem>
+                </Link>
+                <Link href='/shop/t-shirts'>
+                  <DropdownMenuItem>
+                    <GiMonclerJacket className='mr-2 h-4 w-4' />
+                    <span>T-shirt</span>
+                  </DropdownMenuItem>
+                </Link>
+                <Link href='/shop/jackets'>
+                  <DropdownMenuItem>
+                    <TbJacket className='mr-2 h-4 w-4' />
+                    <span>Jackets</span>
+                  </DropdownMenuItem>
+                </Link>
+                <Link href='/shop/shirts'>
+                  <DropdownMenuItem>
+                    <IoShirt className='mr-2 h-4 w-4' />
+                    <span>Shirt</span>
+                  </DropdownMenuItem>
+                </Link>
+                <Link href='/shop/pants'>
+                  <DropdownMenuItem>
+                    <GiArmoredPants className='mr-2 h-4 w-4' />
+                    <span>Pants</span>
+                  </DropdownMenuItem>
+                </Link>
+                <Link href='/shop/caps'>
+                  <DropdownMenuItem>
+                    <GiBilledCap className='mr-2 h-4 w-4' />
+                    <span>Caps</span>
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <Link href='/'>
-            <div className='font-lora uppercase font-bold text-lg'>
+            <div className='font-lora uppercase font-black text-lg lg:text-xl italic'>
               Sleekease.
             </div>
           </Link>
-          <div className='w-full flex items-center max-md:ml-auto max-md:w-fit rounded-md'>
-            <Link
-              href='/category'
-              className='flex items-center gap-x-1 bg-gray-100 h-10 rounded-sm px-4 max-sm:hidden'>
-              <Logs size={20} />
-              <span className='text-sm max-md:text-[13px] font-poppinsMedium'>
-                Categories
-              </span>
-            </Link>
-            <div className='w-full flex items-center max-md:hidden'>
-              <input
-                type='text'
-                className='border border-[#0000002d] outline-none h-[39px] w-full bg-transparent'
-              />
-              <button className='h-10 px-5 rounded-tr-md rounded-br-md bg-primary text-white'>
-                <Search size={20} />
-              </button>
-            </div>
-            <Logs size={25} className='hidden max-sm:flex' />
-            <Search size={23} className='hidden max-md:flex ml-4 ' />
-          </div>
-          <div className='flex items-center gap-x-4 justify-self-end'>
-            <CircleUserRound size={23} />
+
+          <div className='flex items-center gap-x-5 max-sm:gap-x-4'>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <CircleUserRound size={23} className='cursor-pointer' />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className='w-44'>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup className='space-y-0.5'>
+                  <DropdownMenuItem>
+                    <User className='mr-2 h-4 w-4' />
+                    <span>Profile</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <PackageOpen className='mr-2 h-4 w-4' />
+                    <span>Orders</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Heart className='mr-2 h-4 w-4' />
+                    <span>Saved Items</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className='bg-red-100 mt-1.5'>
+                  <LogOut className='mr-2 h-4 w-4' />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link
               href='/cart'
               className='flex items-end gap-x-1 cursor-pointer'>
               <span className='relative'>
                 <ShoppingBag size={20} />
-                <span className='bg-primary text-white px-[5px] py-[.5px] rounded-full border border-white absolute -top-2 -right-2 text-[10px] font-bold'>
+                <span className='bg-primary text-white h-5 w-5 flex items-center justify-center rounded-full border border-white absolute -top-3 -right-2 text-[10px] font-bold'>
                   4
                 </span>
               </span>
