@@ -16,10 +16,8 @@ export default function RootLayout({
     <html lang='en'>
       <body className='relative min-h-screen'>
         <Navbar />
-        <main className='h-full pb-14'>{children}</main>
-        <div className='absolute bottom-0 left-0 right-0'>
-          <Footer />
-        </div>
+        <main className='h-full min-h-[calc(100vh-144px)]'>{children}</main>
+        <Footer />
       </body>
     </html>
   );

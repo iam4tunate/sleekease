@@ -1,7 +1,9 @@
 export default function Footer() {
   return (
-    <footer className='border border-t h-14 flex items-center padX'>
-      <p className='font-medium text-sm'>&copy; 2024 Sleekease</p>
+    <footer className='bg-gray-100 border-t h-10 flex items-center'>
+      <div className='padX container'>
+        <p className='font-medium text-sm'>&copy; 2024 Sleekease</p>
+      </div>
     </footer>
   );
 }

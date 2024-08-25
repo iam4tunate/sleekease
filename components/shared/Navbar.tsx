@@ -31,7 +31,7 @@ export default function Navbar() {
   return (
     <nav className='shadow-sm'>
       <div className='bg-gray-100'>
-        <div className='container padX py-4 text-sm max-sm:text-xs font-poppinsMedium flex flex-wrap gap-x-6 gap-y-1.5 items-center justify-between'>
+        <div className='container padX h-12 text-sm max-sm:text-xs font-poppinsMedium flex flex-wrap gap-x-6 gap-y-1.5 items-center justify-between'>
           <p className=''>Welcome to our store</p>
           <div className='flex items-center gap-x-4 max-sm:gap-x-3'>
             <Link href='/auth/login'>Log in</Link>
@@ -40,8 +40,8 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-      <div className='container padX py-4 w-full'>
-        <div className='flex items-center justify-between'>
+      <div className='container padX w-full'>
+        <div className='h-14 flex items-center justify-between'>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <div className='flex items-center gap-x-1 bg-gray-100 py-2 rounded-sm px-4 max-sm:px-2 cursor-pointer'>

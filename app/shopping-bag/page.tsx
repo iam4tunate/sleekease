@@ -1,4 +1,6 @@
-import { CartItem } from '@/components/shared';
+import { ShopItem } from '@/components/shared';
+import { truncate } from '@/lib/utils';
+import { Heart, Minus, Plus, Trash2 } from 'lucide-react';
 
 export default function Page() {
   return (
@@ -6,10 +8,9 @@ export default function Page() {
       <div className='heading mb-4'>Shopping Bag</div>
       <div className='grid grid-cols-[55%_35%] max-lg:grid-cols-[60%_35%] gap-y-12 max-md:grid-cols-1 justify-between'>
         <div className=''>
-          <CartItem />
-          <CartItem />
-          <CartItem />
-          <CartItem />
+          <ShopItem />
+          <ShopItem />
+          <ShopItem />
         </div>
         <div className='border border-dark border-opacity-20  py-3.5 rounded-md h-fit'>
           <div className='px-4'>
