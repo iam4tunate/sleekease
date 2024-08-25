@@ -14,10 +14,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body>
+      <body className='relative min-h-screen'>
         <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <main className='h-full pb-14'>{children}</main>
+        <div className='absolute bottom-0 left-0 right-0'>
+          <Footer />
+        </div>
       </body>
     </html>
   );

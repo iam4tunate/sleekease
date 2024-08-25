@@ -3,7 +3,7 @@ import Image from 'next/image';
 export default function ProductCard() {
   return (
     <div className=''>
-      <div className='h-[25rem] max-lg:h-[30rem] relative cursor-pointer'>
+      <div className='h-[25rem] max-md:h-[30rem] max-sm:h-[25rem] relative cursor-pointer'>
         <Image
           fill
           loading='lazy'
@@ -12,11 +12,11 @@ export default function ProductCard() {
           className='object-cover w-full'
         />
       </div>
-      <div className='pl-2 pt-2'>
-        <p className='capitalize font-lora font-medium text-lg'>
+      <div className='pt-2 flex items-center justify-between text-base'>
+        <p className='w-[75%] truncate ... capitalize font-medium font-lora'>
           Twill Jacket Black
         </p>
-        <p className='font-lora font-semibold text-sm'>4,900 Naira</p>
+        <p className='font-poppinsMedium'>₦12,900</p>
       </div>
     </div>
   );

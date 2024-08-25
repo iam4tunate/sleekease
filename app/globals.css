@@ -100,4 +100,7 @@
   .padY {
     @apply py-14 max-lg:py-10 max-sm:py-7;
   }
+  .heading {
+    @apply font-lora font-medium text-3xl max-sm:text-2xl pb-4 max-md:pb-3 capitalize;
+  }
 }

@@ -8,15 +8,15 @@ export default function CartItem() {
           <img
             src='/images/shirt1_2.jpg'
             alt=''
-            className='w-24 h-24 rounded-md object-cover'
+            className='w-24 h-full min-h-28 rounded-md object-cover'
           />
-          <div className='flex flex-col gap-y-1.5'>
-            <p className='text-sm capitalize font-poppinsMedium'>
+          <div className='flex flex-col gap-y-2'>
+            <p className='capitalize font-poppinsMedium'>
               Masters Polo
             </p>
-            <span className='text-sm opacity-70 font-'>2XL</span>
-            <p className='hidden max-sm:flex font-poppinsSemibold opacity-90 py-0.5'>
-              12,000 Naira
+            <span className='opacity-70'>2XL</span>
+            <p className='hidden max-sm:flex font-poppinsMedium opacity-90'>
+              ₦12,000
             </p>
             <div className='w-fit flex items-center gap-x-4 border py-1.5 px-3 rounded-md'>
               <Minus size={16} />
@@ -25,8 +25,8 @@ export default function CartItem() {
             </div>
           </div>
         </div>
-        <p className='max-sm:hidden font-poppinsSemibold opacity-90 pl-3'>
-          12,000 Naira
+        <p className='max-sm:hidden font-poppinsMedium opacity-90 pl-3'>
+          ₦12,000
         </p>
       </div>
       <div className='self-end flex items-center'>

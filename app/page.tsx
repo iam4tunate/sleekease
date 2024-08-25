@@ -23,7 +23,7 @@ export default function Home() {
       </div>
 
       <div className='container padX padY'>
-        <div className='font-lora font-medium text-3xl max-sm:text-2xl pb-4'>
+        <div className='heading'>
           New Arrivals
         </div>
         <ProductGrid />
@@ -43,7 +43,7 @@ export default function Home() {
               Effortless Style,
               <br /> Every Day.
             </h2>
-            <p className='w-[40%] max-lg:w-[50%] max-sm:w-[60%] mx-auto leading-relaxed pt-1 pb-2'>
+            <p className='w-[40%] max-lg:w-[50%] max-sm:w-[70%] mx-auto leading-relaxed pt-1 pb-2 max-sm:text-[13px]'>
               Discover the perfect wardrobe essentials that blend style and
               comfort for every occasion.
             </p>

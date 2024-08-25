@@ -5,7 +5,7 @@ import {
   Heart,
   LogOut,
   Logs,
-  PackageOpen,
+  Package2,
   ShoppingBag,
   User,
 } from 'lucide-react';
@@ -29,15 +29,15 @@ import { TbJacket } from 'react-icons/tb';
 
 export default function Navbar() {
   return (
-    <nav className=''>
+    <nav className='shadow-sm'>
       <div className='bg-gray-100'>
         <div className='container padX py-4 text-sm max-sm:text-xs font-poppinsMedium flex flex-wrap gap-x-6 gap-y-1.5 items-center justify-between'>
           <p className=''>Welcome to our store</p>
-          <p className='flex items-center gap-x-4 max-sm:gap-x-3'>
-            Log in{' '}
+          <div className='flex items-center gap-x-4 max-sm:gap-x-3'>
+            <Link href='/auth/login'>Log in</Link>
             <span className='h-3.5 w-[1.5px] bg-dark inline-block'></span>
-            Create account
-          </p>
+            <Link href='/auth/register'>Create account</Link>
+          </div>
         </div>
       </div>
       <div className='container padX py-4 w-full'>
@@ -112,28 +112,34 @@ export default function Navbar() {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup className='space-y-0.5'>
-                  <DropdownMenuItem>
-                    <User className='mr-2 h-4 w-4' />
-                    <span>Profile</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <PackageOpen className='mr-2 h-4 w-4' />
-                    <span>Orders</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Heart className='mr-2 h-4 w-4' />
-                    <span>Saved Items</span>
-                  </DropdownMenuItem>
+                  <Link href='/customer/overview'>
+                    <DropdownMenuItem>
+                      <User className='mr-2 h-4 w-4' />
+                      <span>Overview</span>
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href='/customer/orders'>
+                    <DropdownMenuItem>
+                      <Package2 className='mr-2 h-4 w-4' />
+                      <span>Orders</span>
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href='/customer/saved'>
+                    <DropdownMenuItem>
+                      <Heart className='mr-2 h-4 w-4' />
+                      <span>Saved Items</span>
+                    </DropdownMenuItem>
+                  </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className='bg-red-100 mt-1.5'>
+                <DropdownMenuItem className='bg-red-50 mt-1.5'>
                   <LogOut className='mr-2 h-4 w-4' />
                   <span>Log out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Link
-              href='/cart'
+              href='/shopping-bag'
               className='flex items-end gap-x-1 cursor-pointer'>
               <span className='relative'>
                 <ShoppingBag size={20} />
