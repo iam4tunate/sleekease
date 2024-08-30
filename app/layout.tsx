@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { Footer, Navbar } from '@/components/shared';
+import { QueryProvider } from '@/lib/react-query/Provider';
+import { Toaster } from 'sonner';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -15,9 +17,15 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className='relative min-h-screen'>
-        <Navbar />
-        <main className='h-full min-h-[calc(100vh-144px)]'>{children}</main>
-        <Footer />
+        <QueryProvider>
+            <Toaster
+              richColors
+              className='font-rubikMedium text-base max-sm:text-sm'
+            />
+            <Navbar />
+            <main className='h-full min-h-[calc(100vh-144px)]'>{children}</main>
+            <Footer />
+        </QueryProvider>
       </body>
     </html>
   );

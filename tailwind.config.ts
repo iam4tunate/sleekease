@@ -19,15 +19,15 @@ const config = {
     },
     extend: {
       fontFamily: {
-        poppinsLight: ['poppins-light', 'sans-serif'],
-        poppins: ['poppins-regular', 'sans-serif'],
-        poppinsMedium: ['poppins-medium', 'sans-serif'],
-        poppinsSemibold: ['poppins-semibold', 'sans-serif'],
-        poppinsBold: ['poppins-bold', 'sans-serif'],
+        rubikLight: ['rubik-light', 'sans-serif'],
+        rubik: ['rubik-regular', 'sans-serif'],
+        rubikMedium: ['rubik-medium', 'sans-serif'],
+        rubikSemibold: ['rubik-semibold', 'sans-serif'],
+        rubikBold: ['rubik-bold', 'sans-serif'],
         lora: ['lora', 'sans-serif'],
       },
       colors: {
-        dark: '#070707',
+        orange: '#E8572A',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

@@ -3,7 +3,6 @@ import Link from 'next/link';
 import {
   CircleUserRound,
   Heart,
-  LogOut,
   Logs,
   Package2,
   ShoppingBag,
@@ -27,16 +26,16 @@ import {
 import { IoShirt } from 'react-icons/io5';
 import { TbJacket } from 'react-icons/tb';
 
-export default function Navbar() {
+export default async function Navbar() {
   return (
     <nav className='shadow-sm'>
       <div className='bg-gray-100'>
-        <div className='container padX h-12 text-sm max-sm:text-xs font-poppinsMedium flex flex-wrap gap-x-6 gap-y-1.5 items-center justify-between'>
-          <p className=''>Welcome to our store</p>
+        <div className='container padX h-12 flex flex-wrap gap-x-6 gap-y-1.5 items-center justify-between'>
+          <p className='font-rubikMedium'>Welcome to our store</p>
           <div className='flex items-center gap-x-4 max-sm:gap-x-3'>
-            <Link href='/auth/login'>Log in</Link>
-            <span className='h-3.5 w-[1.5px] bg-dark inline-block'></span>
-            <Link href='/auth/register'>Create account</Link>
+            <Link href='/login'>Log in</Link>
+            <span className='h-3.5 w-[1.5px] bg-primary inline-block'></span>
+            <Link href='/register'>Create account</Link>
           </div>
         </div>
       </div>
@@ -46,7 +45,7 @@ export default function Navbar() {
             <DropdownMenuTrigger asChild>
               <div className='flex items-center gap-x-1 bg-gray-100 py-2 rounded-sm px-4 max-sm:px-2 cursor-pointer'>
                 <Logs size={20} className='' />
-                <span className='text-sm font-poppinsMedium max-sm:hidden'>
+                <span className='font-rubikMedium max-sm:hidden'>
                   Categories
                 </span>
               </div>
@@ -106,7 +105,7 @@ export default function Navbar() {
           <div className='flex items-center gap-x-5 max-sm:gap-x-4'>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <CircleUserRound size={23} className='cursor-pointer' />
+                <CircleUserRound size={26} className='cursor-pointer' />
               </DropdownMenuTrigger>
               <DropdownMenuContent className='w-44'>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -132,8 +131,7 @@ export default function Navbar() {
                   </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className='bg-red-50 mt-1.5'>
-                  <LogOut className='mr-2 h-4 w-4' />
+                <DropdownMenuItem className='w-fit mx-auto text-[13px] px-2 font-rubikMedium bg-red-50 mt-1.5'>
                   <span>Log out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -142,8 +140,8 @@ export default function Navbar() {
               href='/shopping-bag'
               className='flex items-end gap-x-1 cursor-pointer'>
               <span className='relative'>
-                <ShoppingBag size={20} />
-                <span className='bg-primary text-white h-5 w-5 flex items-center justify-center rounded-full border border-white absolute -top-3 -right-2 text-[10px] font-bold'>
+                <ShoppingBag size={23} />
+                <span className='bg-primary text-white h-5 w-5 flex items-center justify-center rounded-full border border-white absolute -top-2 -right-2 text-[10px] font-bold'>
                   4
                 </span>
               </span>

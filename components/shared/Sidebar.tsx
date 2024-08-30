@@ -13,7 +13,7 @@ export default function Sidebar() {
             key={link.name}
             href={link.href}
             className={`first:rounded-t-sm px-3 flex items-center gap-x-4 py-4 ${
-              pathname === link.href ? 'bg-gray-200 font-poppinsMedium' : ''
+              pathname === link.href ? 'bg-gray-200 font-rubikMedium' : ''
             }`}>
             <link.icon size={20} />
             <span>{link.name}</span>

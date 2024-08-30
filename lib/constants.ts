@@ -1,5 +1,6 @@
 import {
   ArrowLeftRight,
+  CirclePlus,
   Heart,
   History,
   Package2,
@@ -11,6 +12,7 @@ export const NavLinks = [
   { name: 'Orders', href: '/customer/orders', icon: Package2 },
   { name: 'Saved Items', href: '/customer/saved', icon: Heart },
   { name: 'Recently Viewed', href: '/customer/recently-viewed', icon: History },
+  { name: 'Create Item', href: '/admin/create', icon: CirclePlus },
 ];
 
 export const AccountStats = [

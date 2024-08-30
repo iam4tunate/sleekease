@@ -12,11 +12,11 @@ export default function ProductCard() {
           className='object-cover w-full'
         />
       </div>
-      <div className='pt-2 flex items-center justify-between text-base'>
+      <div className='pt-2 px-3 max-sm:px-2 flex items-center justify-between text-base'>
         <p className='w-[75%] truncate ... capitalize font-medium font-lora'>
           Twill Jacket Black
         </p>
-        <p className='font-poppinsMedium'>₦12,900</p>
+        <p className='font-rubikMedium'>₦12,900</p>
       </div>
     </div>
   );

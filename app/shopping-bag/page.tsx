@@ -5,7 +5,7 @@ import { Heart, Minus, Plus, Trash2 } from 'lucide-react';
 export default function Page() {
   return (
     <div className='container padX padY'>
-      <div className='heading mb-4'>Shopping Bag</div>
+      <div className='heading mb-6'>Shopping Bag</div>
       <div className='grid grid-cols-[55%_35%] max-lg:grid-cols-[60%_35%] gap-y-12 max-md:grid-cols-1 justify-between'>
         <div className=''>
           <ShopItem />
@@ -14,19 +14,19 @@ export default function Page() {
         </div>
         <div className='border border-dark border-opacity-20  py-3.5 rounded-md h-fit'>
           <div className='px-4'>
-            <div className='font-poppinsSemibold text- pb-4'>
+            <div className='font-rubikSemibold text- pb-4'>
               Shopping Summary
             </div>
             <div className='space-y-4'>
-              <span className='flex items-center justify-between font-poppinsMedium'>
+              <span className='flex items-center justify-between font-rubikMedium'>
                 <span>Subtotal</span>
                 <span>₦12,900</span>
               </span>
-              <span className='flex items-center justify-between font-poppinsMedium'>
+              <span className='flex items-center justify-between font-rubikMedium'>
                 <span>Shipping</span>
                 <span>₦2,000</span>
               </span>
-              <span className='flex items-center justify-between font-poppinsMedium'>
+              <span className='flex items-center justify-between font-rubikMedium'>
                 <span>Grand Total</span>
                 <span>₦14,000</span>
               </span>

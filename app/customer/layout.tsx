@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { NavLinks } from '@/lib/constants';
 import { Heart, History, Menu, Package2, User } from 'lucide-react';
 import Link from 'next/link';
 
@@ -23,30 +24,14 @@ export default function layout({ children }: { children: React.ReactNode }) {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup className='space-y-0.5'>
-              <Link href='/customer/overview'>
-                <DropdownMenuItem>
-                  <User className='mr-2 h-4 w-4' />
-                  <span>Overview</span>
-                </DropdownMenuItem>
-              </Link>
-              <Link href='/customer/orders'>
-                <DropdownMenuItem>
-                  <Package2 className='mr-2 h-4 w-4' />
-                  <span>Orders</span>
-                </DropdownMenuItem>
-              </Link>
-              <Link href='/customer/saved'>
-                <DropdownMenuItem>
-                  <Heart className='mr-2 h-4 w-4' />
-                  <span>Saved Items</span>
-                </DropdownMenuItem>
-              </Link>
-              <Link href='/customer/recently-viewed'>
-                <DropdownMenuItem>
-                  <History className='mr-2 h-4 w-4' />
-                  <span>Recently Viewed</span>
-                </DropdownMenuItem>
-              </Link>
+              {NavLinks.map((link) => (
+                <Link key={link.name} href={link.href}>
+                  <DropdownMenuItem>
+                    <link.icon className='mr-2 h-4 w-4' />
+                    <span>{link.name}</span>
+                  </DropdownMenuItem>
+                </Link>
+              ))}
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>

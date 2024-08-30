@@ -23,9 +23,7 @@ export default function Home() {
       </div>
 
       <div className='container padX padY'>
-        <div className='heading'>
-          New Arrivals
-        </div>
+        <div className='heading'>New Arrivals</div>
         <ProductGrid />
       </div>
 
@@ -57,6 +55,7 @@ export default function Home() {
       </div>
 
       <div className='padY padX'>
+        <div className='heading'>Top Selling</div>
         <ProductGrid />
       </div>
     </div>
