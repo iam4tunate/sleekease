@@ -1,6 +1,4 @@
 import { ShopItem } from '@/components/shared';
-import { truncate } from '@/lib/utils';
-import { Heart, Minus, Plus, Trash2 } from 'lucide-react';
 
 export default function Page() {
   return (

@@ -9,7 +9,7 @@ export default function Page() {
       </div>
       <div className='grid grid-cols-2 max-lg:grid-cols-1 gap-6 px-4 max-sm:px-2'>
         <div className='border rounded-md'>
-          <p className='border-b px-4 max-sm:px-2 py-4 pb-2 uppercase font-rubikMedium'>
+          <p className='border-b px-4 max-sm:px-2 py-4 pb-2'>
             Account Details
           </p>
           <div className='px-4 max-sm:px-2 py-4'>
@@ -21,7 +21,7 @@ export default function Page() {
           </div>
         </div>
         <div className='border rounded-md'>
-          <p className='border-b px-4 max-sm:px-2 py-4 pb-2 uppercase font-rubikMedium'>
+          <p className='border-b px-4 max-sm:px-2 py-4 pb-2'>
             Shipping Address
           </p>
           <div className='px-4 space-y-2 py-4 max-sm:px-2'>

@@ -1,4 +1,5 @@
 'use client';
+
 import Link from 'next/link';
 import {
   CircleUserRound,
@@ -25,12 +26,16 @@ import {
 } from 'react-icons/gi';
 import { IoShirt } from 'react-icons/io5';
 import { TbJacket } from 'react-icons/tb';
+import { useUserContext } from '@/context/AuthContext';
 
-export default async function Navbar() {
+export default function Navbar() {
+  const { user } = useUserContext();
+  console.log('my-nav', user);
+
   return (
     <nav className='shadow-sm'>
       <div className='bg-gray-100'>
-        <div className='container padX h-12 flex flex-wrap gap-x-6 gap-y-1.5 items-center justify-between'>
+        <div className='container padX h-12 flex flex-wrap gap-x-6 items-center justify-between'>
           <p className='font-rubikMedium'>Welcome to our store</p>
           <div className='flex items-center gap-x-4 max-sm:gap-x-3'>
             <Link href='/login'>Log in</Link>

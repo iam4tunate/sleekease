@@ -28,6 +28,7 @@ const config = {
       },
       colors: {
         orange: '#E8572A',
+        darkOrange: '#BA4622',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

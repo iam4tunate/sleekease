@@ -19,22 +19,47 @@ import { SignupValidation } from '@/lib/validation';
 import Spinner from '@/components/shared/Spinner';
 import Image from 'next/image';
 import Link from 'next/link';
+import { registerUser } from '@/lib/actions/user.actions';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useLoginUser, useRegisterUser } from '@/lib/react-query/queries';
+import { toast } from 'sonner';
+import { useUserContext } from '@/context/AuthContext';
 
 export default function Page() {
-  const isCreating = false;
+  const router = useRouter();
+  const { checkAuthUser } = useUserContext();
+
+  const { mutateAsync: registerUser, isPending: registeringUser } =
+    useRegisterUser();
+  const { mutateAsync: loginUser, isPending: loggingInUser } = useLoginUser();
 
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
     defaultValues: {
-      first_name: '',
-      last_name: '',
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
     },
   });
 
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
-    console.log(values);
+    const newAccount = await registerUser(values);
+
+    const session = await loginUser({
+      email: values.email,
+      password: values.password,
+    });
+
+    const isLoggedIn = await checkAuthUser();
+    console.log('isLoggedIn', isLoggedIn);
+    if (isLoggedIn) {
+      form.reset();
+      router.push('/');
+    } else {
+      return toast('Sign up failed. Please try again');
+    }
   }
 
   return (
@@ -55,7 +80,7 @@ export default function Page() {
             className='w-full space-y-5'>
             <FormField
               control={form.control}
-              name='first_name'
+              name='firstName'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
@@ -68,7 +93,7 @@ export default function Page() {
             />
             <FormField
               control={form.control}
-              name='last_name'
+              name='lastName'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
@@ -106,7 +131,7 @@ export default function Page() {
               )}
             />
             <Button type='submit' className='w-full'>
-              {isCreating ? (
+              {registeringUser ? (
                 <>
                   <Spinner size={20} />
                   <span className='pl-1'>Please wait...</span>

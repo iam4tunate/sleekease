@@ -1,12 +1,11 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { QUERY_KEYS } from './keys';
-import { INewUser } from '../types';
-import { createUser, getCurrentUser, loginUser, logoutUser } from '../actions';
+import { loginUser, registerUser } from '../actions/user.actions';
 
-export const useCreateUser = () => {
+export const useRegisterUser = () => {
   return useMutation({
-    mutationFn: (user: INewUser) => createUser(user),
+    mutationFn: (user: INewUser) => registerUser(user),
     onSuccess: () => {
       toast.success('Account created successfully');
     },
@@ -28,15 +27,15 @@ export const useLoginUser = () => {
   });
 };
 
-export const useLogoutUser = () => {
-  return useMutation({
-    mutationFn: logoutUser,
-  });
-};
+// export const useLogoutUser = () => {
+//   return useMutation({
+//     mutationFn: logoutUser,
+//   });
+// };
 
-export const useGetCurrentUser = () => {
-  return useQuery({
-    queryKey: [QUERY_KEYS.GET_CURRENT_USER],
-    queryFn: getCurrentUser,
-  });
-};
+// export const useGetCurrentUser = () => {
+//   return useQuery({
+//     queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+//     queryFn: getCurrentUser,
+//   });
+// };

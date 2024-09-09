@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Footer, Navbar } from '@/components/shared';
 import { QueryProvider } from '@/lib/react-query/Provider';
 import { Toaster } from 'sonner';
+import AuthContextProvider from '@/context/AuthProvider';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -18,6 +19,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className='relative min-h-screen'>
         <QueryProvider>
+          <AuthContextProvider>
             <Toaster
               richColors
               className='font-rubikMedium text-base max-sm:text-sm'
@@ -25,6 +27,7 @@ export default function RootLayout({
             <Navbar />
             <main className='h-full min-h-[calc(100vh-144px)]'>{children}</main>
             <Footer />
+          </AuthContextProvider>
         </QueryProvider>
       </body>
     </html>

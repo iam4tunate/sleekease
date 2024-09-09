@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Carousel, ProductGrid } from '@/components/shared';
 import { Button } from '@/components/ui/button';
+import Newsletter from '@/components/shared/Newsletter';
 
 export default function Home() {
   return (
@@ -8,9 +9,9 @@ export default function Home() {
       <div className='container padX pb-6 max-sm:pb-3 pt-6'>
         <div className='font-lora text-5xl max-md:text-4xl max-sm:text-3xl max-sm:w-full w-[80%] leading-[1.2]'>
           Simplifying your
-          <span className='text-primary inline'> shopping </span>
+          <span className='text-orange inline'> shopping </span>
           to focus on making
-          <div className='text-primary inline'> memories </div>that matter.
+          <div className='text-orange inline'> memories </div>that matter.
         </div>
       </div>
 
@@ -57,6 +58,10 @@ export default function Home() {
       <div className='padY padX'>
         <div className='heading'>Top Selling</div>
         <ProductGrid />
+      </div>
+
+      <div className='container padX padY'>
+        <Newsletter />
       </div>
     </div>
   );

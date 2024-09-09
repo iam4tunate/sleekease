@@ -18,9 +18,16 @@ import { SigninValidation } from '@/lib/validation';
 import Spinner from '@/components/shared/Spinner';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useLoginUser } from '@/lib/react-query/queries';
+import { useUserContext } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
-  const isLoggingIn = false;
+  const router = useRouter();
+  const { checkAuthUser } = useUserContext();
+
+  const { mutateAsync: loginUser, isPending: loggingInUser } = useLoginUser();
+
   const form = useForm<z.infer<typeof SigninValidation>>({
     resolver: zodResolver(SigninValidation),
     defaultValues: {
@@ -30,7 +37,17 @@ export default function Page() {
   });
 
   async function onSubmit(values: z.infer<typeof SigninValidation>) {
-    console.log(values);
+    const session = await loginUser({
+      email: values.email,
+      password: values.password,
+    });
+
+    const isLoggedIn = await checkAuthUser();
+    console.log('isLoggedIn', isLoggedIn);
+    if (isLoggedIn) {
+      form.reset();
+      router.push('/');
+    }
   }
 
   return (
@@ -76,7 +93,7 @@ export default function Page() {
               )}
             />
             <Button type='submit' className='w-full'>
-              {isLoggingIn ? (
+              {loggingInUser ? (
                 <>
                   <Spinner size={20} />
                   <span className='pl-1'>Please wait...</span>

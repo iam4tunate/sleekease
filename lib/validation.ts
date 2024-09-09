@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
 export const SignupValidation = z.object({
-  first_name: z.string().min(1, {
+  firstName: z.string().min(1, {
     message: 'Field is required.',
   }),
-  last_name: z.string().min(1, {
+  lastName: z.string().min(1, {
     message: 'Field is required.',
   }),
   email: z.string().email(),
