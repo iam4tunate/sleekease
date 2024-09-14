@@ -50,7 +50,7 @@ export default function Cart() {
       <div className='py-12'>
         <TopSelling />
       </div>
-      <div className='container'>
+      <div className='container mb-8 padX'>
         <ShopCta />
       </div>
     </div>
