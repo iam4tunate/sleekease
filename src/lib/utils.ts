@@ -11,3 +11,7 @@ export function truncate(sentence: string, maxLength: number) {
   }
   return sentence;
 }
+
+export function formatNumberWithCommas(value: number) {
+  return value.toLocaleString();
+}

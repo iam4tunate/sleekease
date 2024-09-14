@@ -1,15 +1,24 @@
-import { CartItem } from "@/components/shared";
+import { CartItem, ShopCta, TopSelling } from '@/components/shared';
+import { useGetCurrentUser } from '@/lib/react-query/queries';
+import { Models } from 'appwrite';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function Cart() {
+  const { data: currentUser } = useGetCurrentUser();
+  const cart = currentUser?.cart ?? [];
+
   return (
     <div className='container padX padY'>
-      <div className='heading mb-6'>Shopping Bag</div>
-      <div className='grid grid-cols-[55%_35%] max-lg:grid-cols-[60%_35%] gap-y-12 max-md:grid-cols-1 justify-between'>
-        <div className=''>
-          <CartItem />
-          <CartItem />
-          <CartItem />
-        </div>
+      <div className='heading'>Shopping Cart</div>
+      <div className='grid grid-cols-[55%_35%] max-lg:grid-cols-[60%_35%] gap-y-6 max-md:grid-cols-1 justify-between'>
+        <ScrollArea className='max-h-[60vh] w-full rounded-md border p-4 bg-[#FDFDFD] shadow'>
+          {cart
+            .slice()
+            .reverse()
+            .map((cartItem: Models.Document) => (
+              <CartItem key={cartItem.$id} cartItem={cartItem} />
+            ))}
+        </ScrollArea>
         <div className='border border-dark border-opacity-20  py-3.5 rounded-md h-fit'>
           <div className='px-4'>
             <div className='font-rubikSemibold text- pb-4'>
@@ -36,6 +45,10 @@ export default function Cart() {
           </div>
         </div>
       </div>
+      <div className='py-12'>
+        <TopSelling />
+      </div>
+      <ShopCta />
     </div>
-  )
+  );
 }

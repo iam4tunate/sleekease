@@ -4,12 +4,12 @@ export default function Spinner({
   colored,
   size,
 }: {
-  colored?: boolean;
+  colored?: string;
   size: number;
 }) {
   return (
     <ClipLoader
-      color={colored ? '#04563B' : '#ffffff'}
+      color={colored ? colored : '#ffffff'}
       size={size}
       aria-label='Loading Spinner'
     />

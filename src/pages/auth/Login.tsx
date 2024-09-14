@@ -15,8 +15,8 @@ import { useUserContext } from '@/context/AuthContext';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Spinner } from '@/components/shared';
 import { useLoginUser } from '@/lib/react-query/queries';
-import { LoginValidation } from '@/lib/validation';
 import { useEffect } from 'react';
+import { LoginValidation } from '@/lib/validation';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -42,20 +42,22 @@ export default function Login() {
     });
 
     const isLoggedIn = await checkAuthUser();
-    
+
     if (isLoggedIn) {
       form.reset();
       navigate(from, { replace: true });
     }
   }
+  // TODO: MERGE AT LOGIN
+  // useMergeCartOnLogin(user.id);
 
   //! redirecting to the homepage if user already logged in
   useEffect(() => {
-    if (isAuthenticated) navigate('/');
-  }, [navigate, isAuthenticated]);
+    if (isAuthenticated) navigate(from, { replace: true });
+  }, [navigate, isAuthenticated, from]);
 
   return (
-    <div className='grid grid-cols-2 max-lg:grid-cols-1 items-center gap-x-12 container min-h-[30rem] padY'>
+    <div className='grid grid-cols-2 max-lg:grid-cols-1 items-start gap-x-12 container padY'>
       <div className='flex flex-col items-center justify-center w-[90%] max-lg:w-[70%] max-sm:w-full mx-auto'>
         <div className='w-[70%] max-sm:w-[90%] text-center pb-6 space-y-1'>
           <div className='font-lora text-3xl max-sm:text-3xl'>
@@ -115,12 +117,13 @@ export default function Login() {
             className='font-rubikMedium text-orange pl-1.5 pr-0.5 underline'>
             Register Now
           </Link>{' '}
-          for exclusive fashion deals and top styles.
+          for exclusive top styles.
         </p>
       </div>
-      <div className='relative max-lg:hidden rounded-2xl min-h-[30rem]'>
+      <div className='relative max-lg:hidden rounded-2xl h-full'>
+        <div className='bg-black absolute top-0 bottom-0 w-full bg-opacity-20 rounded-2xl' />
         <img
-          src='/public/images/authBG2.jpg'
+          src='/images/authBG2.jpg'
           alt='banner'
           className='h-full w-full object-cover rounded-2xl'
         />

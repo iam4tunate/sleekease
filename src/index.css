@@ -89,7 +89,28 @@
     @apply border-border;
   }
   body {
-    @apply bg-background font-rubik text-primary text-sm leading-tight;
+    @apply bg-background font-rubik text-primary text-sm leading-tight remove-scrollbar;
+  }
+
+  /* Remove scrollbar */
+  .remove-scrollbar::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+    border-radius: 0px;
+  }
+
+  .remove-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .remove-scrollbar::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 0px;
+  }
+
+  .remove-scrollbar::-webkit-scrollbar-thumb:hover {
+    /* background: #1e2238; */
+    background: transparent;
   }
 }
 
@@ -98,9 +119,20 @@
     @apply px-8 max-md:px-6 max-sm:px-4;
   }
   .padY {
-    @apply py-14 max-lg:py-10 max-sm:py-7;
+    @apply py-8 max-lg:py-6 max-sm:py-4;
   }
   .heading {
-    @apply font-lora font-medium text-3xl max-sm:text-2xl pb-4 max-md:pb-3 capitalize;
+    @apply font-lora font-medium text-3xl max-sm:text-2xl pb-6 max-md:pb-4 capitalize;
+  }
+
+  /* Custom class to remove number input arrows */
+  .no-arrow::-webkit-outer-spin-button,
+  .no-arrow::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .no-arrow {
+    -moz-appearance: textfield; /* Firefox */
   }
 }

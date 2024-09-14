@@ -1,21 +1,44 @@
+import { useUserContext } from '@/context/AuthContext';
 import { AccountStats } from '@/lib/constants';
+import { useLogoutUser } from '@/lib/react-query/queries';
 import { UserCircle } from 'lucide-react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Overview() {
+  const navigate = useNavigate();
+  const { user } = useUserContext();
+  const { mutateAsync: logout, isSuccess } = useLogoutUser();
+
+  const handleLogout = async () => {
+    await logout();
+  };
+
+  useEffect(() => {
+    if (isSuccess) navigate(0);
+  }, [navigate, isSuccess]);
+
   return (
     <div>
-      <div className='border-b mb-6 px-4 max-sm:px-2 pb-2 text-base font-rubikSemibold'>
-        Account Overview
+      <div className='border-b mb-6 px-4 max-sm:px-2 pb-2 flex items-center justify-between flex-wrap gap-x-4'>
+        <p className='text-base font-rubikSemibold'>Account Overview</p>
+        <div
+          onClick={handleLogout}
+          className='md:hidden bg-orange bg-opacity-10 text-orange py-2 px-4 rounded-md cursor-pointer'>
+          Logout
+        </div>
       </div>
       <div className='grid grid-cols-2 max-lg:grid-cols-1 gap-6 px-4 max-sm:px-2'>
         <div className='border rounded-md'>
-          <p className='font-rubikMedium border-b px-4 max-sm:px-2 py-4 pb-2'>Account Details</p>
+          <p className='font-rubikMedium border-b px-4 max-sm:px-2 py-4 pb-2'>
+            Account Details
+          </p>
           <div className='px-4 max-sm:px-2 py-4'>
             <UserCircle size={35} />
             <p className='font-rubikMedium text-gray-600 capitalize pt-3 pb-1'>
-              Joseph Ogodu
+              {user.firstName} {user.lastName}
             </p>
-            <p className='text-gray-600 lowercase'>fortunateogodu@gmail.com</p>
+            <p className='text-gray-600 lowercase'>{user.email}</p>
           </div>
         </div>
         <div className='border rounded-md'>

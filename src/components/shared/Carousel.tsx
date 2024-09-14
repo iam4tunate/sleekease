@@ -14,7 +14,7 @@ export default function Carousel() {
   const nextRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className='container relative bg-black w-full px-0'>
+    <div className='relative w-full px-0'>
       <div className=''>
         <div
           ref={prevRef}

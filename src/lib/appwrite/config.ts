@@ -6,7 +6,7 @@ export const appwriteConfig = {
   storageId: import.meta.env.VITE_APPWRITE_STORAGE_ID,
   usersCollectionId: import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID,
   productsCollectionId: import.meta.env.VITE_APPWRITE_PRODUCTS_COLLECTION_ID,
-  cartsCollectionId: import.meta.env.VITE_APPWRITE_CARTS_COLLECTION_ID,
+  cartCollectionId: import.meta.env.VITE_APPWRITE_CART_COLLECTION_ID,
   savesCollectionId: import.meta.env.VITE_APPWRITE_SAVES_COLLECTION_ID,
 };
 

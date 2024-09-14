@@ -1,25 +1,13 @@
 export enum QUERY_KEYS {
-    // AUTH KEYS
-    // CREATE_USER_ACCOUNT = "createUserAccount",
-  
-    // USER KEYS
-    GET_CURRENT_USER = 'getCurrentUser',
-    GET_USER_BY_ID = 'getUserById',
-    // GET_USERS = "getUsers",
-  
-    GET_FILTERED_HOMES = 'getFilteredHomes',
-    GET_SAVED_HOMES = 'getSavedHomes',
-  
-    // HOME KEYS
-    GET_HOMES = 'getHomes',
-    GET_HOMES_BY_CREATOR_ID = 'getHomesByCreatorId',
-    GET_FEATURED_HOMES = 'getFeaturedHomes',
-    GET_HOME_BY_ID = 'getHomeById',
-    // GET_INFINITE_POSTS = "getInfinitePosts",
-    // GET_USER_POSTS = "getUserPosts",
-    // GET_FILE_PREVIEW = "getFilePreview",
-  
-    //  SEARCH KEYS
-    // SEARCH_POSTS = "getSearchPosts",
-  }
-  
+  // USER KEYS
+  GET_CURRENT_USER = 'getCurrentUser',
+
+  // PRODUCT KEYS
+  GET_PRODUCTS = 'getProducts',
+  GET_PRODUCT_BY_ID = 'getProductById',
+  GET_RECENT_PRODUCTS = 'getRecentProducts',
+  GET_PRODUCTS_BY_CATEGORY = 'getProductsByCategory',
+
+  // CART KEY
+  // GET_CART = 'getCart',
+}

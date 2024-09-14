@@ -1,0 +1,124 @@
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useUserContext } from '@/context/AuthContext';
+import { cn, formatNumberWithCommas } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Separator } from '@/components/ui/separator';
+import { useAddToCart, useGetProductById } from '@/lib/react-query/queries';
+import { useParams } from 'react-router-dom';
+import { CartValidation } from '@/lib/validation';
+import { SubmitButton } from '@/components/shared';
+
+export default function ProductDetails() {
+  const { id } = useParams();
+  const { isAuthenticated, userLoading, user } = useUserContext();
+  const { data: product, isPending: isLoading } = useGetProductById(id || '');
+  const { mutateAsync: addToCart, isPending: isAdding } = useAddToCart();
+
+  const form = useForm<z.infer<typeof CartValidation>>({
+    resolver: zodResolver(CartValidation),
+  });
+
+  async function onSubmit(data: z.infer<typeof CartValidation>) {
+    // TODO: if no userId save to localStorage
+    await addToCart({
+      productId: product!.$id,
+      userId: user!.id,
+      size: data.type,
+      quantity: 1,
+    });
+  }
+
+  if (isLoading) return <div>Loading, please wait</div>;
+
+  return (
+    <div className='container padX relative'>
+      <div className='grid grid-cols-[66%_30%] max-lg:grid-cols-[60%_40%] justify-between max-md:grid-cols-1 gap-x-6 gap-y-7'>
+        <div className='grid grid-cols-2 max-lg:grid-cols-1 gap-x-0.5 gap-y-1'>
+          {/* TODO: ADD SLIDER FROM shadcn: 1 on mobile or tab 2 on large screens */}
+          {product?.imageUrls.map((url: string) => (
+            <img
+              key={url}
+              src={url}
+              alt=''
+              className='h-[30rem] max-sm:h-[35rem] object-top w-full object-cover'
+            />
+          ))}
+        </div>
+        <div
+          className={cn(
+            'pb-10 pt-8 max-lg:pt-6 max-w-[30%] max-lg:max-w-[35%] max-md:max-w-full w-full md:fixed right-8 max-md:right-6 max-sm:right-4 2xl:right-[5%] overflow-y-auto remove-scrollbar bottom-0',
+            isAuthenticated && !userLoading ? 'top-[56px]' : 'top-[104px]'
+          )}>
+          <div className='font-rubikMedium text-[23px] capitalize'>
+            {product?.title}
+          </div>
+          <p className='text-xl pt-1 pb-5'>
+            {formatNumberWithCommas(product?.price)} Naira
+          </p>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <FormField
+                control={form.control}
+                name='type'
+                render={({ field }) => (
+                  <FormItem className=''>
+                    <FormLabel className='font-rubikMedium'>
+                      Available sizes:
+                    </FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className='flex flex-wrap gap-y-6 gap-x-2 pt-2 pb-2'>
+                        {product?.sizes.map((size: string) => (
+                          <FormItem>
+                            <FormControl>
+                              <RadioGroupItem
+                                value={size}
+                                className='hidden peer'
+                              />
+                            </FormControl>
+                            <FormLabel className='bg-gray-100 text-[15px] py-2 px-6 rounded-full cursor-pointer peer-aria-checked:text-white peer-aria-checked:bg-primary'>
+                              {size}
+                            </FormLabel>
+                          </FormItem>
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <SubmitButton
+                text='Add to Cart'
+                isLoading={isAdding}
+                className='rounded-full font-rubikMedium w-full mt-8'
+              />
+            </form>
+          </Form>
+          <div className='mt-8 py-3 border rounded-md'>
+            <div className='font-rubikMedium px-2'>Product Info</div>
+            <Separator className='my-2' />
+            <p className='px-2 text-[15px] leading-[1.3] pt-2 pb-4'>
+              {product?.description}
+            </p>
+            <div className='px-2 text-[15px] leading-[1.3] capitalize'>
+              {product?.features}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

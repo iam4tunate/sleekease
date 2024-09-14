@@ -16,10 +16,10 @@ import Spinner from '@/components/shared/Spinner';
 import { useLoginUser, useRegisterUser } from '@/lib/react-query/queries';
 import { useUserContext } from '@/context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { registerValidation } from '@/lib/validation';
 import { useEffect } from 'react';
+import { registerValidation } from '@/lib/validation';
 
-export default function Page() {
+export default function Register() {
   const navigate = useNavigate();
   const { checkAuthUser, isAuthenticated } = useUserContext();
 
@@ -45,7 +45,7 @@ export default function Page() {
     });
 
     const isLoggedIn = await checkAuthUser();
-    
+
     if (isLoggedIn) {
       form.reset();
       navigate('/');
@@ -147,9 +147,10 @@ export default function Page() {
           here to stay sleek.
         </p>
       </div>
-      <div className='relative max-lg:hidden rounded-2xl min-h-[30rem]'>
+      <div className='relative max-lg:hidden rounded-2xl h-full'>
+        <div className='bg-black absolute top-0 bottom-0 w-full bg-opacity-20 rounded-2xl' />
         <img
-          src='/public/images/authBg1.jpg'
+          src='/images/authBg1.jpg'
           alt='cloth store'
           className='h-full w-full object-cover rounded-2xl'
         />

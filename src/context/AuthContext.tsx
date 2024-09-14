@@ -7,6 +7,7 @@ const INITIAL_USER = {
   firstName: '',
   lastName: '',
   email: '',
+  label: '',
 };
 
 const INITIAL_STATE = {
@@ -42,13 +43,14 @@ export default function AuthProvider({
   const checkAuthUser = async () => {
     try {
       const currentAccount = await getCurrentUser();
-
+      
       if (currentAccount) {
         setUser({
           id: currentAccount.$id,
           firstName: currentAccount.firstName,
           lastName: currentAccount.lastName,
           email: currentAccount.email,
+          label: currentAccount.label,
         });
         setIsAuthenticated(true);
         return true;

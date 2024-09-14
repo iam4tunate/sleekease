@@ -1,9 +1,0 @@
-export { default as Home } from './Home';
-export { default as Login } from './Login';
-export { default as Register } from './Register';
-export { default as Cart } from './Cart';
-export { default as Overview } from './Overview';
-export { default as Category } from './Category';
-export { default as Orders } from './Orders';
-export { default as Saved } from './Saved';
-export { default as RecentlyViewed } from './RecentlyViewed';

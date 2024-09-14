@@ -1,9 +1,10 @@
 import {
   ArrowLeftRight,
-  CirclePlus,
   Heart,
   History,
+  List,
   Package2,
+  PackagePlus,
   User,
 } from 'lucide-react';
 import {
@@ -12,24 +13,28 @@ import {
   GiHoodie,
   GiMonclerJacket,
 } from 'react-icons/gi';
+import { RiShirtFill } from "react-icons/ri";
 import { IoShirt } from 'react-icons/io5';
-import { TbJacket } from 'react-icons/tb';
 
 export const DashboardNav = [
   { name: 'My Account', href: '/customer/overview', icon: User },
   { name: 'Orders', href: '/customer/orders', icon: Package2 },
   { name: 'Saved Items', href: '/customer/saved', icon: Heart },
   { name: 'Recently Viewed', href: '/customer/recently-viewed', icon: History },
-  { name: 'Create Item', href: '/admin/create', icon: CirclePlus },
+];
+
+export const AdminDashboardNav = [
+  { name: 'Create Product', href: '/admin/create', icon: PackagePlus },
+  { name: 'Product List', href: '/admin/list', icon: List },
 ];
 
 export const CategoryNav = [
-  { name: 'Hoodies', href: '/category/hoodies', icon: GiHoodie },
-  { name: 'T-shirts', href: '/category/t-shirts', icon: GiMonclerJacket },
-  { name: 'Jackets', href: '/category/jackets', icon: TbJacket },
-  { name: 'Shirts', href: '/category/shirts', icon: IoShirt },
-  { name: 'Pants', href: '/category/pants', icon: GiArmoredPants },
-  { name: 'Caps', href: '/category/caps', icon: GiBilledCap },
+  { label: 't-shirts', icon: RiShirtFill },
+  { label: 'pants', icon: GiArmoredPants },
+  { label: 'shirts', icon: IoShirt },
+  { label: 'caps', icon: GiBilledCap },
+  { label: 'jackets', icon: GiMonclerJacket },
+  { label: 'sweatshirts', icon: GiHoodie },
 ];
 
 export const AccountStats = [
@@ -38,3 +43,5 @@ export const AccountStats = [
   { name: 'saved items', value: 4, icon: Heart },
   { name: 'Recently Viewed', value: 50, icon: History },
 ];
+
+export const SizesOptions = ['x-small', 'small', 'medium', 'large', 'x-large'];

@@ -5,6 +5,7 @@ import {
   Logs,
   Package2,
   ShoppingBag,
+  User,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -19,21 +20,26 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CategoryNav } from '@/lib/constants';
 import { useUserContext } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
-import { useLogoutUser } from '@/lib/react-query/queries';
+import { useGetCurrentUser, useLogoutUser } from '@/lib/react-query/queries';
 import { useEffect } from 'react';
 
 export default function Navbar() {
   const navigate = useNavigate();
   const { isAuthenticated, userLoading } = useUserContext();
-  const { mutate: logout, isSuccess } = useLogoutUser();
+  const { mutateAsync: logout, isSuccess } = useLogoutUser();
+  const { data: currentUser } = useGetCurrentUser();
+  const cart = currentUser?.cart ?? [];
+
+  const handleLogout = async () => {
+    await logout();
+  };
 
   useEffect(() => {
     if (isSuccess) navigate(0);
   }, [navigate, isSuccess]);
 
   return (
-    <nav className='shadow-sm'>
-      {/* {!isAuthenticated && !userLoading && ( */}
+    <nav className='shadow-sm fixed top-0 left-0 right-0 z-50'>
       <div
         className={cn(
           'bg-gray-100',
@@ -44,13 +50,17 @@ export default function Navbar() {
           <div className='flex items-center gap-x-4 max-sm:gap-x-3'>
             <Link to='/login'>Log in</Link>
             <span className='h-3.5 w-[1.5px] bg-primary inline-block'></span>
-            <Link to='/register'>Create account</Link>
+            <Link to='/register' className='max-[370px]:hidden'>
+              Create account
+            </Link>
+            <Link to='/register' className='hidden max-[370px]:flex'>
+              Register
+            </Link>
           </div>
         </div>
       </div>
-      {/* )} */}
-      <div className='container padX w-full'>
-        <div className='h-14 flex items-center justify-between'>
+      <div className='bg-white'>
+        <div className='h-14 flex items-center justify-between container padX'>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <div className='flex items-center gap-x-1 bg-gray-100 py-2 rounded-sm px-4 max-sm:px-2 cursor-pointer'>
@@ -67,10 +77,10 @@ export default function Navbar() {
               <DropdownMenuSeparator />
               <DropdownMenuGroup className='space-y-1'>
                 {CategoryNav.map((nav) => (
-                  <Link key={nav.name} to={nav.href}>
+                  <Link key={nav.label} to={`/category/${nav.label}`}>
                     <DropdownMenuItem>
                       <nav.icon className='mr-2 h-4 w-4' />
-                      <span>{nav.name}</span>
+                      <span className='capitalize'>{nav.label}</span>
                     </DropdownMenuItem>
                   </Link>
                 ))}
@@ -79,22 +89,27 @@ export default function Navbar() {
           </DropdownMenu>
 
           <Link to='/'>
-            <div className='font-lora uppercase font-black text-lg lg:text-xl italic'>
+            <div className='uppercase font-rubikBold text-lg lg:text-xl italic'>
               Sleekease.
             </div>
           </Link>
 
-          <div className='flex items-center gap-x-5 max-sm:gap-x-4'>
+          <div className='max-md:hidden flex items-center gap-x-5 max-sm:gap-x-4'>
+            <Link
+              to='/explore'
+              className='border rounded-full px-4 py-1.5 hover:bg-gray-100'>
+              Shop All
+            </Link>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <div className='relative cursor-pointer'>
                   <CircleUserRound size={26} />
                   <BadgeCheck
-                    size={16}
+                    size={19}
                     fill='green'
                     color='white'
                     className={cn(
-                      'absolute bottom-0 -right-1.5',
+                      'absolute -bottom-1 -right-2',
                       !isAuthenticated && !userLoading && 'hidden'
                     )}
                   />
@@ -103,6 +118,12 @@ export default function Navbar() {
               <DropdownMenuContent className='w-44'>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuGroup className='space-y-0.5'>
+                  <Link to='/customer/overview'>
+                    <DropdownMenuItem>
+                      <User className='mr-2 h-4 w-4' />
+                      <span>Account</span>
+                    </DropdownMenuItem>
+                  </Link>{' '}
                   <Link to='/customer/orders'>
                     <DropdownMenuItem>
                       <Package2 className='mr-2 h-4 w-4' />
@@ -117,10 +138,10 @@ export default function Navbar() {
                   </Link>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                {isAuthenticated && !userLoading && (
+                {isAuthenticated && (
                   <DropdownMenuItem
-                    onClick={() => logout()}
-                    className='w-fit mx-auto text-[13px] px-2 font-rubikMedium bg-red-100 mt-1.5'>
+                    onClick={handleLogout}
+                    className='w-fit mx-auto text-[13px] px-2 bg-gray-100 hover:bg-orange mt-1.5 cursor-pointer'>
                     <span>Log out</span>
                   </DropdownMenuItem>
                 )}
@@ -129,9 +150,11 @@ export default function Navbar() {
             <Link to='/cart' className='flex items-end gap-x-1 cursor-pointer'>
               <span className='relative'>
                 <ShoppingBag size={23} />
-                <span className='bg-primary text-white h-5 w-5 flex items-center justify-center rounded-full border border-white absolute -top-2 -right-2 text-[10px] font-rubikSemibold'>
-                  4
-                </span>
+                {cart.length !== 0 && (
+                  <span className='bg-primary text-white h-5 w-5 flex items-center justify-center rounded-full border border-white absolute -top-2 -right-2 text-[10px] font-rubikSemibold'>
+                    {cart.length}
+                  </span>
+                )}
               </span>
             </Link>
           </div>
