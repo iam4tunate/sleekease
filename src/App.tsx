@@ -21,7 +21,10 @@ import UpdateProduct from './pages/admin/UpdateProduct';
 export default function App() {
   return (
     <>
-      {/* TODO: CREATE 1. *PAGE NOT FOUND FFOR ALL WRONG ROUTING, SHADCN SKELETON FOR ALL LOADING STATES AND EMPTY RESULT UI FOR CART,SAVED AND OTHERS  */}
+      {/* TODO: CREATE NOT FOUND PAGE FOR ALL WRONG ROUTINGS, 
+      SHADCN SKELETON FOR ALL LOADING STATES 
+      EMPTY RESULT UI FOR CART,SAVED AND OTHERS
+      OPTIMIZE AKK IMAGES BEFOFE UPLOADING  */}
       <ScrollToTop>
         <Routes>
           <Route element={<RootLayout />}>

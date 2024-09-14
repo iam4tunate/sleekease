@@ -58,7 +58,7 @@ export default function Login() {
 
   return (
     <div className='grid grid-cols-2 max-lg:grid-cols-1 items-start gap-x-12 container padY'>
-      <div className='flex flex-col items-center justify-center w-[90%] max-lg:w-[70%] max-sm:w-full mx-auto'>
+      <div className='flex flex-col items-center justify-center w-[90%] max-lg:w-[70%] max-sm:w-full mx-auto max-lg:py-8'>
         <div className='w-[70%] max-sm:w-[90%] text-center pb-6 space-y-1'>
           <div className='font-lora text-3xl max-sm:text-3xl'>
             Your Style Awaits.

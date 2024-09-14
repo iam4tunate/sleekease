@@ -5,9 +5,12 @@ import {
   TopSelling,
 } from '@/components/shared';
 import { Button } from '@/components/ui/button';
+import { useUserContext } from '@/context/AuthContext';
+import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 
 export default function Home() {
+  const { isAuthenticated } = useUserContext();
   return (
     <div className='padY'>
       <div className='container padX pb-6 max-sm:pb-3 pt-6'>
@@ -31,7 +34,11 @@ export default function Home() {
 
       <div className="mt-8 max-md:mt-6 relative bg-[url('/images/homeBg.jpg')] bg-cover bg-center h-[40rem] max-md:h-[35rem] max-sm:h-[30rem]">
         <div className='z-10 absolute top-0 right-0 bottom-0 left-0 bg-black bg-opacity-60' />
-        <div className='sticky top-10 bottom-4 w-[90%] max-sm:w-full mx-auto z-10 text-white text-center space-y-3 py-5 padX'>
+        <div
+          className={cn(
+            'sticky bottom-6 w-[90%] max-sm:w-full mx-auto z-10 text-white text-center space-y-3 pt-5 pb-8 padX',
+            isAuthenticated ? 'top-12' : 'top-24'
+          )}>
           <h2 className='uppercase font-lora text-[7vw] 2xl:text-8xl max-sm:text-5xl max-[320px]:text-4xl leading-none opacity-80'>
             Effortless Style,
             <br /> Every Day.

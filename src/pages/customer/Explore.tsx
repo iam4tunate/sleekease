@@ -5,7 +5,7 @@ export default function Explore() {
   const { isPending: isLoading, data: products } = useGetRecentProducts();
 
   return (
-    <div className='padY padX'>
+    <div className='padY padX container'>
       <div className='heading'>Find Your Style in Our Collections</div>
       {/* TODO: after uploading alot of products pagination should be added */}
       {isLoading ? (
