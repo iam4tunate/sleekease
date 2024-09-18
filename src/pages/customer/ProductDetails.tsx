@@ -14,29 +14,63 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
-import { useAddToCart, useGetProductById } from '@/lib/react-query/queries';
+import {
+  useAddToCart,
+  useGetCurrentUser,
+  useGetProductById,
+} from '@/lib/react-query/queries';
 import { useParams } from 'react-router-dom';
 import { CartValidation } from '@/lib/validation';
 import { SubmitButton } from '@/components/shared';
+import { toast } from 'sonner';
+import { useCartContext } from '@/context/CartContext';
+import { Models } from 'appwrite';
 
 export default function ProductDetails() {
   const { id } = useParams();
+  const { dispatch } = useCartContext();
   const { isAuthenticated, userLoading, user } = useUserContext();
   const { data: product, isPending: isLoading } = useGetProductById(id || '');
   const { mutateAsync: addToCart, isPending: isAdding } = useAddToCart();
+  const { data: currentUser } = useGetCurrentUser();
+  const cartItems = currentUser?.cart;
 
   const form = useForm<z.infer<typeof CartValidation>>({
     resolver: zodResolver(CartValidation),
   });
 
   async function onSubmit(data: z.infer<typeof CartValidation>) {
-    // TODO: if no userId save to localStorage
-    await addToCart({
-      productId: product!.$id,
-      userId: user!.id,
-      size: data.type,
-      quantity: 1,
-    });
+    if (isAuthenticated) {
+      const existingItem = cartItems.find(
+        (item: Models.Document) => item.id === cartItems.$id
+      );
+      
+      if (existingItem) {
+        toast.message('This item is already in your cart');
+      } else {
+        //! store in appwrite
+        await addToCart({
+          productId: product!.$id,
+          userId: user!.id,
+          size: data.type,
+          quantity: 1,
+          title: product?.title,
+          price: product?.price,
+          imageUrls: product?.imageUrls,
+        });
+      }
+    } else {
+      const cartItem = {
+        $id: product!.$id,
+        title: product?.title,
+        price: product?.price,
+        quantity: 1,
+        size: data.type,
+        imageUrls: product?.imageUrls,
+      };
+      dispatch({ type: 'ADD_ITEM', payload: cartItem });
+      
+    }
   }
 
   if (isLoading) return <div>Loading, please wait</div>;
@@ -82,7 +116,7 @@ export default function ProductDetails() {
                         defaultValue={field.value}
                         className='flex flex-wrap gap-y-6 gap-x-2 pt-2 pb-2'>
                         {product?.sizes.map((size: string) => (
-                          <FormItem>
+                          <FormItem key={size}>
                             <FormControl>
                               <RadioGroupItem
                                 value={size}

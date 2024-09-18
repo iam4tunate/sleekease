@@ -19,14 +19,18 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import Spinner from './Spinner';
-import { useUserContext } from '@/context/AuthContext';
 import { toast } from 'sonner';
-import { useState } from 'react';
+import { ICartItem } from '@/lib/types';
+import { useCartContext } from '@/context/CartContext';
 
-export default function CartItem({ cartItem }: { cartItem: Models.Document }) {
-  const { user } = useUserContext();
-  const { $id, product, size, quantity } = cartItem;
-  const [updatedQuantity, setUpdatedQuantity] = useState(quantity);
+export default function CartItem({
+  user,
+  guest,
+}: {
+  user?: Models.Document;
+  guest?: ICartItem;
+}) {
+  const { dispatch } = useCartContext();
 
   const { data: currentUser } = useGetCurrentUser();
   const savedProducts = currentUser?.saved ?? [];
@@ -37,41 +41,58 @@ export default function CartItem({ cartItem }: { cartItem: Models.Document }) {
   const { mutateAsync: updateQuantity, isPending: isUpdating } =
     useUpdateQuatity();
 
-  const isProductSaved = async (productId: string, userId: string) => {
-    // TODO: if no userId save to localStorage
-    const exists = savedProducts.some(
-      (save: Models.Document) => save.product.$id === productId
-    );
+  const isProductSaved = async (productId?: string, userId?: string) => {
+    if (currentUser) {
+      const exists = savedProducts.some(
+        (save: Models.Document) => save.product.$id === productId
+      );
 
-    if (exists) {
-      toast.message('This product is already in your saved list.');
-      await deleteItem({ documentId: $id });
+      if (exists) {
+        toast.message('This product is already in your saved list.');
+        await deleteItem({ documentId: user!.$id });
+      } else {
+        await deleteItem({ documentId: user!.$id });
+        await saveItem({ productId, userId });
+      }
     } else {
-      await saveItem({ productId, userId });
-      await deleteItem({ documentId: $id });
+      toast.message(
+        'Only logged-in users can save products. Please log in to continue.'
+      );
     }
   };
 
   const handleDelete = async () => {
-    await deleteItem({ documentId: $id });
+    if (currentUser) {
+      await deleteItem({ documentId: user!.$id });
+    } else {
+      dispatch({ type: 'REMOVE_ITEM', payload: guest!.$id });
+      toast.success('Product removed from cart');
+    }
   };
 
   const handleIncrement = async () => {
-    if (quantity > 0) {
-      const newQuantity = updatedQuantity + 1; // Calculate the new quantity
-      setUpdatedQuantity(newQuantity); // Update state with new quantity
-      await updateQuantity({ documentId: $id, quantity: newQuantity });
+    if (currentUser) {
+      const newQuantity = user?.quantity + 1; // Calculate the new quantity
+      await updateQuantity({ documentId: user!.$id, quantity: newQuantity });
     } else {
-      return updatedQuantity;
+      dispatch({ type: 'INCREASE_QUANTITY', payload: guest!.$id });
     }
   };
+
   const handleDecrement = async () => {
-    if (updatedQuantity > 1) {
-      const newQuantity = updatedQuantity - 1;
-      setUpdatedQuantity(newQuantity);
-      await updateQuantity({ documentId: $id, quantity: newQuantity });
+    if (currentUser) {
+      if (user?.quantity > 1) {
+        const newQuantity = user?.quantity - 1;
+        await updateQuantity({ documentId: user!.$id, quantity: newQuantity });
+      } else {
+        return user?.quantity;
+      }
     } else {
-      return updatedQuantity;
+      if (guest!.quantity > 1) {
+        dispatch({ type: 'DECREASE_QUANTITY', payload: guest!.$id });
+      } else {
+        return guest?.quantity;
+      }
     }
   };
 
@@ -80,33 +101,35 @@ export default function CartItem({ cartItem }: { cartItem: Models.Document }) {
       <div className='h-28 flex max-[400px]:flex-col items-start justify-between select-none'>
         <div className='flex gap-x-4'>
           <img
-            src={product.imageUrls[0]}
-            alt={product.title}
+            src={user?.product.imageUrls[0] ?? guest?.imageUrls[0]}
+            alt={user?.product.title ?? guest?.title}
             className='w-36 h-28 max-sm:w-24 rounded-md object-cover'
           />
           <div className='flex flex-col gap-y-2.5 w-full'>
             <p className='capitalize font-rubikMedium'>
-              {truncate(product.title, 30)}
+              {truncate(user?.product.title ?? guest?.title, 30)}
             </p>
-            <span className='opacity-70 text-xs capitalize'>{size}</span>
-            <div className='flex items-center border'>
+            <span className='opacity-70 text-xs capitalize'>
+              {user?.size ?? guest?.size}
+            </span>
+            <div className='flex items-center border w-fit'>
               <div
                 onClick={handleDecrement}
-                className='h-full py-1.5 px-2 max-[300px]:px-1 w-full hover:bg-orange hover:bg-opacity-10 cursor-pointer'>
+                className='h-full py-1.5 px-2 max-[300px]:px-1  hover:bg-orange hover:bg-opacity-10 cursor-pointer'>
                 <Minus size={16} />
               </div>
-              <div className='text-center mx-1 max-w-8 max-sm:max-w-6 w-full flex items-center justify-center'>
+              <div className='h-full text-center mx-1 w-6 max-sm:max-w-6 flex items-center justify-center'>
                 {isUpdating ? (
                   <Spinner size={13} colored='#E8572A' />
                 ) : (
                   <span className='font-rubikMedium w-full'>
-                    {updatedQuantity}
+                    {user?.quantity ?? guest?.quantity}
                   </span>
                 )}
               </div>
               <div
                 onClick={handleIncrement}
-                className='h-full py-1.5 px-2 max-[300px]:px-1 w-full hover:bg-orange hover:bg-opacity-10 cursor-pointer'>
+                className='h-full py-1.5 px-2 max-[300px]:px-1 hover:bg-orange hover:bg-opacity-10 cursor-pointer'>
                 <Plus size={16} />
               </div>
             </div>
@@ -114,7 +137,12 @@ export default function CartItem({ cartItem }: { cartItem: Models.Document }) {
         </div>
         <div className='h-full max-[400px]:w-full flex flex-col items-end max-[400px]:flex-row max-[400px]:justify-between text-right'>
           <p className='font-rubikSemibold opacity-90 mb-auto max-sm:mb-0 max-sm:py-2'>
-            ₦{formatNumberWithCommas(product.price)}
+            ₦
+            {formatNumberWithCommas(
+              user
+                ? user?.product.price * user?.quantity
+                : guest!.price * guest!.quantity
+            )}
           </p>
           <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -136,11 +164,15 @@ export default function CartItem({ cartItem }: { cartItem: Models.Document }) {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter className='w-full flex justify-between max-sm:justify-start'>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel className='bg-gray-200 hover:bg-gray-300'>
+                  Cancel
+                </AlertDialogCancel>
                 <div className='flex max-sm:flex-col justify-end gap-3 w-full'>
                   <AlertDialogAction
-                    onClick={() => isProductSaved(product.$id, user.id)}
-                    className='bg-gray-200 hover:bg-gray-300 text-primary font-rubikMedium'>
+                    onClick={() =>
+                      isProductSaved(user?.product.$id, currentUser?.$id)
+                    }
+                    className='bg-orange text-white hover:bg-darkOrange'>
                     Save for later
                   </AlertDialogAction>
                   <AlertDialogAction onClick={handleDelete}>

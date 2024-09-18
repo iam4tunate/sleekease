@@ -39,10 +39,23 @@ export type IUpdateProduct = {
   imageUrls: string[];
 };
 
-export type ICartItem = {
-  id: string;
-  name: string;
-  size: string;
+// types.ts
+// types.ts
+export interface ICartItem {
+  $id: string;
+  title: string;
   price: number;
   quantity: number;
-};
+  size: string;
+  imageUrls: string[];
+}
+
+export type ICartAction =
+  | { type: 'ADD_ITEM'; payload: ICartItem }
+  | { type: 'REMOVE_ITEM'; payload: string }
+  | { type: 'INCREASE_QUANTITY'; payload: string }
+  | { type: 'DECREASE_QUANTITY'; payload: string };
+
+export interface ICartState {
+  items: ICartItem[];
+}

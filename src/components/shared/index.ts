@@ -4,6 +4,7 @@ export { default as ProductGrid } from './ProductGrid';
 export { default as ProductForm } from './ProductForm';
 export { default as ProductCard } from './ProductCard';
 export { default as CartItem } from './CartItem';
+export { default as CartSummary } from './CartSummary';
 export { default as Sidebar } from './Sidebar';
 export { default as ShopCta } from './ShopCta';
 export { default as Footer } from './Footer';

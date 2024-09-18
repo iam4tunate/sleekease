@@ -20,19 +20,38 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CategoryNav } from '@/lib/constants';
 import { useUserContext } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
-import { useGetCurrentUser, useLogoutUser } from '@/lib/react-query/queries';
+import {
+  useGetCurrentUser,
+  useLogoutUser,
+  useSyncCartOnLogin,
+} from '@/lib/react-query/queries';
 import { useEffect } from 'react';
+import { useCartContext } from '@/context/CartContext';
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const { isAuthenticated, userLoading } = useUserContext();
+  const { isAuthenticated, userLoading, user } = useUserContext();
   const { mutateAsync: logout, isSuccess } = useLogoutUser();
+  const { mutateAsync: syncOnLogin } = useSyncCartOnLogin();
   const { data: currentUser } = useGetCurrentUser();
-  const cart = currentUser?.cart ?? [];
+  const { cart: localCart } = useCartContext();
+
+  const userCart = currentUser?.cart;
+  const guestCart = localCart.items;
+
+  // Move all items from local storage cart to appwrite on login
+  useEffect(() => {
+    const runOnLogin = async () => {
+      if (user?.id) {
+        await syncOnLogin(user?.id);
+      }
+    };
+    runOnLogin();
+  }, [syncOnLogin, user.id]);
 
   const handleLogout = async () => {
-    await logout();
-  };
+    await logout(user.id);
+  }; 
 
   useEffect(() => {
     if (isSuccess) navigate(0);
@@ -150,9 +169,10 @@ export default function Navbar() {
             <Link to='/cart' className='flex items-end gap-x-1 cursor-pointer'>
               <span className='relative'>
                 <ShoppingBag size={23} />
-                {cart.length !== 0 && (
+                {((userCart && userCart?.length !== 0) ||
+                  (guestCart && guestCart?.length !== 0)) && (
                   <span className='bg-primary text-white h-5 w-5 flex items-center justify-center rounded-full border border-white absolute -top-2 -right-2 text-[10px] font-rubikSemibold'>
-                    {cart.length}
+                    {userCart?.length ?? guestCart.length}
                   </span>
                 )}
               </span>

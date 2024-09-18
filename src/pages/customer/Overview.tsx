@@ -11,7 +11,7 @@ export default function Overview() {
   const { mutateAsync: logout, isSuccess } = useLogoutUser();
 
   const handleLogout = async () => {
-    await logout();
+    await logout(user.id);
   };
 
   useEffect(() => {

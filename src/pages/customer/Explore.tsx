@@ -8,11 +8,7 @@ export default function Explore() {
     <div className='padY padX container'>
       <div className='heading'>Find Your Style in Our Collections</div>
       {/* TODO: after uploading alot of products pagination should be added */}
-      {isLoading ? (
-        <div>please wait</div>
-      ) : (
-        <ProductGrid products={products?.documents ?? []} />
-      )}
+      <ProductGrid isLoading={isLoading} products={products?.documents ?? []} />
     </div>
   );
 }

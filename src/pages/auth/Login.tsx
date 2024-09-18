@@ -48,8 +48,6 @@ export default function Login() {
       navigate(from, { replace: true });
     }
   }
-  // TODO: MERGE AT LOGIN
-  // useMergeCartOnLogin(user.id);
 
   //! redirecting to the homepage if user already logged in
   useEffect(() => {

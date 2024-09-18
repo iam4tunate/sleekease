@@ -57,7 +57,9 @@ export default function Home() {
         </div>
       </div>
 
-      <TopSelling />
+      <div className='container padX'>
+        <TopSelling />
+      </div>
 
       <div className='container padX padY'>
         <ShopCta />

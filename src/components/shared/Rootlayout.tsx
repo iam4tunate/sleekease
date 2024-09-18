@@ -6,16 +6,20 @@ import { cn } from '@/lib/utils';
 import {
   BadgeCheck,
   CircleUserRound,
-  Pocket,
+  Heart,
   Shirt,
   ShoppingBag,
 } from 'lucide-react';
 import { useGetCurrentUser } from '@/lib/react-query/queries';
+import { useCartContext } from '@/context/CartContext';
 
 export default function Rootlayout() {
   const { isAuthenticated, userLoading } = useUserContext();
   const { data: currentUser } = useGetCurrentUser();
-  const cart = currentUser?.cart ?? [];
+  const { cart: localCart } = useCartContext();
+  const saved = currentUser?.saved ?? [];
+  const userCart = currentUser?.cart;
+  const guestCart = localCart.items;
 
   return (
     <div className='relative min-h-screen antialiased'>
@@ -54,16 +58,17 @@ export default function Rootlayout() {
           </div>
           <span className='max-sm:text-xs max-[300px]:hidden'>My Account</span>
         </Link>
-        {/* <Link
-          to='/customer/overview'
-          className='flex flex-col gap-y-0.5 items-center justify-center'>
-          <User className='h-6 max-sm:h-5 w-6 max-sm:w-5' />
-          <span className='max-sm:text-xs max-[300px]:hidden'>My Account</span>
-        </Link> */}
         <Link
           to='/customer/saved'
           className='flex flex-col gap-y-0.5 items-center justify-center'>
-          <Pocket className='h-6 max-sm:h-5 w-6 max-sm:w-5' />
+          <span className='relative'>
+            <Heart className='h-6 max-sm:h-5 w-6 max-sm:w-5' />
+            {saved.length !== 0 && (
+              <span className='bg-primary text-white h-4 w-4 flex items-center justify-center rounded-full border border-white absolute -top-1 -right-2 text-[10px] font-rubikSemibold'>
+                {saved.length}
+              </span>
+            )}
+          </span>
           <span className='max-sm:text-xs max-[300px]:hidden'>Saved</span>
         </Link>
         <Link
@@ -71,9 +76,10 @@ export default function Rootlayout() {
           className='flex flex-col gap-y-0.5 items-center justify-center'>
           <span className='relative'>
             <ShoppingBag className='h-6 max-sm:h-5 w-6 max-sm:w-5' />
-            {cart.length !== 0 && (
+            {((userCart && userCart?.length !== 0) ||
+              (guestCart && guestCart?.length !== 0)) && (
               <span className='bg-primary text-white h-4 w-4 flex items-center justify-center rounded-full border border-white absolute -top-1 -right-2 text-[10px] font-rubikSemibold'>
-                {cart.length}
+                {userCart?.length ?? guestCart.length}
               </span>
             )}
           </span>

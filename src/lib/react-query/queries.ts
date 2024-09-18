@@ -14,6 +14,8 @@ import {
   logoutUser,
   registerUser,
   saveProduct,
+  syncCartOnLogin,
+  syncCartOnLogout,
   updateProduct,
   updateQuantity,
 } from '../appwrite/api';
@@ -33,9 +35,13 @@ export const useRegisterUser = () => {
 };
 
 export const useLoginUser = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (user: { email: string; password: string }) => loginUser(user),
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
       toast.success('Logged in successfully.');
     },
     onError: (error) => {
@@ -47,7 +53,7 @@ export const useLoginUser = () => {
 export const useLogoutUser = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: logoutUser,
+    mutationFn: (userId: string) => logoutUser(userId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
@@ -55,7 +61,7 @@ export const useLogoutUser = () => {
       toast.success('Logged out successfully.');
     },
     onError: () => {
-      toast.success('Unable to log out, please try again.');
+      toast.error('Unable to log out, please try again.');
     },
   });
 };
@@ -163,12 +169,18 @@ export const useAddToCart = () => {
       userId,
       size,
       quantity,
+      title,
+      price,
+      imageUrls,
     }: {
       productId: string;
       userId: string;
       size: string;
       quantity: number;
-    }) => addToCart(productId, userId, size, quantity),
+      title: string;
+      price: number;
+      imageUrls: string[];
+    }) => addToCart(productId, userId, size, quantity, title, price, imageUrls),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
@@ -205,14 +217,14 @@ export const useSaveProduct = () => {
       productId,
       userId,
     }: {
-      productId: string;
-      userId: string;
+      productId?: string;
+      userId?: string;
     }) => saveProduct(productId, userId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Product saved sucessfully.');
+      toast.success('Product added to saved list.');
     },
     onError: (error) => {
       toast(error.message);
@@ -251,8 +263,35 @@ export const useUpdateQuatity = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
+    },
+    onError: (error) => {
+      toast(error.message);
+    },
+  });
+};
+
+export const useSyncCartOnLogin = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (userId: string) => syncCartOnLogin(userId),
+    onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_PRODUCT_BY_ID],
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+    },
+    onError: (error) => {
+      toast(error.message);
+    },
+  });
+};
+
+export const useSyncCartOnLogout = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (userId: string) => syncCartOnLogout(userId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
     },
     onError: (error) => {

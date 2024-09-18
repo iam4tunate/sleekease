@@ -29,7 +29,7 @@ export default function TopSelling() {
   }, []);
 
   return (
-    <div className='padY padX container'>
+    <div className='padY'>
       <div className='heading'>Our Top Selling {randomCategory}</div>
 
       {isLoading ? (

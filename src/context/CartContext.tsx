@@ -1,59 +1,84 @@
-// import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-// TODO: Fix guest state for saving and adding to cart with the hooks also
-// // Define the Cart item type
-// interface CartItem {
-//   id: string;
-//   name: string;
-//   price: number;
-//   quantity: number;
-// }
+// CartContext.tsx
+import { ICartAction, ICartState } from '@/lib/types';
+import React, { createContext, useReducer, useEffect, ReactNode } from 'react';
+import { toast } from 'sonner';
 
-// // Define the shape of the CartContext
-// interface CartContextType {
-//   cart: CartItem[];
-//   addToCart: (item: CartItem) => void;
-//   removeFromCart: (id: string) => void;
-// }
+const initialState: ICartState = {
+  items: JSON.parse(localStorage.getItem('cart') || '[]') || [],
+};
 
-// // Create the CartContext with default values
-// const CartContext = createContext<CartContextType | undefined>(undefined);
+const CartContext = createContext<
+  | {
+      cart: ICartState;
+      dispatch: React.Dispatch<ICartAction>;
+    }
+  | undefined
+>(undefined);
 
-// // Reducer function to manage the cart state
-// const cartReducer = (state: CartItem[], action: any) => {
-//   switch (action.type) {
-//     case 'ADD_TO_CART':
-//       return [...state, action.payload];
-//     case 'REMOVE_FROM_CART':
-//       return state.filter(item => item.id !== action.payload);
-//     default:
-//       return state;
-//   }
-// };
+const cartReducer = (cart: ICartState, action: ICartAction): ICartState => {
+  switch (action.type) {
+    case 'ADD_ITEM': {
+      const existingItem = cart.items.find(
+        (item) => item.$id === action.payload.$id
+      );
+      if (existingItem) {
+        toast.message('Item already in cart');
+        return cart;
+      } else {
+        toast.success('Item added to cart!');
+        return { ...cart, items: [...cart.items, action.payload] };
+      }
+    }
+    case 'REMOVE_ITEM':
+      return {
+        ...cart,
+        items: cart.items.filter((item) => item.$id !== action.payload),
+      };
+    case 'INCREASE_QUANTITY': {
+      return {
+        ...cart,
+        items: cart.items.map((item) =>
+          item.$id === action.payload
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        ),
+      };
+    }
+    case 'DECREASE_QUANTITY': {
+      return {
+        ...cart,
+        items: cart.items.map((item) =>
+          item.$id === action.payload && item.quantity > 1
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        ),
+      };
+    }
+    default:
+      return cart;
+  }
+};
 
-// // Provide the CartContext to components
-// export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-//   const [cart, dispatch] = useReducer(cartReducer, []);
+export const CartProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [cart, dispatch] = useReducer(cartReducer, initialState);
 
-//   const addToCart = (item: CartItem) => {
-//     dispatch({ type: 'ADD_TO_CART', payload: item });
-//   };
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart.items));
+  }, [cart.items]);
 
-//   const removeFromCart = (id: string) => {
-//     dispatch({ type: 'REMOVE_FROM_CART', payload: id });
-//   };
+  return (
+    <CartContext.Provider value={{ cart, dispatch }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
 
-//   return (
-//     <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
-//       {children}
-//     </CartContext.Provider>
-//   );
-// };
-
-// // Hook to use the CartContext
-// export const useCart = () => {
-//   const context = useContext(CartContext);
-//   if (context === undefined) {
-//     throw new Error('useCart must be used within a CartProvider');
-//   }
-//   return context;
-// };
+export const useCartContext = () => {
+  const context = React.useContext(CartContext);
+  if (context === undefined) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
+};
