@@ -32,11 +32,11 @@ export default function TopSelling() {
     <div className='padY'>
       <div className='heading'>Our Top Selling {randomCategory}</div>
 
-      {isLoading ? (
-        <div>please wait</div>
-      ) : (
-        <ProductGrid maxLength={3} products={products?.documents ?? []} />
-      )}
+      <ProductGrid
+        isLoading={isLoading}
+        maxLength={3}
+        products={products?.documents ?? []}
+      />
     </div>
   );
 }

@@ -8,11 +8,11 @@ export default function NewArrivals() {
     <div className='padY padX container'>
       <div className='heading'>New Arrivals</div>
 
-      {isLoading ? (
-        <div>please wait</div>
-      ) : (
-        <ProductGrid maxLength={3} products={products?.documents ?? []} />
-      )}
+      <ProductGrid
+        isLoading={isLoading}
+        maxLength={3}
+        products={products?.documents ?? []}
+      />
     </div>
   );
 }

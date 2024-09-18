@@ -11,11 +11,8 @@ export default function Category() {
   return (
     <div className='container padY padX'>
       <div className='heading'>{category} Collection</div>
-      {isLoading ? (
-        <div>please wait</div>
-      ) : (
-        <ProductGrid products={products?.documents ?? []} />
-      )}
+
+      <ProductGrid isLoading={isLoading} products={products?.documents ?? []} />
       <div className='pt-16 pb-8'>
         <ShopCta />
       </div>
