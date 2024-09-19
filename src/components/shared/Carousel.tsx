@@ -4,6 +4,7 @@ import { Navigation, Autoplay } from 'swiper/modules';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import 'swiper/css/navigation';
 import 'swiper/css';
+import { HomeCarousel } from '@/lib/constants';
 
 export default function Carousel() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -20,14 +21,14 @@ export default function Carousel() {
           ref={prevRef}
           className={`${
             isBegin && 'invisible'
-          } z-10 p-1.5 rounded-full shadow bg-primary opacity-60 absolute top-1/2 left-12 max-lg:left-8 max-sm:left-4 -translate-y-1/2`}>
+          } z-10 p-1.5 rounded-full shadow bg-darkOrange opacity-60 absolute top-1/2 left-12 max-lg:left-8 max-sm:left-4 -translate-y-1/2`}>
           <ChevronLeft color='white' size={30} />
         </div>
         <div
           ref={nextRef}
           className={`${
             isEnd && 'invisible'
-          } z-10 p-1.5 rounded-full shadow bg-primary opacity-60 absolute top-1/2 right-12 max-lg:right-8 max-sm:right-4 -translate-y-1/2`}>
+          } z-10 p-1.5 rounded-full shadow bg-darkOrange opacity-60 absolute top-1/2 right-12 max-lg:right-8 max-sm:right-4 -translate-y-1/2`}>
           <ChevronRight color='white' size={30} />
         </div>
       </div>
@@ -56,55 +57,11 @@ export default function Carousel() {
           },
         }}
         className='h-[35rem] max-sm:h-[30rem]'>
-        <SwiperSlide>
-          <img
-            src='/images/slider1.jpg'
-            alt=''
-            className='h-full w-full object-cover'
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src='/images/slider2.jpg'
-            alt=''
-            className='h-full w-full object-cover'
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src='/images/slider3.jpg'
-            alt=''
-            className='h-full w-full object-cover'
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src='/images/slider4.jpg'
-            alt=''
-            className='h-full w-full object-cover'
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src='/images/slider5.jpg'
-            alt=''
-            className='h-full w-full object-cover'
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src='/images/slider6.jpg'
-            alt=''
-            className='h-full w-full object-cover'
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src='/images/slider7.jpg'
-            alt=''
-            className='h-full w-full object-cover'
-          />
-        </SwiperSlide>
+        {HomeCarousel.map((slider, index) => (
+          <SwiperSlide key={index}>
+            <img src={slider} alt='' className='h-full w-full object-cover' />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );

@@ -51,7 +51,7 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     await logout(user.id);
-  }; 
+  };
 
   useEffect(() => {
     if (isSuccess) navigate(0);
@@ -113,10 +113,10 @@ export default function Navbar() {
             </div>
           </Link>
 
-          <div className='max-md:hidden flex items-center gap-x-5 max-sm:gap-x-4'>
+          <div className='flex items-center gap-x-5 max-sm:gap-x-4'>
             <Link
               to='/shop'
-              className='border rounded-full px-4 py-1.5 hover:bg-gray-100'>
+              className='border rounded-full px-4 py-1.5 hover:bg-gray-100 max-md:hidden'>
               Shop All
             </Link>
             <DropdownMenu>
@@ -149,10 +149,10 @@ export default function Navbar() {
                       <span>Orders</span>
                     </DropdownMenuItem>
                   </Link>
-                  <Link to='/customer/saved'>
+                  <Link to='/customer/wishlist'>
                     <DropdownMenuItem>
                       <Heart className='mr-2 h-4 w-4' />
-                      <span>Saved Items</span>
+                      <span>Wishlist</span>
                     </DropdownMenuItem>
                   </Link>
                 </DropdownMenuGroup>
@@ -166,7 +166,9 @@ export default function Navbar() {
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
-            <Link to='/cart' className='flex items-end gap-x-1 cursor-pointer'>
+            <Link
+              to='/cart'
+              className='flex items-end gap-x-1 cursor-pointer max-md:hidden'>
               <span className='relative'>
                 <ShoppingBag size={23} />
                 {((userCart && userCart?.length !== 0) ||

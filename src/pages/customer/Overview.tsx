@@ -64,13 +64,11 @@ export default function Overview() {
             <div
               key={stat.name}
               className='border-l-2 border-orange-300 bg-white w-full max-sm:w-full rounded-md shadow-md flex flex-col items-start justify-between gap-x-6'>
-              <p className='border-b px-4 max-sm:px-2 py-3 w-full uppercase font-rubikMedium'>
+              <p className='border-b px-4 max-sm:px-2 py-3 w-full uppercase'>
                 {stat.name}
               </p>
               <div className='px-4 max-sm:px-2 py-4 flex items-center justify-between w-full'>
-                <p className='font-rubikSemibold text-3xl max-sm:text-2xl'>
-                  {stat.value}
-                </p>
+                <p className='text-3xl max-sm:text-2xl'>{stat.value}</p>
                 <span className='bg-[#FEF8F5] rounded-full p-2'>
                   <stat.icon className='text-orange' size={25} />
                 </span>

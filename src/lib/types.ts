@@ -39,8 +39,6 @@ export type IUpdateProduct = {
   imageUrls: string[];
 };
 
-// types.ts
-// types.ts
 export interface ICartItem {
   $id: string;
   title: string;
@@ -59,3 +57,10 @@ export type ICartAction =
 export interface ICartState {
   items: ICartItem[];
 }
+
+export type IRecenltyViewed = {
+  id: string;
+  title: string;
+  price: string;
+  image: string;
+};

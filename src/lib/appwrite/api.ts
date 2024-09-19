@@ -1,5 +1,11 @@
 import { ID, Models, Query } from 'appwrite';
-import { ICartItem, INewProduct, INewUser, IUpdateProduct } from '../types';
+import {
+  ICartItem,
+  INewProduct,
+  INewUser,
+  IRecenltyViewed,
+  IUpdateProduct,
+} from '../types';
 import { account, appwriteConfig, databases, storage } from './config';
 
 export async function registerUser(user: INewUser) {
@@ -388,3 +394,20 @@ export async function syncCartOnLogout(userId: string) {
   );
   await Promise.all(deletePromises);
 }
+
+export const addToRecentlyViewed = (product: IRecenltyViewed) => {
+  const viewedProducts = JSON.parse(
+    localStorage.getItem('recentlyViewed') || '[]'
+  );
+
+  // Remove the product if it's already in the list
+  const updatedProducts = viewedProducts.filter(
+    (item: IRecenltyViewed) => item.id !== product.id
+  );
+
+  // Add the product to the top of the list
+  updatedProducts.unshift(product);
+
+  // Save the updated list back to local storage
+  localStorage.setItem('recentlyViewed', JSON.stringify(updatedProducts));
+};

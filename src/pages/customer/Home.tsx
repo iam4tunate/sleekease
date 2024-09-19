@@ -15,17 +15,16 @@ export default function Home() {
     <div className='padY'>
       <div className='container padX pb-6 max-sm:pb-3 pt-6'>
         <div className='font-lora text-[52px] max-md:text-5xl max-sm:text-4xl max-md:w-full w-[70%] max-lg:w-[80%] leading-[1.2]'>
-          Simplifying your
-          <span className='text-orange inline'> shopping </span>
-          to focus on making
-          <div className='text-orange inline'> memories </div>that matter.
+          Elevating your <span className='text-orange inline'> style </span>
+          so you can focus on creating to focus on making
+          <div className='text-orange inline'> unforgettable </div>moments.
         </div>
       </div>
 
       <Carousel />
 
       <div className='padY padX container text-center tracking-tighter leading-none flex flex-col items-center uppercase pb-8 max-sm:pb-4'>
-        <div className='text-[8vw] 2xl:text-8xl max-sm:text-4xl font-lora'>
+        <div className='text-[8vw] 2xl:text-8xl max-sm:text-4xl font-lora select-none'>
           Crafted to turn heads wherever you go.
         </div>
       </div>
@@ -36,14 +35,14 @@ export default function Home() {
         <div className='z-10 absolute top-0 right-0 bottom-0 left-0 bg-black bg-opacity-60' />
         <div
           className={cn(
-            'sticky bottom-6 w-[90%] max-sm:w-full mx-auto z-10 text-white text-center space-y-3 pt-5 pb-8 padX',
+            'select-none sticky bottom-6 w-[90%] max-sm:w-full mx-auto z-10 text-white text-center space-y-3 pt-5 pb-8 padX',
             isAuthenticated ? 'top-12' : 'top-24'
           )}>
           <h2 className='uppercase font-lora text-[7vw] 2xl:text-8xl max-sm:text-5xl max-[320px]:text-4xl leading-none opacity-80'>
             Effortless Style,
             <br /> Every Day.
           </h2>
-          <p className='w-[40%] max-lg:w-[50%] max-sm:w-[70%] mx-auto leading-relaxed pt-1 pb-2 max-sm:text-[13px] opacity-90'>
+          <p className='w-[40%] max-lg:w-[50%] max-sm:w-[80%] mx-auto leading-relaxed pt-1 pb-2 max-sm:text-[13px] opacity-90'>
             Discover the perfect wardrobe essentials that blend style and
             comfort for every occasion.
           </p>

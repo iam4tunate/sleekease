@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 export default function Cart() {
   const { data: currentUser, isPending: isLoading } = useGetCurrentUser();
   const { cart } = useCartContext();
-  console.log(currentUser);
+  
   const userCart = currentUser?.cart
     .slice()
     .reverse()
@@ -61,7 +61,7 @@ export default function Cart() {
               <div className='flex flex-col items-center justify-center py-8'>
                 <img
                   src='/images/empty-bag.png'
-                  alt=''
+                  alt='shopping bag'
                   className='w-[10rem] max-sm:w-[8rem]'
                 />
                 <div className='font-rubikMedium text-lg'>

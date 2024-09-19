@@ -1,13 +1,18 @@
+import { addToRecentlyViewed } from '@/lib/appwrite/api';
 import { formatNumberWithCommas } from '@/lib/utils';
 import { Models } from 'appwrite';
 import { Link } from 'react-router-dom';
 
 export default function ProductCard({ product }: { product: Models.Document }) {
   const { $id, title, price, imageUrls } = product;
+  
+  const viewedProduct = { id: $id, title, price, image: imageUrls[0] };
 
   return (
     <div className='h-full'>
-      <Link to={`/product/${$id}`}>
+      <Link
+        to={`/product/${$id}`}
+        onClick={() => addToRecentlyViewed(viewedProduct)}>
         <img
           loading='lazy'
           src={imageUrls[0]}

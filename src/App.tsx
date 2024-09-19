@@ -39,7 +39,7 @@ export default function App() {
             <Route element={<PrivateRoutes />}>
               <Route element={<DashboardLayout />}>
                 <Route path='/customer/overview' element={<Overview />} />
-                <Route path='/customer/saved' element={<Saved />} />
+                <Route path='/customer/wishlist' element={<Saved />} />
                 <Route path='/customer/orders' element={<Orders />} />
                 <Route
                   path='/customer/recently-viewed'

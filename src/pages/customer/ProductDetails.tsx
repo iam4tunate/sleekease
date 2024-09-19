@@ -21,7 +21,7 @@ import {
 } from '@/lib/react-query/queries';
 import { useParams } from 'react-router-dom';
 import { CartValidation } from '@/lib/validation';
-import { SubmitButton } from '@/components/shared';
+import { Spinner, SubmitButton } from '@/components/shared';
 import { toast } from 'sonner';
 import { useCartContext } from '@/context/CartContext';
 import { Models } from 'appwrite';
@@ -44,7 +44,7 @@ export default function ProductDetails() {
       const existingItem = cartItems.find(
         (item: Models.Document) => item.id === cartItems.$id
       );
-      
+
       if (existingItem) {
         toast.message('This item is already in your cart');
       } else {
@@ -69,11 +69,18 @@ export default function ProductDetails() {
         imageUrls: product?.imageUrls,
       };
       dispatch({ type: 'ADD_ITEM', payload: cartItem });
-      
     }
   }
 
-  if (isLoading) return <div>Loading, please wait</div>;
+  if (isLoading)
+    return (
+      <div className='min-h-[70vh] flex flex-col items-center justify-center'>
+        <Spinner colored='black' size={50} />
+        <p className='text-lg max-sm:text-base pt-3'>
+          Fetching product details, hang tight!
+        </p>
+      </div>
+    );
 
   return (
     <div className='container padX relative'>
