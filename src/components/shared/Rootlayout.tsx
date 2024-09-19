@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import Footer from './Footer';
 import Navbar from './Navbar';
 import { useUserContext } from '@/context/AuthContext';
@@ -35,17 +35,25 @@ export default function Rootlayout() {
       </main>
       <Footer />
       <div className='shadow-inner md:hidden h-16 max-[300px]:h-12 bg-white fixed bottom-0 right-0 left-0 z-50 flex items-center justify-between gap-x-6 px-16 max-sm:px-6'>
-        <Link
-          to='/explore'
-          className='flex flex-col gap-y-0.5 items-center justify-center'>
-          <Shirt className='h-6 max-sm:h-5 w-6 max-sm:w-5' />
+        <NavLink
+          to='/shop'
+          className={({ isActive }) =>
+            cn('flex flex-col gap-y-0.5 items-center justify-center', {
+              'text-destructive': isActive,
+            })
+          }>
+          <Shirt className='h-6 w-6 max-sm:h-[22px] max-sm:w-[22px]' />
           <span className='max-sm:text-xs max-[300px]:hidden'>Shop</span>
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to='/customer/overview'
-          className='flex flex-col gap-y-0.5 items-center justify-center'>
+          className={({ isActive }) =>
+            cn('flex flex-col gap-y-0.5 items-center justify-center', {
+              'text-destructive': isActive,
+            })
+          }>
           <div className='relative'>
-            <CircleUserRound size={26} />
+            <CircleUserRound className='h-6 w-6 max-sm:h-[22px] max-sm:w-[22px]' />
             <BadgeCheck
               size={19}
               fill='green'
@@ -57,25 +65,33 @@ export default function Rootlayout() {
             />
           </div>
           <span className='max-sm:text-xs max-[300px]:hidden'>My Account</span>
-        </Link>
-        <Link
+        </NavLink>
+        <NavLink
           to='/customer/saved'
-          className='flex flex-col gap-y-0.5 items-center justify-center'>
+          className={({ isActive }) =>
+            cn('flex flex-col gap-y-0.5 items-center justify-center', {
+              'text-destructive': isActive,
+            })
+          }>
           <span className='relative'>
-            <Heart className='h-6 max-sm:h-5 w-6 max-sm:w-5' />
+            <Heart className='h-6 w-6 max-sm:h-[22px] max-sm:w-[22px]' />
             {saved.length !== 0 && (
               <span className='bg-primary text-white h-4 w-4 flex items-center justify-center rounded-full border border-white absolute -top-1 -right-2 text-[10px] font-rubikSemibold'>
                 {saved.length}
               </span>
             )}
           </span>
-          <span className='max-sm:text-xs max-[300px]:hidden'>Saved</span>
-        </Link>
-        <Link
+          <span className='max-sm:text-xs max-[300px]:hidden'>Wishlist</span>
+        </NavLink>
+        <NavLink
           to='/cart'
-          className='flex flex-col gap-y-0.5 items-center justify-center'>
+          className={({ isActive }) =>
+            cn('flex flex-col gap-y-0.5 items-center justify-center', {
+              'text-destructive': isActive,
+            })
+          }>
           <span className='relative'>
-            <ShoppingBag className='h-6 max-sm:h-5 w-6 max-sm:w-5' />
+            <ShoppingBag className='h-6 w-6 max-sm:h-[22px] max-sm:w-[22px]' />
             {((userCart && userCart?.length !== 0) ||
               (guestCart && guestCart?.length !== 0)) && (
               <span className='bg-primary text-white h-4 w-4 flex items-center justify-center rounded-full border border-white absolute -top-1 -right-2 text-[10px] font-rubikSemibold'>
@@ -83,8 +99,8 @@ export default function Rootlayout() {
               </span>
             )}
           </span>
-          <span className='max-sm:text-xs max-[300px]:hidden'>Cart</span>
-        </Link>
+          <span className='max-sm:text-xs max-[300px]:hidden'>Bag</span>
+        </NavLink>
       </div>
     </div>
   );

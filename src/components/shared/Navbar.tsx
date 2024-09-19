@@ -115,7 +115,7 @@ export default function Navbar() {
 
           <div className='max-md:hidden flex items-center gap-x-5 max-sm:gap-x-4'>
             <Link
-              to='/explore'
+              to='/shop'
               className='border rounded-full px-4 py-1.5 hover:bg-gray-100'>
               Shop All
             </Link>

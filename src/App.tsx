@@ -6,7 +6,7 @@ import AdminRoutes from './lib/AdminRoutes';
 import Home from './pages/customer/Home';
 import Cart from './pages/customer/Cart';
 import Category from './pages/customer/Category';
-import Explore from './pages/customer/Explore';
+import Shop from './pages/customer/Shop';
 import ProductDetails from './pages/customer/ProductDetails';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
@@ -31,7 +31,7 @@ export default function App() {
             <Route path='/' element={<Home />} />
             <Route path='/cart' element={<Cart />} />
             <Route path='/category/:category' element={<Category />} />
-            <Route path='/explore' element={<Explore />} />
+            <Route path='/shop' element={<Shop />} />
             <Route path='/product/:id' element={<ProductDetails />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />

@@ -3,6 +3,7 @@ import { useGetCurrentUser } from '@/lib/react-query/queries';
 import { ICartItem } from '@/lib/types';
 import { formatNumberWithCommas } from '@/lib/utils';
 import { Models } from 'appwrite';
+import { Button } from '../ui/button';
 
 export default function CartSummary() {
   const { data: currentUser } = useGetCurrentUser();
@@ -23,6 +24,10 @@ export default function CartSummary() {
     0
   );
 
+  const empty =
+    (currentUser && userTotalAmount === 0) ||
+    (!currentUser && guestTotalAmount === 0);
+
   return (
     <div className='border border-dark border-opacity-20  py-3.5 rounded-md h-fit'>
       <div className='px-4'>
@@ -31,8 +36,8 @@ export default function CartSummary() {
           <span className='flex items-center justify-between font-rubikMedium'>
             <span>Subtotal</span>
             <span>
-              {formatNumberWithCommas(userTotalAmount ?? guestTotalAmount)}{' '}
-              Naira
+              ₦{formatNumberWithCommas(userTotalAmount ?? guestTotalAmount)}
+              {empty && '.00'}
             </span>
           </span>
           {/* <span className='flex items-center justify-between font-rubikMedium'>
@@ -43,12 +48,18 @@ export default function CartSummary() {
             <span>Grand Total</span>
             <span>₦14,000</span>
           </span> */}
-          <p>Delivery fee not included yet</p>
+          {empty ? (
+            <p className='opacity-90'>Your shopping bag is empty</p>
+          ) : (
+            <p>Delivery fee not included yet</p>
+          )}
           <div className='h-[1px] w-full block bg-dark bg-opacity-20' />
         </div>
-        <button className='py-2.5 bg-primary text-white rounded-full w-full mt-3.5 font-semibold'>
+        <Button
+          disabled={empty}
+          className='py-2.5 bg-primary text-white rounded-full w-full mt-3.5 font-semibold'>
           Checkout
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import { ProductGrid } from '@/components/shared';
 import { useGetRecentProducts } from '@/lib/react-query/queries';
 
-export default function Explore() {
+export default function Shop() {
   const { isPending: isLoading, data: products } = useGetRecentProducts();
 
   return (

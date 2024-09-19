@@ -47,7 +47,7 @@ export default function Home() {
             Discover the perfect wardrobe essentials that blend style and
             comfort for every occasion.
           </p>
-          <Link to='/explore'>
+          <Link to='/shop'>
             <Button
               size='lg'
               className='font-lora border bg-transparent rounded-full text-base max-sm:text-sm hover:bg-orange hover:border-none hover:text-dark font-medium'>

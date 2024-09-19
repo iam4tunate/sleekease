@@ -98,7 +98,7 @@ export default function CartItem({
 
   return (
     <div className='flex flex-col last-of-type:border-b-0 border-b border-dark border-opacity-15 pb-5 mb-5 max-sm:pb-8 last-of-type:pb-0 last-of-type:mb-0 gap-2'>
-      <div className='h-28 flex max-[400px]:flex-col items-start justify-between select-none'>
+      <div className='h-28 max-[400px]:h-full flex max-[400px]:flex-col items-start justify-between select-none'>
         <div className='flex gap-x-4'>
           <img
             src={user?.product.imageUrls[0] ?? guest?.imageUrls[0]}
@@ -136,7 +136,7 @@ export default function CartItem({
           </div>
         </div>
         <div className='h-full max-[400px]:w-full flex flex-col items-end max-[400px]:flex-row max-[400px]:justify-between text-right'>
-          <p className='font-rubikSemibold opacity-90 mb-auto max-sm:mb-0 max-sm:py-2'>
+          <p className='font-rubikSemibold opacity-90 mb-auto  max-sm:py-2'>
             ₦
             {formatNumberWithCommas(
               user
