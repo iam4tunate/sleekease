@@ -22,10 +22,10 @@ const cartReducer = (cart: ICartState, action: ICartAction): ICartState => {
         (item) => item.$id === action.payload.$id
       );
       if (existingItem) {
-        toast.message('Item already in cart');
+        toast.message('This piece is already in your cart.');
         return cart;
       } else {
-        toast.success('Item added to cart!');
+        toast.success('Your cart has been updated: item added.');
         return { ...cart, items: [...cart.items, action.payload] };
       }
     }

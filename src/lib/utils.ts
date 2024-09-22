@@ -13,7 +13,7 @@ export function truncate(sentence: string, maxLength: number) {
 }
 
 export function formatNumberWithCommas(value: number) {
-  return value.toLocaleString();
+  return value?.toLocaleString();
 }
 
 export function formatDate(dateString: string): string {

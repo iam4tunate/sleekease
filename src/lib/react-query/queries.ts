@@ -29,7 +29,7 @@ export const useRegisterUser = () => {
   return useMutation({
     mutationFn: (user: INewUser) => registerUser(user),
     onSuccess: () => {
-      toast.success('Registeration successful.');
+      toast.success('Account created successfully!');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -45,7 +45,7 @@ export const useLoginUser = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Logged in successfully.');
+      toast.success('You are now logged in!');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -61,10 +61,10 @@ export const useLogoutUser = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Logged out successfully.');
+      toast.success('You are now logged out.');
     },
     onError: () => {
-      toast.error('Unable to log out, please try again.');
+      toast.error('There was an issue logging you out. Please retry.');
     },
   });
 };
@@ -87,7 +87,7 @@ export const useCreateProduct = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_PRODUCT_BY_ID, data.$id],
       });
-      toast.success('Item created successfully.');
+      toast.success('Item created successfully!');
     },
     onError: (error) => {
       toast(error.message);
@@ -148,7 +148,7 @@ export const useDeleteProduct = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_PRODUCTS_BY_CATEGORY],
       });
-      toast.success('Product deleted successfully');
+      toast.success('Item deleted successfully');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -188,7 +188,7 @@ export const useAddToCart = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Item added to cart.');
+      toast.success('This piece is now in your cart!');
     },
     onError: (error) => {
       toast(error.message);
@@ -205,7 +205,7 @@ export const useDeleteFromCart = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Item removed from cart');
+      toast.success('Your cart has been updated: item removed.');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -227,7 +227,7 @@ export const useSaveProduct = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Item added to saved list.');
+      toast.success('Your wishlist has been updated: item added.');
     },
     onError: (error) => {
       toast(error.message);
@@ -244,7 +244,7 @@ export const useDeleteSaved = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Item removed from your saved list');
+      toast.success('Your wishlist has been updated: item removed.');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -313,7 +313,7 @@ export const useAddShippingInfo = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Shipping details submitted.');
+      toast.success('Your shipping info has been saved!');
     },
     onError: (error) => {
       toast(error.message);
@@ -335,7 +335,7 @@ export const useUpdateShippingInfo = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Details updated successfully');
+      toast.success('Shipping details updated!');
     },
     onError: (error) => {
       toast(error.message);

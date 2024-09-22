@@ -51,7 +51,7 @@ export default function CartItem({
       );
 
       if (exists) {
-        toast.message('This item is already in your saved list.');
+        toast.message('This piece is already in your wishlist.');
         await deleteItem({ documentId: user!.$id });
       } else {
         await deleteItem({ documentId: user!.$id });
@@ -59,7 +59,7 @@ export default function CartItem({
       }
     } else {
       toast.message(
-        'Only logged-in users can save products. Please log in to continue.'
+        'Only logged-in users can add to their wishlist. kindly log in to continue.'
       );
     }
   };
@@ -69,7 +69,7 @@ export default function CartItem({
       await deleteItem({ documentId: user!.$id });
     } else {
       dispatch({ type: 'REMOVE_ITEM', payload: guest!.$id });
-      toast.success('Product removed from cart');
+      toast.success('Your cart has been updated: item removed.');
     }
   };
 
@@ -161,7 +161,7 @@ export default function CartItem({
                   </AlertDialogTitle>
                   <AlertDialogDescription>
                     Would you like to make changes to this item before re-adding
-                    it to your cart, or do you just want to view the product
+                    it to your cart, or do you just want to view the item
                     details? If you choose to make changes, the item will be
                     removed from your cart.
                   </AlertDialogDescription>

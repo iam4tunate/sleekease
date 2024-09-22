@@ -19,21 +19,25 @@ import {
   useGetCurrentUser,
   useGetProductById,
 } from '@/lib/react-query/queries';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CartValidation } from '@/lib/validation';
-import { Spinner, SubmitButton } from '@/components/shared';
+import { Spinner, SubmitButton, TopSelling } from '@/components/shared';
 import { toast } from 'sonner';
 import { useCartContext } from '@/context/CartContext';
 import { Models } from 'appwrite';
+import { Button } from '@/components/ui/button';
 
 export default function ProductDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { dispatch } = useCartContext();
   const { isAuthenticated, userLoading, user } = useUserContext();
   const { data: product, isPending: isLoading } = useGetProductById(id || '');
   const { mutateAsync: addToCart, isPending: isAdding } = useAddToCart();
   const { data: currentUser } = useGetCurrentUser();
   const cartItems = currentUser?.cart;
+
+  console.log(product);
 
   const form = useForm<z.infer<typeof CartValidation>>({
     resolver: zodResolver(CartValidation),
@@ -46,7 +50,7 @@ export default function ProductDetails() {
       );
 
       if (existingItem) {
-        toast.message('This item is already in your cart');
+        toast.message('This piece is already in your cart.');
         return cartItems;
       } else {
         // store items in appwrite
@@ -79,8 +83,28 @@ export default function ProductDetails() {
       <div className='min-h-[70vh] flex flex-col items-center justify-center'>
         <Spinner colored='black' size={40} />
         <p className='text-base max-sm:text-sm pt-3'>
-          Fetching product details, hang tight!
+          Fetching item details, please hold on!
         </p>
+      </div>
+    );
+
+  if (!isLoading && !product)
+    return (
+      <div className='container padX padY flex flex-col items-center justify-center'>
+        <div className='text-center flex flex-col gap-y-2.5 justify-center items-center mb-8 max-w-xl'>
+          <div className='font-lora font-medium text-3xl max-md:text-2xl capitalize'>
+            Oops! We couldn't find that Item.
+          </div>
+          <p className='text-base leading-[1.3] text-center'>
+            The item you’re looking for doesn’t exist or may have been removed.
+          </p>
+          <Button
+            onClick={() => navigate('/shop')}
+            className='rounded-full w-[10rem]'>
+            Return to Shop
+          </Button>
+        </div>
+        <TopSelling />
       </div>
     );
 

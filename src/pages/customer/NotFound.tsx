@@ -7,7 +7,7 @@ export default function NotFound() {
   return (
     <div className='container padX padY flex flex-col items-center justify-center'>
       <div className='text-center flex flex-col gap-y-5 justify-center items-center mb-8 max-w-xl'>
-        <div className='font-lora font-medium text-4xl max-md:text-3xl capitalize'>
+        <div className='font-lora font-medium text-3xl max-md:text-2xl capitalize'>
           Page Not found
         </div>
         <p className='text-base leading-[1.3]'>

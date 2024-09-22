@@ -16,7 +16,7 @@ export default function ShippingInfo({
       <div className='h-[15rem] flex flex-col items-center justify-center'>
         <Spinner colored='black' size={40} />
         <p className='text-base max-sm:text-base  pt-3'>
-          Fetching Shipping details, hang tight!
+          Fetching Shipping details, please hold on!
         </p>
       </div>
     );

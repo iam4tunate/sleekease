@@ -82,7 +82,7 @@ export default function Checkout() {
           productIds: productIds,
           userId: currentUser!.$id,
         });
-        toast.success('Payment Successful');
+        toast.success("You've completed your payment!");
         navigate('/customer/orders');
       },
       onClose: () => {

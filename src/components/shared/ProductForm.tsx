@@ -60,7 +60,7 @@ export default function ProductForm({ product, action }: PostFormProps) {
 
   async function onSubmit(values: z.infer<typeof ProductValidation>) {
     if (action === 'Create' && !values.files.length) {
-      return toast.message('Please upload an image before submitting.');
+      return toast.message('Image upload is required before submission.');
     }
 
     //! UPDATING
@@ -81,7 +81,7 @@ export default function ProductForm({ product, action }: PostFormProps) {
         imageUrls: product?.imageUrls,
       });
       if (updatedHome) {
-        toast.success('Product update successful.');
+        toast.success('Update successful!');
         return navigate(`/admin/list`);
       }
     }
