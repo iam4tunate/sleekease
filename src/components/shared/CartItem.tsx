@@ -218,7 +218,7 @@ export default function CartItem({
                         isProductSaved(user?.product.$id, currentUser?.$id)
                       }
                       className='bg-orange text-white hover:bg-darkOrange'>
-                      Save for later
+                      Add to Wishlist
                     </AlertDialogAction>
                     <AlertDialogAction onClick={handleDelete}>
                       Remove
