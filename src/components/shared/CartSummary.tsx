@@ -1,21 +1,22 @@
 import { useCartContext } from '@/context/CartContext';
 import { useGetCurrentUser } from '@/lib/react-query/queries';
 import { ICartItem } from '@/lib/types';
-import { formatNumberWithCommas } from '@/lib/utils';
+import { cn, formatNumberWithCommas } from '@/lib/utils';
 import { Models } from 'appwrite';
 import { Button } from '../ui/button';
+import { Link, useLocation } from 'react-router-dom';
 
-export default function CartSummary() {
+export default function CartSummary({ noBtn }: { noBtn?: boolean }) {
+  const { pathname } = useLocation();
   const { data: currentUser } = useGetCurrentUser();
   const { cart: guestCart } = useCartContext();
   const userCart = currentUser?.cart;
 
-  const userTotalAmount = userCart?.reduce(
-    (total: number, item: Models.Document) => {
+  const userTotalAmount =
+    currentUser &&
+    userCart?.reduce((total: number, item: Models.Document) => {
       return total + item.product.price * item.quantity;
-    },
-    0
-  );
+    }, 0);
 
   const guestTotalAmount = guestCart?.items.reduce(
     (total: number, item: ICartItem) => {
@@ -28,10 +29,22 @@ export default function CartSummary() {
     (currentUser && userTotalAmount === 0) ||
     (!currentUser && guestTotalAmount === 0);
 
+  let deliveryFee;
+  switch (pathname) {
+    case '/cart':
+      deliveryFee = 0;
+      break;
+    case '/checkout':
+      deliveryFee = 5000;
+      break;
+    default:
+      break;
+  }
+
   return (
     <div className='border border-dark border-opacity-20  py-3.5 rounded-md h-fit'>
       <div className='px-4'>
-        <div className='font-rubikSemibold text- pb-4'>Shopping Summary</div>
+        <div className='font-rubikSemibold text- pb-4'>Cart Summary</div>
         <div className='space-y-4'>
           <span className='flex items-center justify-between font-rubikMedium'>
             <span>Subtotal</span>
@@ -40,26 +53,35 @@ export default function CartSummary() {
               {empty && '.00'}
             </span>
           </span>
-          {/* <span className='flex items-center justify-between font-rubikMedium'>
-            <span>Delivery Fee</span>
-            <span>₦2,000</span>
+          <span className='flex items-center justify-between font-rubikMedium'>
+            <span>Delivery Free</span>
+            <span>
+              {pathname === '/cart' ? (
+                <span className='font-rubik'>not included yet</span>
+              ) : (
+                `₦${formatNumberWithCommas(deliveryFee!)}`
+              )}
+            </span>
           </span>
           <span className='flex items-center justify-between font-rubikMedium'>
             <span>Grand Total</span>
-            <span>₦14,000</span>
-          </span> */}
-          {empty ? (
-            <p className='opacity-90'>Your shopping bag is empty</p>
-          ) : (
-            <p>Delivery fee not included yet</p>
-          )}
+            <span>
+              ₦
+              {formatNumberWithCommas(
+                (userTotalAmount ?? guestTotalAmount) + deliveryFee
+              )}
+              {empty && '.00'}
+            </span>
+          </span>
           <div className='h-[1px] w-full block bg-dark bg-opacity-20' />
         </div>
-        <Button
-          disabled={empty}
-          className='py-2.5 bg-primary text-white rounded-full w-full mt-3.5 font-semibold'>
-          Checkout
-        </Button>
+        <Link to='/checkout' className={cn({ hidden: noBtn })}>
+          <Button
+            disabled={empty}
+            className='py-2.5 bg-primary text-white rounded-full w-full mt-3.5 font-semibold'>
+            Checkout
+          </Button>
+        </Link>
       </div>
     </div>
   );

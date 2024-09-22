@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -12,12 +11,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import Spinner from '@/components/shared/Spinner';
 import { useLoginUser, useRegisterUser } from '@/lib/react-query/queries';
 import { useUserContext } from '@/context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { registerValidation } from '@/lib/validation';
+import { SubmitButton } from '@/components/shared';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -125,16 +124,11 @@ export default function Register() {
                 </FormItem>
               )}
             />
-            <Button type='submit' className='w-full'>
-              {registering || loggingIn ? (
-                <>
-                  <Spinner size={20} />
-                  <span className='pl-1'>Please wait...</span>
-                </>
-              ) : (
-                'Sign Up and Start Styling'
-              )}
-            </Button>
+            <SubmitButton
+              text='Sign Up and Start Styling'
+              isLoading={registering || loggingIn}
+              className='rounded-full w-full'
+            />
           </form>
         </Form>
         <p className='pt-3 px-3 text-left self-start'>

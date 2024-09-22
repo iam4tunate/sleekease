@@ -56,7 +56,7 @@ export default function Navbar() {
   useEffect(() => {
     if (isSuccess) navigate(0);
   }, [navigate, isSuccess]);
-
+  
   return (
     <nav className='shadow-sm fixed top-0 left-0 right-0 z-50'>
       <div
@@ -113,7 +113,7 @@ export default function Navbar() {
             </div>
           </Link>
 
-          <div className='flex items-center gap-x-5 max-sm:gap-x-4'>
+          <div className='flex items-center gap-x-6'>
             <Link
               to='/shop'
               className='border rounded-full px-4 py-1.5 hover:bg-gray-100 max-md:hidden'>
@@ -160,7 +160,7 @@ export default function Navbar() {
                 {isAuthenticated && (
                   <DropdownMenuItem
                     onClick={handleLogout}
-                    className='w-fit mx-auto text-[13px] px-2 bg-gray-100 hover:bg-orange mt-1.5 cursor-pointer'>
+                    className='w-fit mx-auto text-[13px] px-2 bg-red-50 mt-1.5 cursor-pointer'>
                     <span>Log out</span>
                   </DropdownMenuItem>
                 )}

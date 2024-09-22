@@ -8,6 +8,8 @@ export const appwriteConfig = {
   productsCollectionId: import.meta.env.VITE_APPWRITE_PRODUCTS_COLLECTION_ID,
   cartCollectionId: import.meta.env.VITE_APPWRITE_CART_COLLECTION_ID,
   savesCollectionId: import.meta.env.VITE_APPWRITE_SAVES_COLLECTION_ID,
+  shippingCollectionId: import.meta.env.VITE_APPWRITE_SHIPPING_COLLECTION_ID,
+  ordersCollectionId: import.meta.env.VITE_APPWRITE_ORDERS_COLLECTION_ID,
 };
 
 export const client = new Client();

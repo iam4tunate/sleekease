@@ -1,5 +1,4 @@
 import {
-  ArrowLeftRight,
   Heart,
   History,
   List,
@@ -24,8 +23,8 @@ export const DashboardNav = [
 ];
 
 export const AdminDashboardNav = [
-  { name: 'Create Product', href: '/admin/create', icon: PackagePlus },
-  { name: 'Product List', href: '/admin/list', icon: List },
+  { name: 'Create Item', href: '/admin/create', icon: PackagePlus },
+  { name: 'Item List', href: '/admin/list', icon: List },
 ];
 
 export const CategoryNav = [
@@ -35,13 +34,6 @@ export const CategoryNav = [
   { label: 'caps', icon: GiBilledCap },
   { label: 'jackets', icon: GiMonclerJacket },
   { label: 'sweatshirts', icon: GiHoodie },
-];
-
-export const AccountStats = [
-  { name: 'orders', value: 10, icon: Package2 },
-  { name: 'successful transactions', value: 10, icon: ArrowLeftRight },
-  { name: 'wishlist', value: 4, icon: Heart },
-  { name: 'Recently Viewed', value: 50, icon: History },
 ];
 
 export const SizesOptions = ['x-small', 'small', 'medium', 'large', 'x-large'];

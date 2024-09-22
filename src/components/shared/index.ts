@@ -13,5 +13,7 @@ export { default as TopSelling } from './TopSelling';
 export { default as DashboardLayout } from './DashboardLayout';
 export { default as RootLayout } from './Rootlayout';
 export { default as Spinner } from './Spinner';
+export { default as ShippingForm } from './ShippingForm';
+export { default as ShippingInfo } from './ShippingInfo';
 export { default as SubmitButton } from './SubmitButton';
 export { default as ScrollToTop } from './ScrollToTop';

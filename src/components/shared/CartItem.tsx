@@ -6,7 +6,7 @@ import {
 } from '@/lib/react-query/queries';
 import { formatNumberWithCommas, truncate } from '@/lib/utils';
 import { Models } from 'appwrite';
-import { Minus, Plus, Trash2 } from 'lucide-react';
+import { Minus, Plus, X } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -48,7 +48,7 @@ export default function CartItem({
       );
 
       if (exists) {
-        toast.message('This product is already in your saved list.');
+        toast.message('This item is already in your saved list.');
         await deleteItem({ documentId: user!.$id });
       } else {
         await deleteItem({ documentId: user!.$id });
@@ -97,25 +97,25 @@ export default function CartItem({
   };
 
   return (
-    <div className='flex flex-col last-of-type:border-b-0 border-b border-dark border-opacity-15 pb-5 mb-5 max-sm:pb-8 last-of-type:pb-0 last-of-type:mb-0 gap-2'>
-      <div className='h-28 max-[400px]:h-full flex max-[400px]:flex-col items-start justify-between select-none'>
+    <div className='flex flex-col last-of-type:border-b-0 border-b border-dark border-opacity-15 pb-5 mb-5 last-of-type:pb-0 last-of-type:mb-0 gap-2'>
+      <div className='h-28 max-[400px]:h-full flex max-[400px]:flex-col gap-x-4 items-start justify-between select-none'>
         <div className='flex gap-x-4'>
           <img
             src={user?.product.imageUrls[0] ?? guest?.imageUrls[0]}
             alt={user?.product.title ?? guest?.title}
-            className='w-36 h-28 max-sm:w-24 rounded-md object-cover'
+            className='w-28 h-28 max-sm:w-24 rounded-md object-cover'
           />
-          <div className='flex flex-col gap-y-2.5 w-full'>
-            <p className='capitalize font-rubikMedium'>
+          <div className='flex flex-col justify-between w-full'>
+            <p className='capitalize font-rubikMedium pb-1.5'>
               {truncate(user?.product.title ?? guest?.title, 30)}
             </p>
-            <span className='opacity-70 text-xs capitalize'>
+            <span className='opacity-70 text-xs capitalize mb-auto'>
               {user?.size ?? guest?.size}
             </span>
-            <div className='flex items-center border w-fit'>
+            <div className='flex items-center border w-fit rounded-full'>
               <div
                 onClick={handleDecrement}
-                className='h-full py-1.5 px-2 max-[300px]:px-1  hover:bg-orange hover:bg-opacity-10 cursor-pointer'>
+                className='h-full py-1.5 px-2 max-[300px]:px-1  hover:bg-orange hover:bg-opacity-10 cursor-pointer rounded-l-full'>
                 <Minus size={16} />
               </div>
               <div className='h-full text-center mx-1 w-6 max-sm:max-w-6 flex items-center justify-center'>
@@ -129,14 +129,14 @@ export default function CartItem({
               </div>
               <div
                 onClick={handleIncrement}
-                className='h-full py-1.5 px-2 max-[300px]:px-1 hover:bg-orange hover:bg-opacity-10 cursor-pointer'>
+                className='h-full py-1.5 px-2 max-[300px]:px-1 hover:bg-orange hover:bg-opacity-10 cursor-pointer rounded-r-full'>
                 <Plus size={16} />
               </div>
             </div>
           </div>
         </div>
-        <div className='h-full max-[400px]:w-full flex flex-col items-end max-[400px]:flex-row max-[400px]:justify-between text-right'>
-          <p className='font-rubikSemibold opacity-90 mb-auto  max-sm:py-2'>
+        <div className='h-full max-[400px]:w-full flex flex-col items-end max-[400px]:flex-row max-[400px]:justify-between text-right max-[400px]:items-center'>
+          <p className='font-rubikSemibold opacity-90 max-[400px]:pt-3'>
             ₦
             {formatNumberWithCommas(
               user
@@ -146,14 +146,15 @@ export default function CartItem({
           </p>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              {isDeleting ? (
-                <Spinner size={20} colored='#E8572A' />
-              ) : (
-                <div className='flex items-center gap-x-2 text-orange hover:bg-orange hover:bg-opacity-25 rounded px-2 py-2 cursor-pointer'>
-                  <Trash2 size={17} />{' '}
-                  <span className='font-rubikMedium'>Remove</span>
-                </div>
-              )}
+              <div className='mt-auto'>
+                {isDeleting ? (
+                  <Spinner size={20} colored='#E8572A' />
+                ) : (
+                  <div className='flex items-center gap-x-1.5 hover:bg-orange hover:bg-opacity-25 p-1.5 cursor-pointer border rounded-full'>
+                    <X size={16} />
+                  </div>
+                )}
+              </div>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>

@@ -23,12 +23,46 @@ export const ProductValidation = z.object({
     message: 'select a size.',
   }),
   files: z.custom<File[]>(),
-  //!issue with this is that you have to upload a new file when you want to upload
-  // files: z.array(z.instanceof(File)).min(1, "At least one file is required"),
 });
 
 export const CartValidation = z.object({
   type: z.enum(['x-small', 'small', 'medium', 'large', 'x-large'], {
     required_error: 'select your preferred size.',
+  }),
+});
+
+export const ShippingValidation = z.object({
+  email: z.string().min(1, {
+    message: 'Email is required.',
+  }),
+  phoneNumber: z.string().min(1, {
+    message: 'Phone number is required',
+  }),
+  firstName: z.string().min(1, {
+    message: 'First name is required',
+  }),
+  lastName: z.string().min(1, {
+    message: 'Last name is required',
+  }),
+  streetAddress: z.string().min(1, {
+    message: 'Street address is required',
+  }),
+  state: z.string().min(1, {
+    message: 'State is required',
+  }),
+  lga: z.string().min(1, {
+    message: 'LGA is required',
+  }),
+  zipCode: z
+    .string()
+    .max(9, {
+      message: 'Maximum of 9 characters',
+    })
+    .optional(),
+});
+
+export const CheckoutValidation = z.object({
+  noRefund: z.boolean().refine((val) => val === true, {
+    message: 'Please accept the policy to proceed.',
   }),
 });

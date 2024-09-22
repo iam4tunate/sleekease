@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { INewProduct, INewUser, IUpdateProduct } from '../types';
+import { INewProduct, INewUser, IShippingInfo, IUpdateProduct } from '../types';
 import {
+  addShippingInfo,
   addToCart,
   createProduct,
   deleteFromCart,
@@ -13,11 +14,13 @@ import {
   loginUser,
   logoutUser,
   registerUser,
+  saveOrder,
   saveProduct,
   syncCartOnLogin,
   syncCartOnLogout,
   updateProduct,
   updateQuantity,
+  updateShippingInfo,
 } from '../appwrite/api';
 import { toast } from 'sonner';
 import { QUERY_KEYS } from './query-keys';
@@ -84,7 +87,7 @@ export const useCreateProduct = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_PRODUCT_BY_ID, data.$id],
       });
-      toast.success('Product created successfully.');
+      toast.success('Item created successfully.');
     },
     onError: (error) => {
       toast(error.message);
@@ -185,7 +188,7 @@ export const useAddToCart = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Product added to cart.');
+      toast.success('Item added to cart.');
     },
     onError: (error) => {
       toast(error.message);
@@ -202,7 +205,7 @@ export const useDeleteFromCart = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Product removed from cart');
+      toast.success('Item removed from cart');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -224,7 +227,7 @@ export const useSaveProduct = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Product added to saved list.');
+      toast.success('Item added to saved list.');
     },
     onError: (error) => {
       toast(error.message);
@@ -241,7 +244,7 @@ export const useDeleteSaved = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Product removed from your saved list');
+      toast.success('Item removed from your saved list');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -293,6 +296,70 @@ export const useSyncCartOnLogout = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
+    },
+    onError: (error) => {
+      toast(error.message);
+    },
+  });
+};
+
+export const useAddToRecentlyViewed = () => {};
+
+export const useAddShippingInfo = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (shipping: IShippingInfo) => addShippingInfo(shipping),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+      toast.success('Shipping details submitted.');
+    },
+    onError: (error) => {
+      toast(error.message);
+    },
+  });
+};
+
+export const useUpdateShippingInfo = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      documentId,
+      shipping,
+    }: {
+      documentId: string;
+      shipping: IShippingInfo;
+    }) => updateShippingInfo(documentId, shipping),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+      toast.success('Details updated successfully');
+    },
+    onError: (error) => {
+      toast(error.message);
+    },
+  });
+};
+
+export const useSaveOrder = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      productIds,
+      userId,
+      shippingId,
+    }: {
+      productIds: string;
+      userId: string;
+      shippingId: string;
+    }) => saveOrder(productIds, userId, shippingId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+      toast.success('Item added to saved list.');
     },
     onError: (error) => {
       toast(error.message);

@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ProductValidation } from '@/lib/validation';
 import {
@@ -28,8 +27,8 @@ import { CategoryNav, SizesOptions } from '@/lib/constants';
 import { Checkbox } from '../ui/checkbox';
 import { useCreateProduct, useUpdateProduct } from '@/lib/react-query/queries';
 import { useUserContext } from '@/context/AuthContext';
-import Spinner from './Spinner';
 import { useNavigate } from 'react-router-dom';
+import SubmitButton from './SubmitButton';
 
 type PostFormProps = {
   product?: Models.Document;
@@ -82,7 +81,7 @@ export default function ProductForm({ product, action }: PostFormProps) {
         imageUrls: product?.imageUrls,
       });
       if (updatedHome) {
-        toast('Product update successful.');
+        toast.success('Product update successful.');
         return navigate(`/admin/list`);
       }
     }
@@ -280,19 +279,11 @@ export default function ProductForm({ product, action }: PostFormProps) {
                 </FormItem>
               )}
             />
-            <Button
-              disabled={isCreating || isUpdating}
-              type='submit'
-              className='w-full'>
-              {isCreating || isUpdating ? (
-                <>
-                  <Spinner size={20} />
-                  <span className='pl-1'>Please wait...</span>
-                </>
-              ) : (
-                `${action} Product`
-              )}
-            </Button>
+            <SubmitButton
+              text={`${action} Product`}
+              isLoading={isCreating || isUpdating}
+              className='rounded-full w-full'
+            />
           </div>
         </form>
       </Form>

@@ -17,17 +17,17 @@ import RecentlyViewed from './pages/customer/RecentlyViewed';
 import CreateProduct from './pages/admin/CreateProduct';
 import ProductList from './pages/admin/ProductList';
 import UpdateProduct from './pages/admin/UpdateProduct';
+import Checkout from './pages/customer/Checkout';
+import NotFound from './pages/customer/NotFound';
 
 export default function App() {
   return (
     <>
-      {/* TODO: CREATE NOT FOUND PAGE FOR ALL WRONG ROUTINGS, 
-      SHADCN SKELETON FOR ALL LOADING STATES 
-      EMPTY RESULT UI FOR CART,SAVED AND OTHERS
-      OPTIMIZE AKK IMAGES BEFOFE UPLOADING  */}
+      {/* TODO: OPTIMIZE ALL IMAGES BEFOFE UPLOADING  */}
       <ScrollToTop>
         <Routes>
           <Route element={<RootLayout />}>
+            <Route path='*' element={<NotFound />} />
             <Route path='/' element={<Home />} />
             <Route path='/cart' element={<Cart />} />
             <Route path='/category/:category' element={<Category />} />
@@ -37,6 +37,7 @@ export default function App() {
             <Route path='/register' element={<Register />} />
 
             <Route element={<PrivateRoutes />}>
+              <Route path='/checkout' element={<Checkout />} />
               <Route element={<DashboardLayout />}>
                 <Route path='/customer/overview' element={<Overview />} />
                 <Route path='/customer/wishlist' element={<Saved />} />

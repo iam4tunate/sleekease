@@ -8,6 +8,8 @@ export enum QUERY_KEYS {
   GET_RECENT_PRODUCTS = 'getRecentProducts',
   GET_PRODUCTS_BY_CATEGORY = 'getProductsByCategory',
 
+  GET_RECENTLY_VIEWED = 'getRecentlyViewed',
+
   // CART KEY
   // GET_CART = 'getCart',
 }

@@ -57,7 +57,7 @@ export default function Rootlayout() {
               </span>
             )}
           </span>
-          <span className='max-sm:text-xs max-[300px]:hidden'>Bag</span>
+          <span className='max-sm:text-xs max-[300px]:hidden'>Cart</span>
         </NavLink>
         {/* <NavLink
           to='/customer/overview'
@@ -104,15 +104,7 @@ export default function Rootlayout() {
               'text-destructive': isActive,
             })
           }>
-          <span className='relative'>
-            <Package2 className='h-6 w-6 max-sm:h-[22px] max-sm:w-[22px]' />
-            {((userCart && userCart?.length !== 0) ||
-              (guestCart && guestCart?.length !== 0)) && (
-              <span className='bg-primary text-white h-4 w-4 flex items-center justify-center rounded-full border border-white absolute -top-1 -right-2 text-[10px] font-rubikSemibold'>
-                {userCart?.length ?? guestCart.length}
-              </span>
-            )}
-          </span>
+          <Package2 className='h-6 w-6 max-sm:h-[22px] max-sm:w-[22px]' />
           <span className='max-sm:text-xs max-[300px]:hidden'>Orders</span>
         </NavLink>
       </div>

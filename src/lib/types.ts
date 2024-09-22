@@ -61,6 +61,18 @@ export interface ICartState {
 export type IRecenltyViewed = {
   id: string;
   title: string;
-  price: string;
+  price: number;
   image: string;
+};
+
+export type IShippingInfo = {
+  user?: string;
+  email: string;
+  phoneNumber: string;
+  firstName: string;
+  lastName: string;
+  streetAddress: string;
+  state: string;
+  lga: string;
+  zipCode?: string;
 };

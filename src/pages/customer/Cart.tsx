@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 export default function Cart() {
   const { data: currentUser, isPending: isLoading } = useGetCurrentUser();
   const { cart } = useCartContext();
-  
+  console.log(cart);
   const userCart = currentUser?.cart
     .slice()
     .reverse()
@@ -34,11 +34,11 @@ export default function Cart() {
   return (
     <div className=''>
       <div className='container padX padY'>
-        <div className='heading'>Shopping Bag</div>
+        <div className='heading'>Your Cart</div>
         <div className='grid grid-cols-[60%_35%] max-lg:grid-cols-[60%_35%] gap-y-6 max-md:grid-cols-1 justify-between'>
-          <ScrollArea className='max-h-[60vh] min-h-fit h-fit w-full rounded-md border p-4'>
+          <ScrollArea className='max-h-[60vh] w-full h-full rounded-md border p-4'>
             {isLoading && currentUser ? (
-              Array.from({ length: 3 }, (_, index) => (
+              Array.from({ length: 2 }, (_, index) => (
                 <div
                   key={index}
                   className='h-28 max-[400px]:h-full flex max-[400px]:flex-col items-start justify-between pb-5 mb-5 max-sm:pb-8 last-of-type:pb-0 last-of-type:mb-0'>
@@ -52,12 +52,12 @@ export default function Cart() {
                   </div>
                   <div className='h-full max-[400px]:w-full flex flex-col justify-between items-end max-[400px]:flex-row max-[400px]:justify-between text-right'>
                     <Skeleton className='h-5 w-24 max-sm:w-16 rounded' />
-                    <Skeleton className='h-8 max-sm:h-6 w-28 max-sm:w-20 rounded' />
+                    <Skeleton className='h-8 w-8 rounded-full' />
                   </div>
                 </div>
               ))
             ) : (currentUser && !isLoading && !userCart?.length) ||
-              (!currentUser && !isLoading && !guestCart.length) ? (
+              (!currentUser && !guestCart.length) ? (
               <div className='flex flex-col items-center justify-center py-8'>
                 <img
                   src='/images/empty-bag.png'

@@ -4,6 +4,7 @@ import {
   INewProduct,
   INewUser,
   IRecenltyViewed,
+  IShippingInfo,
   IUpdateProduct,
 } from '../types';
 import { account, appwriteConfig, databases, storage } from './config';
@@ -65,6 +66,7 @@ export async function getCurrentUser() {
 
 export async function logoutUser(userId: string) {
   await syncCartOnLogout(userId);
+  localStorage.removeItem('recentlyViewed');
   const session = await account.deleteSession('current');
   return session;
 }
@@ -395,7 +397,7 @@ export async function syncCartOnLogout(userId: string) {
   await Promise.all(deletePromises);
 }
 
-export const addToRecentlyViewed = (product: IRecenltyViewed) => {
+export function addToRecentlyViewed(product: IRecenltyViewed) {
   const viewedProducts = JSON.parse(
     localStorage.getItem('recentlyViewed') || '[]'
   );
@@ -410,4 +412,46 @@ export const addToRecentlyViewed = (product: IRecenltyViewed) => {
 
   // Save the updated list back to local storage
   localStorage.setItem('recentlyViewed', JSON.stringify(updatedProducts));
-};
+}
+
+export async function addShippingInfo(shipping: IShippingInfo) {
+  const shippingInfo = await databases.createDocument(
+    appwriteConfig.databaseId,
+    appwriteConfig.shippingCollectionId,
+    ID.unique(),
+    shipping
+  );
+  return shippingInfo;
+}
+
+export async function updateShippingInfo(
+  documentId: string,
+  shipping: IShippingInfo
+) {
+  const shippingInfo = await databases.updateDocument(
+    appwriteConfig.databaseId,
+    appwriteConfig.shippingCollectionId,
+    documentId,
+    shipping
+  );
+  return shippingInfo;
+}
+
+export async function saveOrder(
+  productIds: string,
+  userId: string,
+  shippingId: string
+) {
+  const newOrder = await databases.createDocument(
+    appwriteConfig.databaseId,
+    appwriteConfig.ordersCollectionId,
+    ID.unique(),
+    {
+      user: userId,
+      cart: productIds,
+      shipping: shippingId,
+      orderId: ID.unique(),
+    }
+  );
+  return newOrder;
+}

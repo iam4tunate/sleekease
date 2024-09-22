@@ -18,7 +18,7 @@ export default function DashboardLayout() {
   const { user } = useUserContext();
 
   return (
-    <div className='bg-[#EA7227] bg-opacity-5 h-full py-6 min-h-[calc(100vh-97px)]'>
+    <div className='bg-[#EA7227] bg-opacity-[0.03] h-full py-6 max-sm:py-4 min-h-[calc(100vh-97px)]'>
       <div className='hidden max-md:flex padX container fle justify-end'>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

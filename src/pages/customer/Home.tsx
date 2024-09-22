@@ -38,7 +38,7 @@ export default function Home() {
             'select-none sticky bottom-6 w-[90%] max-sm:w-full mx-auto z-10 text-white text-center space-y-3 pt-5 pb-8 padX',
             isAuthenticated ? 'top-12' : 'top-24'
           )}>
-          <h2 className='uppercase font-lora text-[7vw] 2xl:text-8xl max-sm:text-5xl max-[320px]:text-4xl leading-none opacity-80'>
+          <h2 className='uppercase font-lora text-[7vw] 2xl:text-8xl max-lg:text-7xl max-sm:text-5xl max-[320px]:text-4xl leading-none opacity-80'>
             Effortless Style,
             <br /> Every Day.
           </h2>

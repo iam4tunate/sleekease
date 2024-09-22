@@ -42,11 +42,12 @@ export default function ProductDetails() {
   async function onSubmit(data: z.infer<typeof CartValidation>) {
     if (isAuthenticated) {
       const existingItem = cartItems.find(
-        (item: Models.Document) => item.id === cartItems.$id
+        (item: Models.Document) => item.product.$id === product!.$id
       );
 
       if (existingItem) {
         toast.message('This item is already in your cart');
+        return cartItems;
       } else {
         //! store in appwrite
         await addToCart({
@@ -58,6 +59,7 @@ export default function ProductDetails() {
           price: product?.price,
           imageUrls: product?.imageUrls,
         });
+        console.log('coooooooccccc');
       }
     } else {
       const cartItem = {
@@ -75,8 +77,8 @@ export default function ProductDetails() {
   if (isLoading)
     return (
       <div className='min-h-[70vh] flex flex-col items-center justify-center'>
-        <Spinner colored='black' size={50} />
-        <p className='text-lg max-sm:text-base pt-3'>
+        <Spinner colored='black' size={40} />
+        <p className='text-base max-sm:text-sm pt-3'>
           Fetching product details, hang tight!
         </p>
       </div>
@@ -86,13 +88,12 @@ export default function ProductDetails() {
     <div className='container padX relative'>
       <div className='grid grid-cols-[66%_30%] max-lg:grid-cols-[60%_40%] justify-between max-md:grid-cols-1 gap-x-6 gap-y-7'>
         <div className='grid grid-cols-2 max-lg:grid-cols-1 gap-x-0.5 gap-y-1'>
-          {/* TODO: ADD SLIDER FROM shadcn: 1 on mobile or tab 2 on large screens */}
           {product?.imageUrls.map((url: string) => (
             <img
               key={url}
               src={url}
               alt=''
-              className='h-[30rem] max-sm:h-[35rem] object-top w-full object-cover'
+              className='h-full object-top w-full object-cover'
             />
           ))}
         </div>
@@ -144,7 +145,7 @@ export default function ProductDetails() {
               <SubmitButton
                 text='Add to Cart'
                 isLoading={isAdding}
-                className='rounded-full font-rubikMedium w-full mt-8'
+                className='rounded-full w-full mt-8'
               />
             </form>
           </Form>

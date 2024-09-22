@@ -31,7 +31,7 @@ export default function Saved() {
     setCurrentId(documentId); // Set the current deleting item
     await deleteItem({ documentId });
   };
-  console.log(!savedProducts.length);
+
   return (
     <div>
       <div className='border-b mb-6 px-4 max-sm:px-2 pb-2 text-base font-rubikSemibold'>
@@ -57,7 +57,7 @@ export default function Saved() {
             </div>
           ))}
         </div>
-      ) : !savedProducts.length ? (
+      ) : !isLoading && !savedProducts.length ? (
         <div className='flex flex-col items-center justify-center text-center py-8'>
           <img
             src='/images/wishlist.png'

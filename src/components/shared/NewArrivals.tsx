@@ -6,7 +6,7 @@ export default function NewArrivals() {
 
   return (
     <div className='padY padX container'>
-      <div className='heading'>New Arrivals</div>
+      <div className='font-lora font-medium text-3xl max-sm:text-2xl pb-6 max-md:pb-4 capitalize'>New Arrivals</div>
 
       <ProductGrid
         isLoading={isLoading}

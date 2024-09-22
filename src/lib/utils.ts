@@ -15,3 +15,17 @@ export function truncate(sentence: string, maxLength: number) {
 export function formatNumberWithCommas(value: number) {
   return value.toLocaleString();
 }
+
+export function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+
+  // Define options to format the date
+  const options: Intl.DateTimeFormatOptions = {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  };
+
+  // Return the formatted date
+  return date.toLocaleDateString('en-GB', options);
+}

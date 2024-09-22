@@ -22,6 +22,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { formatNumberWithCommas } from '@/lib/utils';
 import { useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ProductList() {
   const navigate = useNavigate();
@@ -53,9 +54,16 @@ export default function ProductList() {
         </div>
       </div>
       {isLoading ? (
-        <div>loading, plaesa wait!</div>
+        <div className='grid grid-cols-3 max-lg:grid-cols-2 gap-x-2.5 gap-y-6'>
+          {Array.from({ length: 6 }, (_, index) => (
+            <Skeleton
+              key={index}
+              className='w-full h-[20rem] max-sm:h-[13rem] max-md:h-[20rem] max-lg:h-[15rem] max-xl:h-[17rem]'
+            />
+          ))}
+        </div>
       ) : (
-        <div className='grid grid-cols-3 max-md:grid-cols-2 gap-x-2.5 gap-y-6'>
+        <div className='grid grid-cols-3 max-lg:grid-cols-2 gap-x-2.5 gap-y-6'>
           {/* TODO: ADD PAGINATION  */}
           {products?.documents.map((product) => (
             <div className='relative rounded-sm'>

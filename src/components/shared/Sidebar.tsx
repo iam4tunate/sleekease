@@ -14,30 +14,30 @@ export default function Sidebar() {
             key={nav.name}
             to={nav.href}
             className={`first:rounded-t-sm px-3 flex items-center gap-x-4 py-4 ${
-              location.pathname === nav.href
-                ? 'bg-gray-100 text-orange'
-                : ''
+              location.pathname === nav.href ? 'bg-gray-100 text-orange' : ''
             }`}>
             <nav.icon size={20} />
             <span>{nav.name}</span>
           </Link>
         ))}
-        <div className='px-3 font-rubikMedium pt-2'>Admin</div>
-        {user &&
-          user.label === 'admin' &&
-          AdminDashboardNav.map((nav) => (
-            <Link
-              key={nav.name}
-              to={nav.href}
-              className={`first:rounded-t-sm px-3 flex items-center gap-x-4 py-4 ${
-                location.pathname === nav.href
-                  ? 'bg-gray-100 text-orange'
-                  : ''
-              }`}>
-              <nav.icon size={20} />
-              <span>{nav.name}</span>
-            </Link>
-          ))}
+        {user && user.label === 'admin' && (
+          <div className=''>
+            <div className='px-3 font-rubikMedium pt-2'>Admin</div>
+            {AdminDashboardNav.map((nav) => (
+              <Link
+                key={nav.name}
+                to={nav.href}
+                className={`first:rounded-t-sm px-3 flex items-center gap-x-4 py-4 ${
+                  location.pathname === nav.href
+                    ? 'bg-gray-100 text-orange'
+                    : ''
+                }`}>
+                <nav.icon size={20} />
+                <span>{nav.name}</span>
+              </Link>
+            ))}
+          </div>
+        )}
       </ul>
     </div>
   );

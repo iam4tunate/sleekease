@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -13,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useUserContext } from '@/context/AuthContext';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Spinner } from '@/components/shared';
+import { SubmitButton } from '@/components/shared';
 import { useLoginUser } from '@/lib/react-query/queries';
 import { useEffect } from 'react';
 import { LoginValidation } from '@/lib/validation';
@@ -96,16 +95,11 @@ export default function Login() {
                 </FormItem>
               )}
             />
-            <Button type='submit' className='w-full'>
-              {loggingIn ? (
-                <>
-                  <Spinner size={20} />
-                  <span className='pl-1'>Please wait...</span>
-                </>
-              ) : (
-                'Log In and Elevate Your Look'
-              )}
-            </Button>
+            <SubmitButton
+              text='Log In and Elevate Your Look'
+              isLoading={loggingIn}
+              className='rounded-full w-full'
+            />
           </form>
         </Form>
         <p className='pt-3 px-3 text-left self-start'>
