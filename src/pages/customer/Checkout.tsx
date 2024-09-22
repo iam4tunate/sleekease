@@ -18,6 +18,16 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from '@/components/ui/alert-dialog';
+
 import { Button } from '@/components/ui/button';
 import { CheckoutValidation } from '@/lib/validation';
 import { toast } from 'sonner';
@@ -26,6 +36,7 @@ import { useState } from 'react';
 
 export default function Checkout() {
   const navigate = useNavigate();
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [updatingShipping, setUpdatingShipping] = useState<boolean>(false);
 
   const { data: currentUser, isPending: isLoading } = useGetCurrentUser();
@@ -46,13 +57,17 @@ export default function Checkout() {
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async function onSubmit(_data: z.infer<typeof CheckoutValidation>) {
-    payWithPaystack();
+  async function onSubmit(data: z.infer<typeof CheckoutValidation>) {
+    if (data.noRefund) {
+      setIsDialogOpen(true);
+    }
   }
 
   // paystack operation - handling order operations after successful payment.
-  function payWithPaystack() {
+  function payWithPaystack(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    setIsDialogOpen(false);
+
     const paystack = new PaystackPop();
     paystack.newTransaction({
       key: publicKey,
@@ -126,8 +141,25 @@ export default function Checkout() {
                   )}
                 />
                 <Button type='submit' className='w-full rounded-full'>
-                  Continue to Payment
+                  Continue
                 </Button>
+                <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  <AlertDialogContent className='max-sm:max-w-[95%] rounded'>
+                    <AlertDialogHeader>
+                      <AlertDialogDescription>
+                        This transaction is in test mode, and no actual charges
+                        will be made. You can complete the process without any
+                        deductions from your account.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={payWithPaystack}>
+                        Make Payment
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </form>
             </Form>
           )}
