@@ -36,7 +36,7 @@ export default function RecentlyViewed() {
                   <p className='font-rubikMedium opacity-90'>
                     ₦{formatNumberWithCommas(item.price)}
                   </p>
-                  <Link to={`/product/${item.id}`}>
+                  <Link to={`/shop/${item.id}`}>
                     <Eye size={15} />
                   </Link>
                 </div>

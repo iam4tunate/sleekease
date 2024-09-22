@@ -49,7 +49,7 @@ export default function ProductDetails() {
         toast.message('This item is already in your cart');
         return cartItems;
       } else {
-        //! store in appwrite
+        // store items in appwrite
         await addToCart({
           productId: product!.$id,
           userId: user!.id,
@@ -59,9 +59,9 @@ export default function ProductDetails() {
           price: product?.price,
           imageUrls: product?.imageUrls,
         });
-        console.log('coooooooccccc');
       }
     } else {
+      // store items in local storage
       const cartItem = {
         $id: product!.$id,
         title: product?.title,

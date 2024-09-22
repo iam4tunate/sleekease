@@ -6,7 +6,7 @@ import {
 } from '@/lib/react-query/queries';
 import { formatNumberWithCommas, truncate } from '@/lib/utils';
 import { Models } from 'appwrite';
-import { Minus, Plus, X } from 'lucide-react';
+import { Eye, Minus, Plus, X } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,6 +22,7 @@ import Spinner from './Spinner';
 import { toast } from 'sonner';
 import { ICartItem } from '@/lib/types';
 import { useCartContext } from '@/context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function CartItem({
   user,
@@ -30,6 +31,7 @@ export default function CartItem({
   user?: Models.Document;
   guest?: ICartItem;
 }) {
+  const navigate = useNavigate();
   const { dispatch } = useCartContext();
 
   const { data: currentUser } = useGetCurrentUser();
@@ -41,6 +43,7 @@ export default function CartItem({
   const { mutateAsync: updateQuantity, isPending: isUpdating } =
     useUpdateQuatity();
 
+  //Cheking if item has already been added to their wishlist
   const isProductSaved = async (productId?: string, userId?: string) => {
     if (currentUser) {
       const exists = savedProducts.some(
@@ -135,8 +138,8 @@ export default function CartItem({
             </div>
           </div>
         </div>
-        <div className='h-full max-[400px]:w-full flex flex-col items-end max-[400px]:flex-row max-[400px]:justify-between text-right max-[400px]:items-center'>
-          <p className='font-rubikSemibold opacity-90 max-[400px]:pt-3'>
+        <div className='h-full max-[400px]:w-full flex flex-col max-[400px]:flex-row justify-between text-right max-[400px]:items-center max-[400px]:pt-2'>
+          <p className='font-rubikSemibold opacity-90'>
             ₦
             {formatNumberWithCommas(
               user
@@ -144,45 +147,87 @@ export default function CartItem({
                 : guest!.price * guest!.quantity
             )}
           </p>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <div className='mt-auto'>
-                {isDeleting ? (
-                  <Spinner size={20} colored='#E8572A' />
-                ) : (
-                  <div className='flex items-center gap-x-1.5 hover:bg-orange hover:bg-opacity-25 p-1.5 cursor-pointer border rounded-full'>
-                    <X size={16} />
-                  </div>
-                )}
-              </div>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Are you sure you want to remove this item from your cart? You
-                  can save it for later before removing it.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter className='w-full flex justify-between max-sm:justify-start'>
-                <AlertDialogCancel className='bg-gray-200 hover:bg-gray-300'>
-                  Cancel
-                </AlertDialogCancel>
-                <div className='flex max-sm:flex-col justify-end gap-3 w-full'>
-                  <AlertDialogAction
-                    onClick={() =>
-                      isProductSaved(user?.product.$id, currentUser?.$id)
-                    }
-                    className='bg-orange text-white hover:bg-darkOrange'>
-                    Save for later
-                  </AlertDialogAction>
-                  <AlertDialogAction onClick={handleDelete}>
-                    Remove
-                  </AlertDialogAction>
+          <div className='mt-auto flex items-center gap-x-4'>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <div className='hover:bg-orange hover:bg-opacity-25 p-1.5 cursor-pointer border rounded-full'>
+                  <Eye size={15} />
                 </div>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    What would you like to do?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Would you like to make changes to this item before re-adding
+                    it to your cart, or do you just want to view the product
+                    details? If you choose to make changes, the item will be
+                    removed from your cart.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className='w-full flex justify-between max-sm:justify-start'>
+                  <AlertDialogCancel className='bg-gray-200 hover:bg-gray-300'>
+                    Cancel
+                  </AlertDialogCancel>
+                  <div className='flex max-sm:flex-col justify-end gap-3 w-full'>
+                    <AlertDialogAction
+                      className='bg-orange text-white hover:bg-darkOrange'
+                      onClick={() =>
+                        navigate(`/shop/${user?.product.$id ?? guest?.$id}`)
+                      }>
+                      Just View Details
+                    </AlertDialogAction>
+                    <AlertDialogAction
+                      onClick={() => {
+                        handleDelete();
+                        if (!isDeleting)
+                          navigate(`/shop/${user?.product.$id ?? guest?.$id}`);
+                      }}>
+                      Make Changes
+                    </AlertDialogAction>
+                  </div>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <div className='hover:bg-orange hover:bg-opacity-25 p-1.5 cursor-pointer border rounded-full'>
+                  {isDeleting ? (
+                    <Spinner size={20} colored='#E8572A' />
+                  ) : (
+                    <X size={16} />
+                  )}
+                </div>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to remove this item from your cart?
+                    You can save it for later before removing it.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className='w-full flex justify-between max-sm:justify-start'>
+                  <AlertDialogCancel className='bg-gray-200 hover:bg-gray-300'>
+                    Cancel
+                  </AlertDialogCancel>
+                  <div className='flex max-sm:flex-col justify-end gap-3 w-full'>
+                    <AlertDialogAction
+                      onClick={() =>
+                        isProductSaved(user?.product.$id, currentUser?.$id)
+                      }
+                      className='bg-orange text-white hover:bg-darkOrange'>
+                      Save for later
+                    </AlertDialogAction>
+                    <AlertDialogAction onClick={handleDelete}>
+                      Remove
+                    </AlertDialogAction>
+                  </div>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
       </div>
     </div>

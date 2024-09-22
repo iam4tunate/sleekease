@@ -111,7 +111,7 @@ export default function ProductList() {
                       </AlertDialogContent>
                     </AlertDialog>
                     <Link
-                      to={`/product/${product.$id}`}
+                      to={`/shop/${product.$id}`}
                       className='flex items-center gap-2 cursor-pointer'>
                       <Eye size={17} />
                       <span>View Details</span>

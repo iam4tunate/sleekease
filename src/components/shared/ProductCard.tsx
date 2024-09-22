@@ -11,7 +11,7 @@ export default function ProductCard({ product }: { product: Models.Document }) {
   return (
     <div className='h-full'>
       <Link
-        to={`/product/${$id}`}
+        to={`/shop/${$id}`}
         onClick={() => addToRecentlyViewed(viewedProduct)}>
         <img
           loading='lazy'

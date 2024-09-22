@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 export default function Cart() {
   const { data: currentUser, isPending: isLoading } = useGetCurrentUser();
   const { cart } = useCartContext();
-  console.log(cart);
+
   const userCart = currentUser?.cart
     .slice()
     .reverse()
@@ -52,7 +52,10 @@ export default function Cart() {
                   </div>
                   <div className='h-full max-[400px]:w-full flex flex-col justify-between items-end max-[400px]:flex-row max-[400px]:justify-between text-right'>
                     <Skeleton className='h-5 w-24 max-sm:w-16 rounded' />
-                    <Skeleton className='h-8 w-8 rounded-full' />
+                    <div className='flex items-center gap-x-4'>
+                      <Skeleton className='h-8 w-8 rounded-full' />
+                      <Skeleton className='h-8 w-8 rounded-full' />
+                    </div>
                   </div>
                 </div>
               ))
@@ -65,10 +68,10 @@ export default function Cart() {
                   className='w-[10rem] max-sm:w-[8rem]'
                 />
                 <div className='font-rubikMedium text-lg'>
-                  Your bag is empty
+                  Your cart is empty
                 </div>
                 <p className='pt-1 pb-4 text-center'>
-                  Add some items to your shopping bag to get started.
+                  Add some items to get started.
                 </p>
                 <Button type='button' asChild>
                   <Link to='/shop'>Shop Now</Link>

@@ -97,7 +97,7 @@ export default function Saved() {
                   <div className='justify-end text-xs flex flex-wrap gap-x-4 gap-y-2 w-auto'>
                     <div className='flex items-center gap-x-2 bg-gray-200 rounded px-2 py-2 cursor-pointer h-fit'>
                       <Link
-                        to={`/product/${saved.product.$id}`}
+                        to={`/shop/${saved.product.$id}`}
                         className='font-rubikMedium'>
                         See Details
                       </Link>

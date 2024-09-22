@@ -333,34 +333,54 @@ export async function updateQuantity(documentId: string, quantity: number) {
 }
 
 export async function syncCartOnLogin(userId: string) {
+  // Fetch cart items from Appwrite
+  const response = await databases.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.cartCollectionId,
+    [Query.equal('user', userId)]
+  );
+
+  // Cart items already in Appwrite
+  const existingCartItems = response.documents;
+
   const localCart = localStorage.getItem('cart');
 
   if (localCart) {
     const cartItems: ICartItem[] = JSON.parse(localCart);
 
-    // Add each cart item to Appwrite (bulk insert)
-    const addCartItemsToDB = cartItems.map((item: ICartItem) =>
-      databases.createDocument(
-        appwriteConfig.databaseId,
-        appwriteConfig.cartCollectionId,
-        ID.unique(),
-        {
-          user: userId,
-          product: item.$id,
-          quantity: item.quantity,
-          size: item.size,
-          title: item.title,
-          price: item.price,
-          imageUrls: item.imageUrls,
-        }
-      )
-    );
+    // Filter out cart items that are already in the Appwrite collection
+    const newItems = cartItems.filter((item) => {
+      // Check if the product is already in the user's cart in Appwrite
+      return !existingCartItems.some(
+        (appwriteItem) => appwriteItem.product.$id === item.$id
+      );
+    });
 
-    // Wait for all requests to complete
-    await Promise.all(addCartItemsToDB);
+    if (newItems.length > 0) {
+      // Add the new cart items to Appwrite
+      const addCartItemsToDB = newItems.map((item: ICartItem) =>
+        databases.createDocument(
+          appwriteConfig.databaseId,
+          appwriteConfig.cartCollectionId,
+          ID.unique(),
+          {
+            user: userId,
+            product: item.$id,
+            quantity: item.quantity,
+            size: item.size,
+            title: item.title,
+            price: item.price,
+            imageUrls: item.imageUrls,
+          }
+        )
+      );
 
-    // Clear local storage after syncing
-    localStorage.removeItem('cart');
+      // Wait for all requests to complete
+      await Promise.all(addCartItemsToDB);
+
+      // Clear local storage after syncing
+      localStorage.removeItem('cart');
+    }
   }
 }
 
@@ -372,7 +392,7 @@ export async function syncCartOnLogout(userId: string) {
     [Query.equal('user', userId)]
   );
 
-  const cartItems: ICartItem[] = response.documents.map(
+  const appwriteCartItems: ICartItem[] = response.documents.map(
     (doc: Models.Document) => ({
       $id: doc.product.$id,
       title: doc.title,
@@ -383,18 +403,31 @@ export async function syncCartOnLogout(userId: string) {
     })
   );
 
-  // Store the cart items in localStorage
-  localStorage.setItem('cart', JSON.stringify(cartItems));
+  // Get existing cart items from localStorage (if any)
+  const localCart = localStorage.getItem('cart');
+  const existingLocalCart: ICartItem[] = localCart ? JSON.parse(localCart) : [];
+
+  // Filter out Appwrite cart items that are already in localStorage
+  const newItems = appwriteCartItems.filter(
+    (appwriteItem) =>
+      !existingLocalCart.some((localItem) => localItem.$id === appwriteItem.$id)
+  );
+
+  // Combine the existing local cart items with the new items from Appwrite
+  const combinedCart = [...existingLocalCart, ...newItems];
+
+  // Store the updated cart items in localStorage
+  localStorage.setItem('cart', JSON.stringify(combinedCart));
 
   // Delete the cart items from Appwrite
-  const deletePromises = response.documents.map((doc: Models.Document) =>
-    databases.deleteDocument(
-      appwriteConfig.databaseId,
-      appwriteConfig.cartCollectionId,
-      doc.$id
-    )
-  );
-  await Promise.all(deletePromises);
+  // const deletePromises = response.documents.map((doc: Models.Document) =>
+  //   databases.deleteDocument(
+  //     appwriteConfig.databaseId,
+  //     appwriteConfig.cartCollectionId,
+  //     doc.$id
+  //   )
+  // );
+  // await Promise.all(deletePromises);
 }
 
 export function addToRecentlyViewed(product: IRecenltyViewed) {
