@@ -138,7 +138,7 @@ export default function CartItem({
             </div>
           </div>
         </div>
-        <div className='h-full max-[400px]:w-full flex flex-col max-[400px]:flex-row justify-between text-right max-[400px]:items-center max-[400px]:pt-2'>
+        <div className='h-full max-[400px]:w-full flex flex-col max-[400px]:flex-row-reverse justify-between text-right max-[400px]:items-center max-[400px]:pt-2'>
           <p className='font-rubikSemibold opacity-90'>
             ₦
             {formatNumberWithCommas(

@@ -82,7 +82,7 @@ export default function ProductDetails() {
     return (
       <div className='min-h-[70vh] flex flex-col items-center justify-center'>
         <Spinner colored='black' size={40} />
-        <p className='text-base max-sm:text-sm pt-3'>
+        <p className='text-lg max-sm:text-base pt-3'>
           Fetching item details, please hold on!
         </p>
       </div>
