@@ -359,7 +359,6 @@ export const useSaveOrder = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Item added to saved list.');
     },
     onError: (error) => {
       toast(error.message);
