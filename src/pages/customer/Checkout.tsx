@@ -71,7 +71,7 @@ export default function Checkout() {
     const paystack = new PaystackPop();
     paystack.newTransaction({
       key: publicKey,
-      amount: totalAmount * 100,
+      amount: (totalAmount + 5000) * 100,
       email: shipping.email,
       firstname: shipping.firstName,
       lastname: shipping.lastName,
