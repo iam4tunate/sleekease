@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <div className='padY'>
       <div className='container padX pb-6 max-sm:pb-3 pt-6'>
-        <div className='font-lora text-[52px] max-md:text-5xl max-sm:text-4xl max-md:w-full w-[80%] leading-[1.1]'>
+        <div className='font-lora text-[52px] max-md:text-5xl max-sm:text-4xl max-[400px]:text-3xl max-md:w-full w-[80%] leading-[1.1]'>
           Elevating your <span className='text-orange inline'> style </span>
           so you can focus on creating to focus on making
           <div className='text-orange inline'> unforgettable </div>moments.
