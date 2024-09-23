@@ -25,7 +25,7 @@ import {
   useLogoutUser,
   useSyncCartOnLogin,
 } from '@/lib/react-query/queries';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCartContext } from '@/context/CartContext';
 import {
   Sheet,
@@ -46,6 +46,7 @@ import { ICartItem } from '@/lib/types';
 export default function Navbar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [isSheetOpen, setSheetOpen] = useState<boolean>(false);
   const { isAuthenticated, userLoading, user } = useUserContext();
   const { mutateAsync: logout, isSuccess } = useLogoutUser();
   const { mutateAsync: syncOnLogin } = useSyncCartOnLogin();
@@ -59,14 +60,18 @@ export default function Navbar() {
     ?.slice()
     .reverse()
     .map((cartItem: Models.Document) => (
-      <CartItem key={cartItem.$id} user={cartItem} />
+      <CartItem toggleSheet={setSheetOpen} key={cartItem.$id} user={cartItem} />
     ));
 
   const guestCartItems = guestCart
     ?.slice()
     .reverse()
     .map((cartItem: ICartItem) => (
-      <CartItem key={cartItem.$id} guest={cartItem} />
+      <CartItem
+        toggleSheet={setSheetOpen}
+        key={cartItem.$id}
+        guest={cartItem}
+      />
     ));
 
   // Move all items from local storage cart to appwrite on login
@@ -197,8 +202,7 @@ export default function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* //CART ICON */}
-            <Sheet>
+            <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
               <SheetTrigger>
                 <div className='flex items-end gap-x-1 cursor-pointer max-md:hidden'>
                   <span className='relative'>

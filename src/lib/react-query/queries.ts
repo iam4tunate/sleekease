@@ -205,7 +205,7 @@ export const useDeleteFromCart = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Your cart has been updated: item removed.');
+      toast.success('Item removed from your cart.');
     },
     onError: (error) => {
       toast.error(error.message);
@@ -227,7 +227,7 @@ export const useSaveProduct = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Your wishlist has been updated: item added.');
+      toast.success('Item added to your wishlist.');
     },
     onError: (error) => {
       toast(error.message);
@@ -244,7 +244,7 @@ export const useDeleteSaved = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
-      toast.success('Your wishlist has been updated: item removed.');
+      toast.success('Iitem removed from your wishlist.');
     },
     onError: (error) => {
       toast.error(error.message);

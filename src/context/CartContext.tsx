@@ -25,7 +25,7 @@ const cartReducer = (cart: ICartState, action: ICartAction): ICartState => {
         toast.message('This piece is already in your cart.');
         return cart;
       } else {
-        toast.success('Your cart has been updated: item added.');
+        toast.success('Item added to your cart.');
         return { ...cart, items: [...cart.items, action.payload] };
       }
     }

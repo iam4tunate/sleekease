@@ -24,13 +24,16 @@ import { ICartItem } from '@/lib/types';
 import { useCartContext } from '@/context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { Separator } from '../ui/separator';
+import { SheetClose } from '../ui/sheet';
 
 export default function CartItem({
   user,
   guest,
+  toggleSheet,
 }: {
   user?: Models.Document;
   guest?: ICartItem;
+  toggleSheet?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const navigate = useNavigate();
   const { dispatch } = useCartContext();
@@ -70,7 +73,7 @@ export default function CartItem({
       await deleteItem({ documentId: user!.$id });
     } else {
       dispatch({ type: 'REMOVE_ITEM', payload: guest!.$id });
-      toast.success('Your cart has been updated: item removed.');
+      toast.success('Item removed from your cart.');
     }
   };
 
@@ -161,10 +164,9 @@ export default function CartItem({
                     What would you like to do?
                   </AlertDialogTitle>
                   <AlertDialogDescription>
-                    Would you like to make changes to this item before re-adding
-                    it to your cart, or do you just want to view the item
-                    details? If you choose to make changes, the item will be
-                    removed from your cart.
+                    Would you like to view the item details or make changes? If
+                    you choose to make changes, the item will be removed from
+                    your cart, and you can re-add it.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter className='w-full flex justify-between max-sm:justify-start'>
@@ -172,16 +174,20 @@ export default function CartItem({
                     Cancel
                   </AlertDialogCancel>
                   <div className='flex max-sm:flex-col justify-end gap-3 w-full'>
-                    <AlertDialogAction
-                      className='bg-orange text-white hover:bg-darkOrange'
-                      onClick={() =>
-                        navigate(`/shop/${user?.product.$id ?? guest?.$id}`)
-                      }>
-                      Just View Details
-                    </AlertDialogAction>
+                    <SheetClose asChild>
+                      <AlertDialogAction
+                        className='bg-orange text-white hover:bg-darkOrange'
+                        onClick={() => {
+                          navigate(`/shop/${user?.product.$id ?? guest?.$id}`);
+                          toggleSheet!(false);
+                        }}>
+                        View Details
+                      </AlertDialogAction>
+                    </SheetClose>
                     <AlertDialogAction
                       onClick={() => {
                         handleDelete();
+                        toggleSheet!(false);
                         if (!isDeleting)
                           navigate(`/shop/${user?.product.$id ?? guest?.$id}`);
                       }}>
