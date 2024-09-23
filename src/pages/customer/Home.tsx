@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <div className='padY'>
       <div className='container padX pb-6 max-sm:pb-3 pt-6'>
-        <div className='font-lora text-[52px] max-md:text-5xl max-sm:text-4xl max-md:w-full w-[70%] max-lg:w-[80%] leading-[1.2]'>
+        <div className='font-lora text-[52px] max-md:text-5xl max-sm:text-4xl max-md:w-full w-[80%] leading-[1.1]'>
           Elevating your <span className='text-orange inline'> style </span>
           so you can focus on creating to focus on making
           <div className='text-orange inline'> unforgettable </div>moments.
@@ -50,7 +50,7 @@ export default function Home() {
             <Button
               size='lg'
               className='font-lora border bg-transparent rounded-full text-base max-sm:text-sm hover:bg-orange hover:border-none hover:text-dark font-medium'>
-              Shop Now
+              Unlock Your Style
             </Button>
           </Link>
         </div>

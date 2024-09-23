@@ -11,6 +11,7 @@ export default function Rootlayout() {
   const { isAuthenticated, userLoading } = useUserContext();
   const { data: currentUser } = useGetCurrentUser();
   const { cart: localCart } = useCartContext();
+  
   const saved = currentUser?.saved ?? [];
   const userCart = currentUser?.cart;
   const guestCart = localCart.items;
@@ -59,27 +60,6 @@ export default function Rootlayout() {
           </span>
           <span className='max-sm:text-xs max-[300px]:hidden'>Cart</span>
         </NavLink>
-        {/* <NavLink
-          to='/customer/overview'
-          className={({ isActive }) =>
-            cn('flex flex-col gap-y-0.5 items-center justify-center', {
-              'text-destructive': isActive,
-            })
-          }>
-          <div className='relative'>
-            <CircleUserRound className='h-6 w-6 max-sm:h-[22px] max-sm:w-[22px]' />
-            <BadgeCheck
-              size={19}
-              fill='green'
-              color='white'
-              className={cn(
-                'absolute -bottom-1 -right-2',
-                !isAuthenticated && !userLoading && 'hidden'
-              )}
-            />
-          </div>
-          <span className='max-sm:text-xs max-[300px]:hidden'>My Account</span>
-        </NavLink> */}
         <NavLink
           to='/customer/wishlist'
           className={({ isActive }) =>

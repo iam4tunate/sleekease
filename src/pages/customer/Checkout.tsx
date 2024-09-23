@@ -94,7 +94,7 @@ export default function Checkout() {
   }
 
   return (
-    <div className='padX container padY grid grid-cols-[60%_35%] max-lg:grid-cols-2 max-md:grid-cols-1 gap-y-12 gap-x-4 justify-between'>
+    <div className='padX container padY grid grid-cols-[55%_40%] max-lg:grid-cols-2 max-md:grid-cols-1 gap-y-12 gap-x-4 justify-between'>
       <div className='max-md:order-2'>
         <div className='heading pb-5'>Shipping Details</div>
         <div className='rounded-md border p-4'>
@@ -102,11 +102,11 @@ export default function Checkout() {
             onClick={() => setUpdatingShipping(!updatingShipping)}
             className='w-fit ml-auto'>
             {updatingShipping ? (
-              <div className='border rounded-full px-3 py-1 cursor-pointer hover:bg-gray-400 hover:bg-opacity-20'>
+              <div className='border rounded-full px-3 py-2 cursor-pointer hover:bg-gray-400 hover:bg-opacity-20'>
                 Cancel
               </div>
             ) : (
-              <div className='border rounded-full px-3 py-1 cursor-pointer hover:bg-gray-400 hover:bg-opacity-20'>
+              <div className='border rounded-full px-3 py-2 cursor-pointer hover:bg-gray-400 hover:bg-opacity-20'>
                 Update Details
               </div>
             )}
@@ -168,7 +168,7 @@ export default function Checkout() {
       <div className=''>
         <div className='heading pb-5'>Your Cart</div>
         <div className='flex flex-col gap-y-4 h-full'>
-          <ScrollArea className='max-h-[20rem] h-full w-full rounded-md border p-4'>
+          <ScrollArea className='max-h-[20rem] h-auto w-full rounded-md border p-4'>
             {isLoading
               ? Array.from({ length: 2 }, (_, index) => (
                   <div
@@ -196,7 +196,7 @@ export default function Checkout() {
                   ))}
           </ScrollArea>
           <div className=''>
-            <CartSummary noBtn />
+            <CartSummary />
           </div>
         </div>
       </div>

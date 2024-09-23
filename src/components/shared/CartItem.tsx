@@ -23,6 +23,7 @@ import { toast } from 'sonner';
 import { ICartItem } from '@/lib/types';
 import { useCartContext } from '@/context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import { Separator } from '../ui/separator';
 
 export default function CartItem({
   user,
@@ -100,7 +101,7 @@ export default function CartItem({
   };
 
   return (
-    <div className='flex flex-col last-of-type:border-b-0 border-b border-dark border-opacity-15 pb-5 mb-5 last-of-type:pb-0 last-of-type:mb-0 gap-2'>
+    <>
       <div className='h-28 max-[400px]:h-full flex max-[400px]:flex-col gap-x-4 items-start justify-between select-none'>
         <div className='flex gap-x-4'>
           <img
@@ -230,6 +231,7 @@ export default function CartItem({
           </div>
         </div>
       </div>
-    </div>
+      <Separator className='my-5 last-of-type:hidden' />
+    </>
   );
 }

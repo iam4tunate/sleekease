@@ -1,12 +1,11 @@
 import { useCartContext } from '@/context/CartContext';
 import { useGetCurrentUser } from '@/lib/react-query/queries';
 import { ICartItem } from '@/lib/types';
-import { cn, formatNumberWithCommas } from '@/lib/utils';
+import { formatNumberWithCommas } from '@/lib/utils';
 import { Models } from 'appwrite';
-import { Button } from '../ui/button';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-export default function CartSummary({ noBtn }: { noBtn?: boolean }) {
+export default function CartSummary() {
   const { pathname } = useLocation();
   const { data: currentUser } = useGetCurrentUser();
   const { cart: guestCart } = useCartContext();
@@ -30,21 +29,15 @@ export default function CartSummary({ noBtn }: { noBtn?: boolean }) {
     (!currentUser && guestTotalAmount === 0);
 
   let deliveryFee;
-  switch (pathname) {
-    case '/cart':
-      deliveryFee = 0;
-      break;
-    case '/checkout':
-      deliveryFee = 5000;
-      break;
-    default:
-      break;
+  if (pathname === '/checkout') {
+    deliveryFee = 5000;
+  } else {
+    deliveryFee = 0;
   }
 
   return (
     <div className='border border-dark border-opacity-20  py-3.5 rounded-md h-fit'>
       <div className='px-4'>
-        <div className='font-rubikSemibold text- pb-4'>Cart Summary</div>
         <div className='space-y-4'>
           <span className='flex items-center justify-between font-rubikMedium'>
             <span>Subtotal</span>
@@ -56,11 +49,9 @@ export default function CartSummary({ noBtn }: { noBtn?: boolean }) {
           <span className='flex items-center justify-between font-rubikMedium'>
             <span>Delivery Free</span>
             <span>
-              {pathname === '/cart' ? (
-                <span className='font-rubik'>not included yet</span>
-              ) : (
-                `₦${formatNumberWithCommas(deliveryFee!)}`
-              )}
+              {deliveryFee === 5000
+                ? `₦${formatNumberWithCommas(deliveryFee)}`
+                : 'not included yet'}
             </span>
           </span>
           <span className='flex items-center justify-between font-rubikMedium'>
@@ -73,15 +64,7 @@ export default function CartSummary({ noBtn }: { noBtn?: boolean }) {
               {empty && '.00'}
             </span>
           </span>
-          <div className='h-[1px] w-full block bg-dark bg-opacity-20' />
         </div>
-        <Link to='/checkout' className={cn({ hidden: noBtn })}>
-          <Button
-            disabled={empty}
-            className='py-2.5 bg-primary text-white rounded-full w-full mt-3.5 font-semibold'>
-            Checkout
-          </Button>
-        </Link>
       </div>
     </div>
   );

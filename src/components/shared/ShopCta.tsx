@@ -15,7 +15,7 @@ export default function ShopCta() {
           onClick={() => navigate('/shop')}
           size='lg'
           className='rounded-full py-4 hover:border-none bg-orange hover:bg-darkOrange font-rubikSemibold w-[20%] max-md:w-[40%] max-sm:w-full'>
-          Shop All
+          Shop Now
         </Button>
       </div>
     </div>

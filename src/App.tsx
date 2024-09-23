@@ -60,7 +60,7 @@ export default function App() {
         </Routes>
       </ScrollToTop>
 
-      <Toaster richColors className='font-rubikMedium mb-6 max-md:mb-11' />
+      <Toaster richColors className='font-rubikMedium max-md:mb-11' />
     </>
   );
 }

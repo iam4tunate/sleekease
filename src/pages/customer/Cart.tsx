@@ -11,11 +11,29 @@ import { useCartContext } from '@/context/CartContext';
 import { ICartItem } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 export default function Cart() {
+  const navigate = useNavigate();
+  const [isVisible, setVisible] = useState(true);
   const { data: currentUser, isPending: isLoading } = useGetCurrentUser();
   const { cart } = useCartContext();
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setVisible(true);
+      } else {
+        setVisible(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Initial check
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const userCart = currentUser?.cart
     .slice()
@@ -31,12 +49,17 @@ export default function Cart() {
       <CartItem key={cartItem.$id} guest={cartItem} />
     ));
 
+  if (!isVisible) {
+    navigate('/not-found');
+    return null;
+  }
+
   return (
     <div className=''>
       <div className='container padX padY'>
         <div className='heading'>Your Cart</div>
-        <div className='grid grid-cols-[60%_35%] max-lg:grid-cols-[60%_35%] gap-y-6 max-md:grid-cols-1 justify-between'>
-          <ScrollArea className='max-h-[60vh] w-full h-full rounded-md border p-4'>
+        <div className='grid grid-cols-[60%_35%] max-lg:grid-cols-[60%_35%] gap-y-4 max-md:grid-cols-1 justify-between h-full'>
+          <ScrollArea className='max-h-[60vh] w-full h-auto rounded-md border p-4'>
             {isLoading && currentUser ? (
               Array.from({ length: 2 }, (_, index) => (
                 <div
@@ -83,6 +106,22 @@ export default function Cart() {
           </ScrollArea>
           <div className=''>
             <CartSummary />
+            <div>
+              {currentUser ? (
+                <Button
+                  onClick={() => navigate('/checkout')}
+                  disabled={!userCart.length}
+                  className='py-2.5 bg-primary text-white rounded-full w-full mt-3.5'>
+                  Proceed to Checkout
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => navigate('/checkout')}
+                  className='py-2.5 bg-primary text-white rounded-full w-full mt-3.5'>
+                  Login to Checkout
+                </Button>
+              )}
+            </div>
           </div>
         </div>
         <div className='padY'>
