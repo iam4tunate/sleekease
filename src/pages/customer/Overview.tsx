@@ -53,10 +53,22 @@ export default function Overview() {
           ) : (
             <div className='px-4 max-sm:px-2 py-4'>
               <UserCircle size={35} />
-              <p className='font-rubikMedium text-gray-600 capitalize pt-3 pb-1'>
-                {user?.firstName} {user?.lastName}
+              <p className='capitalize pt-4 text-[13px]'>
+                Full name:{' '}
+                <span className='text-sm'>
+                  {user?.firstName} {user?.lastName}
+                </span>
               </p>
-              <p className='text-gray-600 lowercase'>{user?.email}</p>
+              <p className='py-2 text-[13px]'>
+                Email address:{' '}
+                <span className='lowercase text-sm'>{user?.email}</span>
+              </p>
+              <p className='text-[13px]'>
+                Status:{' '}
+                <span className='bg-green-500 text-white py-1 px-2 rounded text-xs font-rubikMedium'>
+                  {user?.role === 'user' ? 'Customer' : 'Admin'}
+                </span>
+              </p>
             </div>
           )}
         </div>
@@ -68,6 +80,11 @@ export default function Overview() {
             <div className='px-4 max-sm:px-2 py-6'>
               <Spinner size={30} colored='#E8572A' />
             </div>
+          ) : !userLoading && !currentUser?.shipping.length ? (
+            <p className='px-4 py-4 max-sm:px-2 opacity-90'>
+              You haven't added a shipping address yet. You can do this during
+              the checkout process when placing your order.
+            </p>
           ) : (
             <div className='px-4 space-y-3 py-4 max-sm:px-2'>
               <p className='text-gray-600 capitalize'>
