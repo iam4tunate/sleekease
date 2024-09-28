@@ -1,5 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { INewProduct, INewUser, IShippingInfo, IUpdateProduct } from '../types';
+import {
+  INewProduct,
+  INewUser,
+  IShippingInfo,
+  IUpdateProduct,
+  IWishlist,
+} from '../types';
 import {
   addShippingInfo,
   addToCart,
@@ -169,21 +175,21 @@ export const useAddToCart = () => {
   return useMutation({
     mutationFn: ({
       productId,
-      userId,
+      user,
       size,
       quantity,
       title,
       price,
-      imageUrls,
+      imageUrl,
     }: {
       productId: string;
-      userId: string;
+      user: string;
       size: string;
       quantity: number;
       title: string;
       price: number;
-      imageUrls: string[];
-    }) => addToCart(productId, userId, size, quantity, title, price, imageUrls),
+      imageUrl: string;
+    }) => addToCart(productId, user, size, quantity, title, price, imageUrl),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
@@ -199,8 +205,7 @@ export const useAddToCart = () => {
 export const useDeleteFromCart = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ documentId }: { documentId: string }) =>
-      deleteFromCart(documentId),
+    mutationFn: (documentId: string) => deleteFromCart(documentId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
@@ -216,13 +221,7 @@ export const useDeleteFromCart = () => {
 export const useSaveProduct = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      productId,
-      userId,
-    }: {
-      productId?: string;
-      userId?: string;
-    }) => saveProduct(productId, userId),
+    mutationFn: (savedItem: IWishlist) => saveProduct(savedItem),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],

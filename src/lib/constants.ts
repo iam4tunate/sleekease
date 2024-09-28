@@ -8,9 +8,7 @@ import {
 } from 'lucide-react';
 import {
   GiArmoredPants,
-  GiBilledCap,
   GiHoodie,
-  GiMonclerJacket,
 } from 'react-icons/gi';
 import { RiShirtFill } from 'react-icons/ri';
 import { IoShirt } from 'react-icons/io5';
@@ -31,8 +29,6 @@ export const CategoryNav = [
   { label: 't-shirts', icon: RiShirtFill },
   { label: 'pants', icon: GiArmoredPants },
   { label: 'shirts', icon: IoShirt },
-  { label: 'caps', icon: GiBilledCap },
-  { label: 'jackets', icon: GiMonclerJacket },
   { label: 'sweatshirts', icon: GiHoodie },
 ];
 

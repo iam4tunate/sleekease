@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 export default function NotFound() {
   const navigate = useNavigate();
+  const goBack = () => navigate(-1);
+
   return (
     <div className='container padX padY flex flex-col items-center justify-center'>
       <div className='text-center flex flex-col gap-y-5 justify-center items-center mb-8 max-w-xl'>
@@ -15,11 +17,19 @@ export default function NotFound() {
           don't worry, your next great outfit is just a click away. Browse our
           latest collections and discover something new!
         </p>
-        <Button
-          onClick={() => navigate('/shop')}
-          className='rounded-full w-[10rem]'>
-          Shop Now
-        </Button>
+        <div className='flex flex-wrap items-center gap-x-6'>
+          <Button
+            variant='outline'
+            onClick={goBack}
+            className='rounded-full w-[10rem] border-primary'>
+            Go Back
+          </Button>
+          <Button
+            onClick={() => navigate('/shop')}
+            className='rounded-full w-[10rem]'>
+            Shop Now
+          </Button>
+        </div>
       </div>
       <TopSelling />
     </div>

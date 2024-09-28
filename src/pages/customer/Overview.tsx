@@ -1,20 +1,16 @@
+import { Spinner } from '@/components/shared';
 import { useUserContext } from '@/context/AuthContext';
 import { useGetCurrentUser, useLogoutUser } from '@/lib/react-query/queries';
-import {
-  ArrowLeftRight,
-  Heart,
-  History,
-  Package2,
-  UserCircle,
-} from 'lucide-react';
+import { Heart, History, Package2, UserCircle } from 'lucide-react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export default function Overview() {
   const navigate = useNavigate();
   const { user } = useUserContext();
   const { mutateAsync: logout, isSuccess } = useLogoutUser();
-  const { data: currentUser } = useGetCurrentUser();
+  const { data: currentUser, isPending: userLoading } = useGetCurrentUser();
   const viewedItems = JSON.parse(
     localStorage.getItem('recentlyViewed') || '[]'
   );
@@ -24,7 +20,11 @@ export default function Overview() {
   const shipping = currentUser?.shipping[0];
 
   const handleLogout = async () => {
-    await logout(user.id);
+    if (user?.id) {
+      await logout(user.id);
+    } else {
+      toast.error('User is not logged in or ID is undefined');
+    }
   };
 
   useEffect(() => {
@@ -46,29 +46,41 @@ export default function Overview() {
           <p className='font-rubikMedium border-b px-4 max-sm:px-2 py-4 pb-2'>
             Account Details
           </p>
-          <div className='px-4 max-sm:px-2 py-4'>
-            <UserCircle size={35} />
-            <p className='font-rubikMedium text-gray-600 capitalize pt-3 pb-1'>
-              {user.firstName} {user.lastName}
-            </p>
-            <p className='text-gray-600 lowercase'>{user.email}</p>
-          </div>
+          {userLoading ? (
+            <div className='px-4 max-sm:px-2 py-6'>
+              <Spinner size={30} colored='#E8572A' />
+            </div>
+          ) : (
+            <div className='px-4 max-sm:px-2 py-4'>
+              <UserCircle size={35} />
+              <p className='font-rubikMedium text-gray-600 capitalize pt-3 pb-1'>
+                {user?.firstName} {user?.lastName}
+              </p>
+              <p className='text-gray-600 lowercase'>{user?.email}</p>
+            </div>
+          )}
         </div>
         <div className='border rounded-md'>
           <p className='font-rubikMedium border-b px-4 max-sm:px-2 py-4 pb-2'>
             Shipping Address
           </p>
-          <div className='px-4 space-y-3 py-4 max-sm:px-2'>
-            <p className='text-gray-600 capitalize'>
-              {shipping?.firstName} {shipping?.lastName}
-            </p>
-            <p className='text-gray-600'>{shipping?.streetAddress}</p>
-            <p className='text-gray-600'>
-              {shipping?.lga}, {shipping?.state}
-            </p>
-            <p className='text-gray-600'>{shipping?.phoneNumber}</p>
-            <p className='text-gray-600'>Zip code: {shipping?.zipCode}</p>
-          </div>
+          {userLoading ? (
+            <div className='px-4 max-sm:px-2 py-6'>
+              <Spinner size={30} colored='#E8572A' />
+            </div>
+          ) : (
+            <div className='px-4 space-y-3 py-4 max-sm:px-2'>
+              <p className='text-gray-600 capitalize'>
+                {shipping?.firstName} {shipping?.lastName}
+              </p>
+              <p className='text-gray-600'>{shipping?.streetAddress}</p>
+              <p className='text-gray-600'>
+                {shipping?.lga}, {shipping?.state}
+              </p>
+              <p className='text-gray-600'>{shipping?.phoneNumber}</p>
+              <p className='text-gray-600'>Zip code: {shipping?.zipCode}</p>
+            </div>
+          )}
         </div>
       </div>
       <div className='pt-8'>
@@ -81,7 +93,13 @@ export default function Overview() {
               Wishlist
             </p>
             <div className='px-4 max-sm:px-2 py-4 flex items-center justify-between w-full'>
-              <p className='text-3xl max-sm:text-2xl'>{saved?.length}</p>
+              <p className='text-3xl max-sm:text-2xl'>
+                {userLoading ? (
+                  <Spinner size={20} colored='#E8572A' />
+                ) : (
+                  saved?.length
+                )}
+              </p>
               <span className='bg-[#FEF8F5] rounded-full p-2'>
                 <Heart className='text-orange' size={25} />
               </span>
@@ -92,7 +110,13 @@ export default function Overview() {
               Orders
             </p>
             <div className='px-4 max-sm:px-2 py-4 flex items-center justify-between w-full'>
-              <p className='text-3xl max-sm:text-2xl'>{orders?.length}</p>
+              <p className='text-3xl max-sm:text-2xl'>
+                {userLoading ? (
+                  <Spinner size={20} colored='#E8572A' />
+                ) : (
+                  orders?.length
+                )}
+              </p>
               <span className='bg-[#FEF8F5] rounded-full p-2'>
                 <Package2 className='text-orange' size={25} />
               </span>
@@ -103,20 +127,15 @@ export default function Overview() {
               Recently viewed
             </p>
             <div className='px-4 max-sm:px-2 py-4 flex items-center justify-between w-full'>
-              <p className='text-3xl max-sm:text-2xl'>{viewedItems?.length}</p>
+              <p className='text-3xl max-sm:text-2xl'>
+                {userLoading ? (
+                  <Spinner size={20} colored='#E8572A' />
+                ) : (
+                  viewedItems?.length
+                )}
+              </p>
               <span className='bg-[#FEF8F5] rounded-full p-2'>
                 <History className='text-orange' size={25} />
-              </span>
-            </div>
-          </div>
-          <div className='border-l-2 border-orange-300 bg-white w-full max-sm:w-full rounded-md shadow-md flex flex-col items-start justify-between gap-x-6'>
-            <p className='border-b px-4 max-sm:px-2 py-3 w-full uppercase'>
-              successful transactions
-            </p>
-            <div className='px-4 max-sm:px-2 py-4 flex items-center justify-between w-full'>
-              <p className='text-3xl max-sm:text-2xl'>{orders?.length}</p>
-              <span className='bg-[#FEF8F5] rounded-full p-2'>
-                <ArrowLeftRight className='text-orange' size={25} />
               </span>
             </div>
           </div>

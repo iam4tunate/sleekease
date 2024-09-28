@@ -46,9 +46,12 @@ export default function Checkout() {
   const shipping = currentUser?.shipping[0];
 
   const publicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
-  const totalAmount = cart?.reduce((total: number, item: Models.Document) => {
-    return total + item.product.price * item.quantity;
-  }, 0);
+
+  const totalAmount = cart
+    ?.filter((item: Models.Document) => !item.isDeleted)
+    .reduce((total: number, item: Models.Document) => {
+      return total + item?.price * item?.quantity;
+    }, 0);
 
   const form = useForm<z.infer<typeof CheckoutValidation>>({
     resolver: zodResolver(CheckoutValidation),
@@ -71,12 +74,14 @@ export default function Checkout() {
     const paystack = new PaystackPop();
     paystack.newTransaction({
       key: publicKey,
-      amount: (totalAmount + 5000) * 100,
+      amount: (totalAmount + 2500) * 100,
       email: shipping.email,
       firstname: shipping.firstName,
       lastname: shipping.lastName,
       onSuccess: async () => {
-        const productIds = cart.map((item: Models.Document) => item.$id);
+        const productIds = cart
+          ?.filter((item: Models.Document) => !item.isDeleted)
+          .map((item: Models.Document) => item.$id);
         await saveOrder({
           shippingId: shipping.$id,
           productIds: productIds,
@@ -175,15 +180,15 @@ export default function Checkout() {
                     key={index}
                     className='h-28 max-[400px]:h-full flex max-[400px]:flex-col items-start justify-between pb-5 mb-5 max-sm:pb-8 last-of-type:pb-0 last-of-type:mb-0'>
                     <div className='flex gap-x-4'>
-                      <Skeleton className='w-36 h-28 max-sm:w-24 rounded-md' />
+                      <Skeleton className='w-36 h-28 max-sm:w-24' />
                       <div className='flex flex-col gap-y-2.5 w-full'>
-                        <Skeleton className='h-5 w-26 rounded' />
-                        <Skeleton className='h-4 w-16 rounded' />
-                        <Skeleton className='h-8 w-20 rounded' />
+                        <Skeleton className='h-5 w-26' />
+                        <Skeleton className='h-4 w-16' />
+                        <Skeleton className='h-8 w-20' />
                       </div>
                     </div>
                     <div className='h-full max-[400px]:w-full flex flex-col justify-between items-end max-[400px]:flex-row max-[400px]:justify-between text-right'>
-                      <Skeleton className='h-5 w-24 max-sm:w-16 rounded' />
+                      <Skeleton className='h-5 w-24 max-sm:w-16' />
                       <Skeleton className='h-8 w-8 rounded-full' />
                     </div>
                   </div>
@@ -191,8 +196,9 @@ export default function Checkout() {
               : cart
                   ?.slice()
                   .reverse()
-                  .map((cartItem: Models.Document) => (
-                    <CartItem key={cartItem.$id} user={cartItem} />
+                  .filter((item: Models.Document) => !item.isDeleted)
+                  .map((item: Models.Document) => (
+                    <CartItem key={item.productId} appwriteCartItem={item} />
                   ))}
           </ScrollArea>
           <div className=''>

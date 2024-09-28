@@ -22,7 +22,7 @@ export default function ProductGrid({
           <div key={index} className='flex flex-col space-y-3'>
             <Skeleton className='h-[22rem] w-full' />
             <div className='flex items-center justify-between'>
-              <Skeleton className='h-5 w-[70%] max-md:w-[60%]' />
+              <Skeleton className='h-5 w-[50%]' />
               <Skeleton className='h-5 w-[20%]' />
             </div>
           </div>

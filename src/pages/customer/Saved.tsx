@@ -1,35 +1,57 @@
-import { useDeleteSaved, useGetCurrentUser } from '@/lib/react-query/queries';
+import {
+  useAddToCart,
+  useDeleteSaved,
+  useGetCurrentUser,
+} from '@/lib/react-query/queries';
 import { formatNumberWithCommas, truncate } from '@/lib/utils';
 import { Models } from 'appwrite';
-import { Trash2 } from 'lucide-react';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { Spinner } from '@/components/shared';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
+import { toast } from 'sonner';
 
 export default function Saved() {
   const [currentId, setCurrentId] = useState<string | null>(null);
 
   const { data: currentUser, isPending: isLoading } = useGetCurrentUser();
   const { mutateAsync: deleteItem, isPending: isDeleting } = useDeleteSaved();
+  const { mutateAsync: addToCart, isPending: isAdding } = useAddToCart();
 
-  const savedProducts = currentUser?.saved ?? [];
+  const cartItems = currentUser?.cart;
+  const wishlist = currentUser?.saved ?? [];
 
-  const handleDelete = async (documentId: string) => {
-    setCurrentId(documentId); // Set the current deleting item
-    await deleteItem({ documentId });
+  const handleAddToCart = async (
+    item: {
+      productId: string;
+      user: string;
+      size: string;
+      quantity: number;
+      title: string;
+      price: number;
+      imageUrl: string;
+    },
+    documentId: string
+  ) => {
+    //checking for cart items with isDeleted:false
+    console.log(item, documentId);
+    const nonDeletedCartItems = cartItems.filter(
+      (item: Models.Document) => !item.isDeleted
+    );
+
+    const existingItem = nonDeletedCartItems.find(
+      (cartItem: Models.Document) => cartItem.productId === item.productId
+    );
+
+    if (existingItem) {
+      toast.message('This piece is already in your cart.');
+      return cartItems;
+    } else {
+      setCurrentId(documentId);
+      await deleteItem({ documentId });
+      await addToCart(item);
+    }
   };
 
   return (
@@ -44,20 +66,20 @@ export default function Saved() {
               key={index}
               className='min-h-28 border rounded-md py-2.5 pl-2 pr-4 flex max-[400px]:flex-col items-end justify-between gap-y-1.5'>
               <div className='flex gap-x-4 w-full'>
-                <Skeleton className='w-32 h-28 max-[400px]:h-28 rounded-sm' />
+                <Skeleton className='w-32 h-28 max-[400px]:h-28' />
                 <div className='flex flex-col gap-y-2.5'>
-                  <Skeleton className='h-6 w-[5rem] max-lg:w-[8rem] max-sm:w[4rem] rounded' />
-                  <Skeleton className='h-6 w-16 rounded' />
+                  <Skeleton className='h-6 w-[5rem] max-lg:w-[8rem] max-sm:w[4rem]' />
+                  <Skeleton className='h-6 w-16' />
                 </div>
               </div>
               <div className='h-full max-[400px]:w-full flex flex-col justify-end items-end max-[400px]:flex-row text-right gap-y-2 gap-x-2'>
-                <Skeleton className='h-8 w-20 max-sm:w-14 rounded' />
-                <Skeleton className='h-8 w-24 max-sm:w-16 rounded' />
+                <Skeleton className='h-8 w-20 max-sm:w-14' />
+                <Skeleton className='h-8 w-24 max-sm:w-16' />
               </div>
             </div>
           ))}
         </div>
-      ) : !isLoading && !savedProducts.length ? (
+      ) : !isLoading && !wishlist.length ? (
         <div className='flex flex-col items-center justify-center text-center py-8'>
           <img
             src='/images/wishlist.png'
@@ -71,67 +93,64 @@ export default function Saved() {
         </div>
       ) : (
         <div className='grid grid-cols-2 max-lg:grid-cols-1 max-sm:grid-cols-1 gap-x-6 gap-y-6 px-4 max-sm:px-2'>
-          {savedProducts
+          {wishlist
             .slice()
             .reverse()
-            .map((saved: Models.Document) => (
+            .map((item: Models.Document) => (
               <>
                 <div
-                  key={saved.product.$id}
+                  key={item.$id}
                   className='min-h-28 border rounded-md py-2.5 pl-2 pr-4 flex max-[400px]:flex-col items-end justify-between gap-y-1.5'>
                   <div className='flex gap-x-4 w-full'>
                     <img
-                      src={saved.product.imageUrls[0]}
-                      alt={saved.product.title}
+                      src={item.imageUrl}
+                      alt={item.title}
                       className='h-28 max-[400px]:h-24 rounded-sm'
                     />
                     <div className='flex flex-col gap-y-2.5 max-sm:gap-1.5 w-full pt-0.5'>
                       <p className='capitalize font-rubikMedium whitespace-nowrap max-[400px]:whitespace-normal'>
-                        {truncate(saved.product.title, 30)}
+                        {truncate(item.title, 30)}
+                      </p>
+                      <p className='opacity-70 text-xs capitalize'>
+                        {item.size}
                       </p>
                       <p className='font-rubikSemibold opacity-90'>
-                        ₦{formatNumberWithCommas(saved.product.price)}
+                        ₦{formatNumberWithCommas(item.price)}
                       </p>
                     </div>
                   </div>
-                  <div className='justify-end text-xs flex flex-wrap gap-x-4 gap-y-2 w-auto'>
-                    <div className='flex items-center gap-x-2 bg-gray-200 rounded px-2 py-2 cursor-pointer h-fit'>
-                      <Link
-                        to={`/shop/${saved.product.$id}`}
-                        className='font-rubikMedium'>
-                        See Details
-                      </Link>
-                    </div>
-                    <AlertDialog>
-                      {isDeleting && currentId === saved.$id ? (
-                        <Spinner size={20} colored='#E8572A' />
-                      ) : (
-                        <AlertDialogTrigger asChild>
-                          <div className='flex items-center gap-x-2 text-orange bg-orange bg-opacity-25 rounded px-2 py-2 cursor-pointer h-fit'>
-                            <Trash2 size={17} />{' '}
-                            <span className='font-rubikMedium'>Remove</span>
-                          </div>
-                        </AlertDialogTrigger>
-                      )}
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Are you absolutely sure?
-                          </AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Are you sure you want to remove this item from your
-                            saved list.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={() => handleDelete(saved.$id)}>
-                            Remove
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                  <div className='justify-end flex flex-wrap gap-x-4 gap-y-2 w-auto'>
+                    <Link
+                      to={`/shop/${item.productId}`}
+                      className='bg-gray-200 rounded px-4 py-2 cursor-pointer'>
+                      <span>See Details</span>
+                    </Link>
+                    {isDeleting || (isAdding && currentId === item.$id) ? (
+                      <Spinner size={20} colored='#E8572A' />
+                    ) : (
+                      <div
+                        onClick={() =>
+                          handleAddToCart(
+                            {
+                              user: currentUser!.$id,
+                              productId: item?.productId,
+                              title: item?.title,
+                              price: item?.price,
+                              size: item?.size,
+                              quantity: 1,
+                              imageUrl: item.imageUrl,
+                            },
+                            item?.$id
+                          )
+                        }
+                        className='text-white bg-primary bg-opacity-25 rounded px-4 py-3 cursor-pointer'>
+                        {isDeleting ? (
+                          <Spinner size={13} colored='#E8572A' />
+                        ) : (
+                          'Add to Cart'
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <Separator className='last:hidden lg:hidden' />

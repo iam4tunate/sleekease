@@ -2,16 +2,16 @@ import { getCurrentUser } from '@/lib/appwrite/api';
 import { IUser } from '@/lib/types';
 import { createContext, useContext, useEffect, useState } from 'react';
 
-const INITIAL_USER = {
-  id: '',
-  firstName: '',
-  lastName: '',
-  email: '',
-  label: '',
-};
+// const INITIAL_USER = {
+//   id: '',
+//   firstName: '',
+//   lastName: '',
+//   email: '',
+//   label: '',
+// };
 
 const INITIAL_STATE = {
-  user: INITIAL_USER,
+  user: null as IUser | null,
   userLoading: false,
   isAuthenticated: false,
   setUser: () => {},
@@ -20,9 +20,9 @@ const INITIAL_STATE = {
 };
 
 type IContextType = {
-  user: IUser;
+  user: IUser | null;
   userLoading: boolean;
-  setUser: React.Dispatch<React.SetStateAction<IUser>>;
+  setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
   isAuthenticated: boolean;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   checkAuthUser: () => Promise<boolean>;
@@ -35,28 +35,31 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] = useState<IUser>(INITIAL_USER);
-  const [userLoading, setUserLoading] = useState(false);
+  const [user, setUser] = useState<IUser | null>(null);
+  const [userLoading, setUserLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   //! checking if there's an authenticated users everytime the page reloads
   const checkAuthUser = async () => {
     try {
       const currentAccount = await getCurrentUser();
-      
+
       if (currentAccount) {
         setUser({
           id: currentAccount.$id,
           firstName: currentAccount.firstName,
           lastName: currentAccount.lastName,
           email: currentAccount.email,
-          label: currentAccount.label,
+          role: currentAccount.label,
         });
         setIsAuthenticated(true);
         return true;
+      } else {
+        setUser(null);
       }
       return false;
     } catch {
+      setUser(null);
       return false;
     } finally {
       setUserLoading(false);

@@ -20,7 +20,7 @@ export default function Sidebar() {
             <span>{nav.name}</span>
           </Link>
         ))}
-        {user && user.label === 'admin' && (
+        {user && user.role === 'admin' && (
           <div className=''>
             <div className='px-3 font-rubikMedium pt-2'>Admin</div>
             {AdminDashboardNav.map((nav) => (

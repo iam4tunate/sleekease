@@ -1,10 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
-import { DashboardLayout, RootLayout, ScrollToTop } from './components/shared';
-import PrivateRoutes from './lib/PrivateRoutes';
+import {
+  DashboardLayout,
+  RequireAuth,
+  RootLayout,
+  ScrollToTop,
+} from './components/shared';
 import { Toaster } from './components/ui/sonner';
-import AdminRoutes from './lib/AdminRoutes';
 import Home from './pages/customer/Home';
-import Cart from './pages/customer/Cart';
 import Category from './pages/customer/Category';
 import Shop from './pages/customer/Shop';
 import ProductDetails from './pages/customer/ProductDetails';
@@ -19,11 +21,11 @@ import ProductList from './pages/admin/ProductList';
 import UpdateProduct from './pages/admin/UpdateProduct';
 import Checkout from './pages/customer/Checkout';
 import NotFound from './pages/customer/NotFound';
+import Cart from './pages/customer/Cart';
 
 export default function App() {
   return (
     <>
-      {/* TODO: OPTIMIZE ALL IMAGES BEFOFE UPLOADING  */}
       <ScrollToTop>
         <Routes>
           <Route element={<RootLayout />}>
@@ -36,7 +38,7 @@ export default function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
 
-            <Route element={<PrivateRoutes />}>
+            <Route element={<RequireAuth allowedRoles={['user', 'admin']} />}>
               <Route path='/checkout' element={<Checkout />} />
               <Route element={<DashboardLayout />}>
                 <Route path='/customer/overview' element={<Overview />} />
@@ -49,7 +51,7 @@ export default function App() {
               </Route>
             </Route>
 
-            <Route element={<AdminRoutes />}>
+            <Route element={<RequireAuth allowedRoles={['admin']} />}>
               <Route element={<DashboardLayout />}>
                 <Route path='/admin/create' element={<CreateProduct />} />
                 <Route path='/admin/update/:id' element={<UpdateProduct />} />

@@ -20,9 +20,10 @@ import { LoginValidation } from '@/lib/validation';
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { checkAuthUser, isAuthenticated } = useUserContext();
-
   const from = location.state?.from?.pathname || '/';
+
+  const { checkAuthUser, user, userLoading } =
+    useUserContext();
 
   const { mutateAsync: login, isPending: loggingIn } = useLoginUser();
 
@@ -50,8 +51,8 @@ export default function Login() {
 
   //! redirecting to the homepage if user already logged in
   useEffect(() => {
-    if (isAuthenticated) navigate(from, { replace: true });
-  }, [navigate, isAuthenticated, from]);
+    if (user && !userLoading) navigate(from, { replace: true });
+  }, [navigate, user, userLoading, from]);
 
   return (
     <div className='grid grid-cols-2 max-lg:grid-cols-1 items-start gap-x-12 container padY'>

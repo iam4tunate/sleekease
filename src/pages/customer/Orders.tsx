@@ -90,7 +90,7 @@ export default function Orders() {
                       Show details
                     </div>
                   </DialogTrigger>
-                  <DialogContent className='max-sm:max-w-[95%] py-8 max-h-[90vh] h-full overflow-auto space-y-6 remove-scrollbar rounded-md max-sm:px-3'>
+                  <DialogContent className='max-sm:max-w-[95%] py-8 max-h-[90vh] overflow-auto space-y-6 remove-scrollbar rounded-md max-sm:px-3'>
                     <div className=''>
                       <div className='text-base pb-3 font-rubikMedium'>
                         Items Purchased ({order?.cart.length})
@@ -99,7 +99,7 @@ export default function Orders() {
                         <div className='border px-3 py-2 max-h-28 max-[400px]:h-full flex max-[400px]:flex-col gap-x-4 items-start justify-between select-none mb-4 last-of-type:mb-0'>
                           <div className='flex gap-x-4'>
                             <img
-                              src={cart?.imageUrls[0]}
+                              src={cart?.imageUrl}
                               alt={cart?.title}
                               className='w-24 h-24 max-sm:w-24 rounded-md object-cover'
                             />
@@ -110,8 +110,8 @@ export default function Orders() {
                               <p className='opacity-70 text-xs capitalize'>
                                 {cart?.size}
                               </p>
-                              <p className='font-rubikMedium'>
-                                <span className='opacity-80 pr-2 text-xs font-rubik'>
+                              <p>
+                                <span className='opacity-80 pr-2'>
                                   Quantity:
                                 </span>
                                 {cart?.quantity}
@@ -127,7 +127,7 @@ export default function Orders() {
                         </div>
                       ))}
                     </div>
-                    <div className=''>
+                    <div>
                       <div className='text-base pb-3 font-rubikMedium'>
                         Shipping Details
                       </div>

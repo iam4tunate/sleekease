@@ -6,6 +6,7 @@ import {
   IRecenltyViewed,
   IShippingInfo,
   IUpdateProduct,
+  IWishlist,
 } from '../types';
 import { account, appwriteConfig, databases, storage } from './config';
 
@@ -262,51 +263,49 @@ export async function getProductsByCategory(category: string) {
 
 export async function addToCart(
   productId: string,
-  userId: string,
+  user: string,
   size: string,
   quantity: number,
   title: string,
   price: number,
-  imageUrls: string[]
+  imageUrl: string
 ) {
-  const newCart = await databases.createDocument(
+  const newCartItem = await databases.createDocument(
     appwriteConfig.databaseId,
     appwriteConfig.cartCollectionId,
     ID.unique(),
     {
-      user: userId,
-      product: productId,
+      user,
+      productId,
       size,
       quantity,
       title,
       price,
-      imageUrls,
+      imageUrl,
     }
   );
-  return newCart;
+  return newCartItem;
 }
 
 export async function deleteFromCart(documentId: string) {
-  if (!documentId) throw Error;
-  const deleteCartItem = await databases.deleteDocument(
+  const updatedCartItem = await databases.updateDocument(
     appwriteConfig.databaseId,
     appwriteConfig.cartCollectionId,
-    documentId
+    documentId,
+    { isDeleted: true }
   );
-
-  if (deleteCartItem) {
-    return { status: 'ok' };
-  }
+  return updatedCartItem;
 }
 
-export async function saveProduct(productId?: string, userId?: string) {
-  const newCartItem = await databases.createDocument(
+export async function saveProduct(savedItem: IWishlist) {
+  console.log(savedItem);
+  const newlySaved = await databases.createDocument(
     appwriteConfig.databaseId,
     appwriteConfig.savesCollectionId,
     ID.unique(),
-    { user: userId, product: productId }
+    savedItem
   );
-  return newCartItem;
+  return newlySaved;
 }
 
 export async function deleteSaved(documentId: string) {
@@ -337,7 +336,7 @@ export async function syncCartOnLogin(userId: string) {
   const response = await databases.listDocuments(
     appwriteConfig.databaseId,
     appwriteConfig.cartCollectionId,
-    [Query.equal('user', userId)]
+    [Query.equal('user', userId), Query.equal('isDeleted', false)]
   );
 
   // Cart items already in Appwrite
@@ -352,7 +351,7 @@ export async function syncCartOnLogin(userId: string) {
     const newItems = cartItems.filter((item) => {
       // Check if the product is already in the user's cart in Appwrite
       return !existingCartItems.some(
-        (appwriteItem) => appwriteItem.product.$id === item.$id
+        (appwriteItem) => appwriteItem.productId === item.productId
       );
     });
 
@@ -365,12 +364,12 @@ export async function syncCartOnLogin(userId: string) {
           ID.unique(),
           {
             user: userId,
-            product: item.$id,
+            productId: item.productId,
             quantity: item.quantity,
             size: item.size,
             title: item.title,
             price: item.price,
-            imageUrls: item.imageUrls,
+            imageUrl: item.imageUrl,
           }
         )
       );
@@ -389,16 +388,16 @@ export async function syncCartOnLogout(userId: string) {
   const response = await databases.listDocuments(
     appwriteConfig.databaseId,
     appwriteConfig.cartCollectionId,
-    [Query.equal('user', userId)]
+    [Query.equal('user', userId), Query.equal('isDeleted', false)]
   );
 
   const appwriteCartItems: ICartItem[] = response.documents.map(
     (doc: Models.Document) => ({
-      $id: doc.product.$id,
+      productId: doc.productId,
       title: doc.title,
       price: doc.price,
       quantity: doc.quantity,
-      imageUrls: doc.imageUrls,
+      imageUrl: doc.imageUrl,
       size: doc.size,
     })
   );
@@ -410,7 +409,9 @@ export async function syncCartOnLogout(userId: string) {
   // Filter out Appwrite cart items that are already in localStorage
   const newItems = appwriteCartItems.filter(
     (appwriteItem) =>
-      !existingLocalCart.some((localItem) => localItem.$id === appwriteItem.$id)
+      !existingLocalCart.some(
+        (localItem) => localItem.productId === appwriteItem.productId
+      )
   );
 
   // Combine the existing local cart items with the new items from Appwrite
@@ -418,16 +419,6 @@ export async function syncCartOnLogout(userId: string) {
 
   // Store the updated cart items in localStorage
   localStorage.setItem('cart', JSON.stringify(combinedCart));
-
-  // Delete the cart items from Appwrite
-  // const deletePromises = response.documents.map((doc: Models.Document) =>
-  //   databases.deleteDocument(
-  //     appwriteConfig.databaseId,
-  //     appwriteConfig.cartCollectionId,
-  //     doc.$id
-  //   )
-  // );
-  // await Promise.all(deletePromises);
 }
 
 export function addToRecentlyViewed(product: IRecenltyViewed) {

@@ -13,14 +13,17 @@ import {
 import { Input } from '@/components/ui/input';
 import { useLoginUser, useRegisterUser } from '@/lib/react-query/queries';
 import { useUserContext } from '@/context/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { registerValidation } from '@/lib/validation';
 import { SubmitButton } from '@/components/shared';
 
 export default function Register() {
   const navigate = useNavigate();
-  const { checkAuthUser, isAuthenticated } = useUserContext();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
+
+  const { checkAuthUser, user, userLoading } = useUserContext();
 
   const { mutateAsync: register, isPending: registering } = useRegisterUser();
   const { mutateAsync: login, isPending: loggingIn } = useLoginUser();
@@ -51,10 +54,10 @@ export default function Register() {
     }
   }
 
-  //! redirecting to the homepage if user already logged in
+  // redirecting to the homepage if user already logged in
   useEffect(() => {
-    if (isAuthenticated) navigate('/');
-  }, [navigate, isAuthenticated]);
+    if (user && !userLoading) navigate(from, { replace: true });
+  }, [navigate, user, userLoading, from]);
 
   return (
     <div className='grid grid-cols-2 max-lg:grid-cols-1 items-center gap-x-12 container min-h-[30rem] padY'>

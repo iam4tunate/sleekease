@@ -51,7 +51,7 @@ export default function Shipping({
 
   async function onSubmit(values: z.infer<typeof ShippingValidation>) {
     if (type === 'Add') {
-      const shipping = { ...values, user: user.id };
+      const shipping = { ...values, user: user?.id };
       await addShipping(shipping);
     } else if (type === 'Update') {
       await updateShipping({ documentId: shippingInfo!.$id, shipping: values });

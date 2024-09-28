@@ -1,11 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { QueryProvider } from './lib/react-query/QueryProvider.tsx';
 import AuthProvider from './context/AuthContext.tsx';
+import { CartProvider } from './context/CartContext.tsx';
 import App from './App.tsx';
 import './index.css';
-import { CartProvider } from './context/CartContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -13,7 +13,9 @@ createRoot(document.getElementById('root')!).render(
       <QueryProvider>
         <AuthProvider>
           <CartProvider>
-            <App />
+            <Routes>
+              <Route path='/*' element={<App />} />
+            </Routes>
           </CartProvider>
         </AuthProvider>
       </QueryProvider>

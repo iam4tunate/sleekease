@@ -7,30 +7,27 @@ import { useLocation } from 'react-router-dom';
 
 export default function CartSummary() {
   const { pathname } = useLocation();
-  const { data: currentUser } = useGetCurrentUser();
-  const { cart: guestCart } = useCartContext();
-  const userCart = currentUser?.cart;
 
-  const userTotalAmount =
-    currentUser &&
-    userCart?.reduce((total: number, item: Models.Document) => {
-      return total + item.product.price * item.quantity;
+  const { localCart } = useCartContext();
+  const { data: currentUser } = useGetCurrentUser();
+  const appwriteCart = currentUser?.cart || null;
+
+  const appwriteTotal = appwriteCart
+    ?.filter((item: Models.Document) => !item.isDeleted)
+    .reduce((total: number, item: Models.Document) => {
+      return total + item?.price * item?.quantity;
     }, 0);
 
-  const guestTotalAmount = guestCart?.items.reduce(
-    (total: number, item: ICartItem) => {
-      return total + item.price * item.quantity;
-    },
-    0
-  );
+  const localTotal = localCart?.reduce((total: number, item: ICartItem) => {
+    return total + item?.price * item?.quantity;
+  }, 0);
 
   const empty =
-    (currentUser && userTotalAmount === 0) ||
-    (!currentUser && guestTotalAmount === 0);
+    (currentUser && appwriteTotal === 0) || (!currentUser && localTotal === 0);
 
   let deliveryFee;
   if (pathname === '/checkout') {
-    deliveryFee = 5000;
+    deliveryFee = 2500;
   } else {
     deliveryFee = 0;
   }
@@ -42,14 +39,14 @@ export default function CartSummary() {
           <span className='flex items-center justify-between font-rubikMedium'>
             <span>Subtotal</span>
             <span>
-              ₦{formatNumberWithCommas(userTotalAmount ?? guestTotalAmount)}
+              ₦{formatNumberWithCommas(appwriteTotal ?? localTotal)}
               {empty && '.00'}
             </span>
           </span>
           <span className='flex items-center justify-between font-rubikMedium'>
             <span>Delivery Free</span>
             <span>
-              {deliveryFee === 5000
+              {deliveryFee === 2500
                 ? `₦${formatNumberWithCommas(deliveryFee)}`
                 : 'not included yet'}
             </span>
@@ -59,7 +56,7 @@ export default function CartSummary() {
             <span>
               ₦
               {formatNumberWithCommas(
-                (userTotalAmount ?? guestTotalAmount) + deliveryFee
+                (appwriteTotal ?? localTotal) + deliveryFee
               )}
               {empty && '.00'}
             </span>

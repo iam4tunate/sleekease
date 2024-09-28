@@ -42,21 +42,23 @@ export default function DashboardLayout() {
                 </Link>
               ))}
               <DropdownMenuSeparator />
-              <DropdownMenuLabel>Admin</DropdownMenuLabel>
               {user &&
-                user.label === 'admin' &&
+                user.role === 'admin' &&
                 AdminDashboardNav.map((nav) => (
-                  <Link
-                    key={nav.name}
-                    to={nav.href}
-                    className={
-                      location.pathname === nav.href ? 'text-orange' : ''
-                    }>
-                    <DropdownMenuItem className='mb-6 last:mb-0'>
-                      <nav.icon className='mr-2 h-4 w-4' />
-                      <span>{nav.name}</span>
-                    </DropdownMenuItem>
-                  </Link>
+                  <div className=''>
+                    <DropdownMenuLabel>Admin</DropdownMenuLabel>
+                    <Link
+                      key={nav.name}
+                      to={nav.href}
+                      className={
+                        location.pathname === nav.href ? 'text-orange' : ''
+                      }>
+                      <DropdownMenuItem className='mb-6 last:mb-0'>
+                        <nav.icon className='mr-2 h-4 w-4' />
+                        <span>{nav.name}</span>
+                      </DropdownMenuItem>
+                    </Link>
+                  </div>
                 ))}
             </DropdownMenuGroup>
           </DropdownMenuContent>

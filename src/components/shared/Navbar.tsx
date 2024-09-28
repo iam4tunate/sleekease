@@ -42,6 +42,7 @@ import CartSummary from './CartSummary';
 import { Models } from 'appwrite';
 import CartItem from './CartItem';
 import { ICartItem } from '@/lib/types';
+import { toast } from 'sonner';
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -50,27 +51,37 @@ export default function Navbar() {
   const { isAuthenticated, userLoading, user } = useUserContext();
   const { mutateAsync: logout, isSuccess } = useLogoutUser();
   const { mutateAsync: syncOnLogin } = useSyncCartOnLogin();
+
+  const { localCart } = useCartContext();
   const { data: currentUser, isPending: isLoading } = useGetCurrentUser();
-  const { cart: localCart } = useCartContext();
+  const appwriteCart = currentUser?.cart || null;
+  console.log(user);
+  //filtered appwrite cart length
+  const appwriteCartLength =
+    appwriteCart?.filter((item: Models.Document) => !item.isDeleted).length ||
+    null;
+  const localCartLength = localCart?.length || null;
 
-  const userCart = currentUser?.cart;
-  const guestCart = localCart.items;
-
-  const userCartItems = userCart
+  const appwriteCartItems = appwriteCart
     ?.slice()
     .reverse()
-    .map((cartItem: Models.Document) => (
-      <CartItem toggleSheet={setSheetOpen} key={cartItem.$id} user={cartItem} />
-    ));
-
-  const guestCartItems = guestCart
-    ?.slice()
-    .reverse()
-    .map((cartItem: ICartItem) => (
+    .filter((item: Models.Document) => !item.isDeleted)
+    .map((item: Models.Document) => (
       <CartItem
         toggleSheet={setSheetOpen}
-        key={cartItem.$id}
-        guest={cartItem}
+        key={item.$id}
+        appwriteCartItem={item}
+      />
+    ));
+
+  const localCartItems = localCart
+    ?.slice()
+    .reverse()
+    .map((item: ICartItem) => (
+      <CartItem
+        toggleSheet={setSheetOpen}
+        key={item.productId}
+        localCartItem={item}
       />
     ));
 
@@ -82,10 +93,14 @@ export default function Navbar() {
       }
     };
     runOnLogin();
-  }, [syncOnLogin, user.id]);
+  }, [syncOnLogin, user?.id]);
 
   const handleLogout = async () => {
-    await logout(user.id);
+    if (user?.id) {
+      await logout(user.id);
+    } else {
+      toast.error('User is not logged in or ID is undefined');
+    }
   };
 
   useEffect(() => {
@@ -207,10 +222,9 @@ export default function Navbar() {
                 <div className='flex items-end gap-x-1 cursor-pointer max-md:hidden'>
                   <span className='relative'>
                     <ShoppingBag size={23} />
-                    {((userCart && userCart?.length !== 0) ||
-                      (guestCart && guestCart?.length !== 0)) && (
+                    {(appwriteCartLength || localCartLength) && (
                       <span className='bg-primary text-white h-5 w-5 flex items-center justify-center rounded-full border border-white absolute -top-2 -right-2 text-[10px] font-rubikSemibold'>
-                        {userCart?.length ?? guestCart.length}
+                        {appwriteCartLength ?? localCartLength}
                       </span>
                     )}
                   </span>
@@ -235,15 +249,15 @@ export default function Navbar() {
                           key={index}
                           className='h-28 max-[400px]:h-full flex max-[400px]:flex-col items-start justify-between pb-5 mb-5 max-sm:pb-8 last-of-type:pb-0 last-of-type:mb-0'>
                           <div className='flex gap-x-4'>
-                            <Skeleton className='w-36 h-28 max-sm:w-24 rounded-md' />
+                            <Skeleton className='w-36 h-28 max-sm:w-24' />
                             <div className='flex flex-col gap-y-2.5 w-full'>
-                              <Skeleton className='h-5 w-26 rounded' />
-                              <Skeleton className='h-4 w-16 rounded' />
-                              <Skeleton className='h-8 w-20 rounded' />
+                              <Skeleton className='h-5 w-26' />
+                              <Skeleton className='h-4 w-16' />
+                              <Skeleton className='h-8 w-20' />
                             </div>
                           </div>
                           <div className='h-full max-[400px]:w-full flex flex-col justify-between items-end max-[400px]:flex-row max-[400px]:justify-between text-right'>
-                            <Skeleton className='h-5 w-24 max-sm:w-16 rounded' />
+                            <Skeleton className='h-5 w-24 max-sm:w-16' />
                             <div className='flex items-center gap-x-4'>
                               <Skeleton className='h-8 w-8 rounded-full' />
                               <Skeleton className='h-8 w-8 rounded-full' />
@@ -251,8 +265,8 @@ export default function Navbar() {
                           </div>
                         </div>
                       ))
-                    ) : (currentUser && !isLoading && !userCart?.length) ||
-                      (!currentUser && !guestCart.length) ? (
+                    ) : (currentUser && !isLoading && !appwriteCartLength) ||
+                      (!currentUser && !localCartLength) ? (
                       <div className='flex flex-col items-center justify-center'>
                         <img
                           src='/images/empty-bag.png'
@@ -272,7 +286,7 @@ export default function Navbar() {
                         </SheetClose>
                       </div>
                     ) : (
-                      userCartItems ?? guestCartItems
+                      appwriteCartItems ?? localCartItems
                     )}
                   </ScrollArea>
                   <div className=''>
@@ -282,7 +296,7 @@ export default function Navbar() {
                         <SheetClose asChild>
                           <Button
                             onClick={() => navigate('/checkout')}
-                            disabled={!userCart.length}
+                            disabled={!appwriteCartLength}
                             className='py-2.5 bg-primary text-white rounded-full w-full mt-3.5'>
                             Proceed to Checkout
                           </Button>

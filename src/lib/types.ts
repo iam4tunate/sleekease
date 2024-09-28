@@ -10,7 +10,7 @@ export type IUser = {
   firstName: string;
   lastName: string;
   email: string;
-  label: string;
+  role: string;
 };
 
 export type INewProduct = {
@@ -39,25 +39,6 @@ export type IUpdateProduct = {
   imageUrls: string[];
 };
 
-export interface ICartItem {
-  $id: string;
-  title: string;
-  price: number;
-  quantity: number;
-  size: string;
-  imageUrls: string[];
-}
-
-export type ICartAction =
-  | { type: 'ADD_ITEM'; payload: ICartItem }
-  | { type: 'REMOVE_ITEM'; payload: string }
-  | { type: 'INCREASE_QUANTITY'; payload: string }
-  | { type: 'DECREASE_QUANTITY'; payload: string };
-
-export interface ICartState {
-  items: ICartItem[];
-}
-
 export type IRecenltyViewed = {
   id: string;
   title: string;
@@ -76,3 +57,31 @@ export type IShippingInfo = {
   lga: string;
   zipCode?: string;
 };
+
+export type IWishlist = {
+  user: string;
+  productId: string;
+  title: string;
+  price: number;
+  imageUrl: string;
+  size: string;
+};
+
+export interface ICartItem {
+  productId: string;
+  title: string;
+  price: number;
+  quantity: number;
+  size: string;
+  imageUrl: string;
+}
+
+export type ICartAction =
+  | { type: 'ADD_ITEM'; payload: ICartItem }
+  | { type: 'REMOVE_ITEM'; payload: string }
+  | { type: 'INCREASE_QUANTITY'; payload: string }
+  | { type: 'DECREASE_QUANTITY'; payload: string };
+
+// export interface ICartState {
+//   ICartItem[];
+// }

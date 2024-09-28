@@ -86,7 +86,10 @@ export default function ProductForm({ product, action }: PostFormProps) {
       }
     }
 
-    //! CREATING
+    if (!user?.id) {
+      throw new Error('User ID is required to create a product');
+    }
+
     const newProduct = await createProduct({
       ...values,
       userId: user.id,

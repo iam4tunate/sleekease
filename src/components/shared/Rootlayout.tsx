@@ -6,15 +6,20 @@ import { cn } from '@/lib/utils';
 import { Heart, Package2, Shirt, ShoppingBag } from 'lucide-react';
 import { useGetCurrentUser } from '@/lib/react-query/queries';
 import { useCartContext } from '@/context/CartContext';
+import { Models } from 'appwrite';
 
 export default function Rootlayout() {
   const { isAuthenticated, userLoading } = useUserContext();
+
+  const { localCart } = useCartContext();
   const { data: currentUser } = useGetCurrentUser();
-  const { cart: localCart } = useCartContext();
-  
-  const saved = currentUser?.saved ?? [];
-  const userCart = currentUser?.cart;
-  const guestCart = localCart.items;
+  const appwriteCart = currentUser?.cart || null;
+  const savedItems = currentUser?.saved ?? [];
+
+  const appwriteCartLength =
+    appwriteCart?.filter((cartItem: Models.Document) => !cartItem.isDeleted)
+      .length || null;
+  const localCartLength = localCart?.length || null;
 
   return (
     <div className='relative min-h-screen antialiased'>
@@ -51,10 +56,9 @@ export default function Rootlayout() {
           }>
           <span className='relative'>
             <ShoppingBag className='h-6 w-6 max-sm:h-[22px] max-sm:w-[22px]' />
-            {((userCart && userCart?.length !== 0) ||
-              (guestCart && guestCart?.length !== 0)) && (
+            {(appwriteCartLength || localCartLength) && (
               <span className='bg-primary text-white h-4 w-4 flex items-center justify-center rounded-full border border-white absolute -top-1 -right-2 text-[10px] font-rubikSemibold'>
-                {userCart?.length ?? guestCart.length}
+                {appwriteCartLength ?? localCartLength}
               </span>
             )}
           </span>
@@ -69,9 +73,9 @@ export default function Rootlayout() {
           }>
           <span className='relative'>
             <Heart className='h-6 w-6 max-sm:h-[22px] max-sm:w-[22px]' />
-            {saved.length !== 0 && (
+            {savedItems.length !== 0 && (
               <span className='bg-primary text-white h-4 w-4 flex items-center justify-center rounded-full border border-white absolute -top-1 -right-2 text-[10px] font-rubikSemibold'>
-                {saved.length}
+                {savedItems.length}
               </span>
             )}
           </span>

@@ -21,11 +21,12 @@ import {
 } from '@/lib/react-query/queries';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CartValidation } from '@/lib/validation';
-import { Spinner, SubmitButton, TopSelling } from '@/components/shared';
+import { GalleryThumb, SubmitButton, TopSelling } from '@/components/shared';
 import { toast } from 'sonner';
 import { useCartContext } from '@/context/CartContext';
 import { Models } from 'appwrite';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -37,16 +38,19 @@ export default function ProductDetails() {
   const { data: currentUser } = useGetCurrentUser();
   const cartItems = currentUser?.cart;
 
-  console.log(product);
-
   const form = useForm<z.infer<typeof CartValidation>>({
     resolver: zodResolver(CartValidation),
   });
 
   async function onSubmit(data: z.infer<typeof CartValidation>) {
     if (isAuthenticated) {
-      const existingItem = cartItems.find(
-        (item: Models.Document) => item.product.$id === product!.$id
+      //checking for cart items with isDeleted:false
+      const nonDeletedCartItems = cartItems.filter(
+        (item: Models.Document) => !item.isDeleted
+      );
+
+      const existingItem = nonDeletedCartItems.find(
+        (item: Models.Document) => item.productId === product!.$id
       );
 
       if (existingItem) {
@@ -56,23 +60,23 @@ export default function ProductDetails() {
         // store items in appwrite
         await addToCart({
           productId: product!.$id,
-          userId: user!.id,
+          user: user!.id,
           size: data.type,
           quantity: 1,
           title: product?.title,
           price: product?.price,
-          imageUrls: product?.imageUrls,
+          imageUrl: product?.imageUrls[0],
         });
       }
     } else {
       // store items in local storage
       const cartItem = {
-        $id: product!.$id,
+        productId: product!.$id,
         title: product?.title,
         price: product?.price,
         quantity: 1,
         size: data.type,
-        imageUrls: product?.imageUrls,
+        imageUrl: product?.imageUrls[0],
       };
       dispatch({ type: 'ADD_ITEM', payload: cartItem });
     }
@@ -80,11 +84,39 @@ export default function ProductDetails() {
 
   if (isLoading)
     return (
-      <div className='min-h-[70vh] flex flex-col items-center justify-center'>
-        <Spinner colored='black' size={40} />
-        <p className='text-lg max-sm:text-base pt-3'>
-          Fetching item details, please hold on!
-        </p>
+      <div className='container padX relative'>
+        <div className='grid grid-cols-[66%_30%] max-lg:grid-cols-[60%_40%] justify-between max-md:grid-cols-1 gap-x-6 gap-y-7'>
+          <div className='grid grid-cols-2 max-lg:grid-cols-1 gap-1'>
+            <Skeleton className='w-full h-full max-lg:h-[30rem]' />
+            <Skeleton className='w-full h-full max-lg:hidden' />
+            <Skeleton className='w-full h-full max-lg:hidden' />
+            <Skeleton className='w-full h-full max-lg:hidden' />
+          </div>
+          <div className='w-[95%] mb-10 mt-8 max-lg:mt-6'>
+            <Skeleton className='w-44 h-8' />
+            <Skeleton className='w-32 h-6 mt-3 mb-5' />
+            <div className=''>
+              <Skeleton className='w-32 h-4' />
+              <div className='flex flex-wrap gap-y-3 gap-x-4 mt-2 mb-2'>
+                <Skeleton className='w-20 h-8 rounded-full' />
+                <Skeleton className='w-20 h-8 rounded-full' />
+                <Skeleton className='w-20 h-8 rounded-full' />
+                <Skeleton className='w-20 h-8 rounded-full' />
+                <Skeleton className='w-20 h-8 rounded-full' />
+              </div>
+            </div>
+            <div className='mt-8 py-3 border rounded-md'>
+              <Skeleton className='w-32 h-5 mx-2' />
+              <Separator className='my-2' />
+              <Skeleton className='h-20 w-auto mx-2' />
+            </div>
+            <div className='mt-8 py-3 border rounded-md'>
+              <Skeleton className='w-32 h-5 mx-2' />
+              <Separator className='my-2' />
+              <Skeleton className='h-16 w-auto mx-2' />
+            </div>
+          </div>
+        </div>
       </div>
     );
 
@@ -111,16 +143,19 @@ export default function ProductDetails() {
   return (
     <div className='container padX relative'>
       <div className='grid grid-cols-[66%_30%] max-lg:grid-cols-[60%_40%] justify-between max-md:grid-cols-1 gap-x-6 gap-y-7'>
-        <div className='grid grid-cols-2 max-lg:grid-cols-1 gap-x-0.5 gap-y-1'>
-          {product?.imageUrls.map((url: string) => (
-            <img
-              key={url}
-              src={url}
-              alt=''
-              className='h-full object-top w-full object-cover'
-            />
-          ))}
-        </div>
+        <>
+          <GalleryThumb images={product?.imageUrls} />
+          <div className='grid grid-cols-2 max-lg:grid-cols-1 gap-x-0.5 gap-y-1 max-lg:hidden'>
+            {product?.imageUrls.map((url: string) => (
+              <img
+                key={url}
+                src={url}
+                alt=''
+                className='h-full object-top w-full object-cover'
+              />
+            ))}
+          </div>
+        </>
         <div
           className={cn(
             'pb-10 pt-8 max-lg:pt-6 max-w-[30%] max-lg:max-w-[35%] max-md:max-w-full w-full md:fixed right-8 max-md:right-6 max-sm:right-4 2xl:right-[5%] overflow-y-auto remove-scrollbar bottom-0',
@@ -176,10 +211,12 @@ export default function ProductDetails() {
           <div className='mt-8 py-3 border rounded-md'>
             <div className='font-rubikMedium px-2'>Product Info</div>
             <Separator className='my-2' />
-            <p className='px-2 text-[15px] leading-[1.3] pt-2 pb-4'>
-              {product?.description}
-            </p>
-            <div className='px-2 text-[15px] leading-[1.3] capitalize'>
+            <p className='px-2  leading-normal py-2'>{product?.description}</p>
+          </div>
+          <div className='mt-4 py-3 border rounded-md'>
+            <div className='font-rubikMedium px-2'>Features</div>
+            <Separator className='my-2' />
+            <div className='px-2 leading-normal capitalize'>
               {product?.features}
             </div>
           </div>

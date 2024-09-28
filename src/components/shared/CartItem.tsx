@@ -24,15 +24,14 @@ import { ICartItem } from '@/lib/types';
 import { useCartContext } from '@/context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { Separator } from '../ui/separator';
-import { SheetClose } from '../ui/sheet';
 
 export default function CartItem({
-  user,
-  guest,
+  appwriteCartItem,
+  localCartItem,
   toggleSheet,
 }: {
-  user?: Models.Document;
-  guest?: ICartItem;
+  appwriteCartItem?: Models.Document;
+  localCartItem?: ICartItem;
   toggleSheet?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const navigate = useNavigate();
@@ -47,19 +46,26 @@ export default function CartItem({
   const { mutateAsync: updateQuantity, isPending: isUpdating } =
     useUpdateQuatity();
 
-  //Cheking if item has already been added to their wishlist
-  const isProductSaved = async (productId?: string, userId?: string) => {
+  const AddToWishlist = async () => {
     if (currentUser) {
       const exists = savedProducts.some(
-        (save: Models.Document) => save.product.$id === productId
+        (save: Models.Document) =>
+          save?.produuctId === appwriteCartItem!.produuctId
       );
 
+      const savedItem = {
+        user: currentUser.$id,
+        productId: appwriteCartItem!.productId,
+        title: appwriteCartItem?.title,
+        price: appwriteCartItem?.price,
+        size: appwriteCartItem?.size,
+        imageUrl: appwriteCartItem?.imageUrl,
+      };
       if (exists) {
         toast.message('This piece is already in your wishlist.');
-        await deleteItem({ documentId: user!.$id });
       } else {
-        await deleteItem({ documentId: user!.$id });
-        await saveItem({ productId, userId });
+        await deleteItem(appwriteCartItem!.$id);
+        await saveItem(savedItem);
       }
     } else {
       toast.message(
@@ -70,35 +76,47 @@ export default function CartItem({
 
   const handleDelete = async () => {
     if (currentUser) {
-      await deleteItem({ documentId: user!.$id });
+      await deleteItem(appwriteCartItem!.$id);
     } else {
-      dispatch({ type: 'REMOVE_ITEM', payload: guest!.$id });
+      dispatch({ type: 'REMOVE_ITEM', payload: localCartItem!.productId });
       toast.success('Item removed from your cart.');
     }
   };
 
   const handleIncrement = async () => {
     if (currentUser) {
-      const newQuantity = user?.quantity + 1; // Calculate the new quantity
-      await updateQuantity({ documentId: user!.$id, quantity: newQuantity });
+      const newQuantity = appwriteCartItem?.quantity + 1;
+      await updateQuantity({
+        documentId: appwriteCartItem!.$id,
+        quantity: newQuantity,
+      });
     } else {
-      dispatch({ type: 'INCREASE_QUANTITY', payload: guest!.$id });
+      dispatch({
+        type: 'INCREASE_QUANTITY',
+        payload: localCartItem!.productId,
+      });
     }
   };
 
   const handleDecrement = async () => {
     if (currentUser) {
-      if (user?.quantity > 1) {
-        const newQuantity = user?.quantity - 1;
-        await updateQuantity({ documentId: user!.$id, quantity: newQuantity });
+      if (appwriteCartItem?.quantity > 1) {
+        const newQuantity = appwriteCartItem?.quantity - 1;
+        await updateQuantity({
+          documentId: appwriteCartItem!.$id,
+          quantity: newQuantity,
+        });
       } else {
-        return user?.quantity;
+        return appwriteCartItem?.quantity;
       }
     } else {
-      if (guest!.quantity > 1) {
-        dispatch({ type: 'DECREASE_QUANTITY', payload: guest!.$id });
+      if (localCartItem!.quantity > 1) {
+        dispatch({
+          type: 'DECREASE_QUANTITY',
+          payload: localCartItem!.productId,
+        });
       } else {
-        return guest?.quantity;
+        return localCartItem?.quantity;
       }
     }
   };
@@ -108,16 +126,16 @@ export default function CartItem({
       <div className='h-28 max-[400px]:h-full flex max-[400px]:flex-col gap-x-4 items-start justify-between select-none'>
         <div className='flex gap-x-4'>
           <img
-            src={user?.product.imageUrls[0] ?? guest?.imageUrls[0]}
-            alt={user?.product.title ?? guest?.title}
+            src={appwriteCartItem?.imageUrl ?? localCartItem?.imageUrl}
+            alt={appwriteCartItem?.title ?? localCartItem?.title}
             className='w-28 h-28 max-sm:w-24 rounded-md object-cover'
           />
           <div className='flex flex-col justify-between w-full'>
             <p className='capitalize font-rubikMedium pb-1.5'>
-              {truncate(user?.product.title ?? guest?.title, 30)}
+              {truncate(appwriteCartItem?.title ?? localCartItem?.title, 30)}
             </p>
             <span className='opacity-70 text-xs capitalize mb-auto'>
-              {user?.size ?? guest?.size}
+              {appwriteCartItem?.size ?? localCartItem?.size}
             </span>
             <div className='flex items-center border w-fit rounded-full'>
               <div
@@ -130,7 +148,7 @@ export default function CartItem({
                   <Spinner size={13} colored='#E8572A' />
                 ) : (
                   <span className='font-rubikMedium w-full'>
-                    {user?.quantity ?? guest?.quantity}
+                    {appwriteCartItem?.quantity ?? localCartItem?.quantity}
                   </span>
                 )}
               </div>
@@ -146,9 +164,9 @@ export default function CartItem({
           <p className='font-rubikSemibold opacity-90'>
             ₦
             {formatNumberWithCommas(
-              user
-                ? user?.product.price * user?.quantity
-                : guest!.price * guest!.quantity
+              appwriteCartItem
+                ? appwriteCartItem?.price * appwriteCartItem?.quantity
+                : localCartItem!.price * localCartItem!.quantity
             )}
           </p>
           <div className='mt-auto flex items-center gap-x-4'>
@@ -174,22 +192,29 @@ export default function CartItem({
                     Cancel
                   </AlertDialogCancel>
                   <div className='flex max-sm:flex-col justify-end gap-3 w-full'>
-                    <SheetClose asChild>
-                      <AlertDialogAction
-                        className='bg-orange text-white hover:bg-darkOrange'
-                        onClick={() => {
-                          navigate(`/shop/${user?.product.$id ?? guest?.$id}`);
-                          toggleSheet!(false);
-                        }}>
-                        View Details
-                      </AlertDialogAction>
-                    </SheetClose>
+                    <AlertDialogAction
+                      className='bg-orange text-white hover:bg-darkOrange'
+                      onClick={() => {
+                        navigate(
+                          `/shop/${
+                            appwriteCartItem?.productId ??
+                            localCartItem?.productId
+                          }`
+                        );
+                        toggleSheet!(false);
+                      }}>
+                      View Details
+                    </AlertDialogAction>
                     <AlertDialogAction
                       onClick={() => {
                         handleDelete();
+                        navigate(
+                          `/shop/${
+                            appwriteCartItem?.productId ??
+                            localCartItem?.productId
+                          }`
+                        );
                         toggleSheet!(false);
-                        if (!isDeleting)
-                          navigate(`/shop/${user?.product.$id ?? guest?.$id}`);
                       }}>
                       Make Changes
                     </AlertDialogAction>
@@ -221,9 +246,7 @@ export default function CartItem({
                   </AlertDialogCancel>
                   <div className='flex max-sm:flex-col justify-end gap-3 w-full'>
                     <AlertDialogAction
-                      onClick={() =>
-                        isProductSaved(user?.product.$id, currentUser?.$id)
-                      }
+                      onClick={AddToWishlist}
                       className='bg-orange text-white hover:bg-darkOrange'>
                       Add to Wishlist
                     </AlertDialogAction>
