@@ -38,6 +38,9 @@ export default function ProductDetails() {
   const { data: currentUser } = useGetCurrentUser();
   const cartItems = currentUser?.cart;
 
+  const allSizes = ['x-small', 'small', 'medium', 'large', 'x-large'];
+  const availableSizes = product?.sizes || [];
+
   const form = useForm<z.infer<typeof CartValidation>>({
     resolver: zodResolver(CartValidation),
   });
@@ -85,7 +88,7 @@ export default function ProductDetails() {
   if (isLoading)
     return (
       <div className='container padX relative'>
-        <div className='grid grid-cols-[66%_30%] max-lg:grid-cols-[60%_40%] justify-between max-md:grid-cols-1 gap-x-6 gap-y-4'>
+        <div className='grid grid-cols-[66%_30%] max-lg:grid-cols-[60%_40%] justify-between max-md:grid-cols-1 gap-x-6 gap-y-2'>
           <div className='grid grid-cols-2 max-lg:grid-cols-1 gap-1'>
             <Skeleton className='w-full h-full max-lg:h-[30rem]' />
             <Skeleton className='w-full h-full max-lg:hidden' />
@@ -142,7 +145,7 @@ export default function ProductDetails() {
 
   return (
     <div className='container padX relative'>
-      <div className='grid grid-cols-[66%_30%] max-lg:grid-cols-[60%_40%] justify-between max-md:grid-cols-1 gap-x-6 gap-y-4'>
+      <div className='grid grid-cols-[66%_30%] max-lg:grid-cols-[60%_40%] justify-between max-md:grid-cols-1 gap-x-6 gap-y-2'>
         <>
           <GalleryThumb images={product?.imageUrls} />
           <div className='grid grid-cols-2 max-lg:grid-cols-1 gap-x-0.5 gap-y-1 max-lg:hidden'>
@@ -182,15 +185,22 @@ export default function ProductDetails() {
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                         className='flex flex-wrap gap-y-6 gap-x-2 pt-2 pb-2'>
-                        {product?.sizes.map((size: string) => (
+                        {allSizes.map((size: string) => (
                           <FormItem key={size}>
                             <FormControl>
                               <RadioGroupItem
                                 value={size}
                                 className='hidden peer'
+                                disabled={!availableSizes.includes(size)}
                               />
                             </FormControl>
-                            <FormLabel className='bg-gray-100 text-[15px] py-2 px-6 rounded-full cursor-pointer peer-aria-checked:text-white peer-aria-checked:bg-primary'>
+                            <FormLabel
+                              className={cn(
+                                'bg-gray-100 text-[15px] py-2 px-6 rounded-full cursor-pointer peer-aria-checked:text-white',
+                                availableSizes.includes(size)
+                                  ? 'peer-aria-checked:bg-primary'
+                                  : 'text-gray-400 cursor-not-allowed'
+                              )}>
                               {size}
                             </FormLabel>
                           </FormItem>
