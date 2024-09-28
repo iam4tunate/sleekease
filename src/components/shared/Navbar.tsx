@@ -163,7 +163,7 @@ export default function Navbar() {
             </div>
           </Link>
 
-          <div className='flex items-center gap-x-6'>
+          <div className='flex items-center md:gap-x-6'>
             <Link
               to='/shop'
               className='border rounded-full px-4 py-1.5 hover:bg-gray-100 max-md:hidden'>
