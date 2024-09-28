@@ -15,7 +15,7 @@ export default function UpdateProduct() {
           Update Item
         </div>
       </div>
-      {!isPending ? (
+      {isPending ? (
         <div className='pt-6 flex items-center gap-x-3 text-base'>
           <Spinner size={25} colored='#E8572A' />
           <span>Loading details. please wait!</span>
