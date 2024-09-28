@@ -7,7 +7,7 @@ export default function CreateProduct() {
       <div className='pb-6 max-sm:pb-4 flex items-center gap-x-1.5'>
         <PackagePlus className='w-6 h-6' />
         <div className='text-xl font-rubikMedium max-sm:text-xl'>
-          Create New Product
+          Create New Item
         </div>
       </div>
       <ProductForm action='Create' />
