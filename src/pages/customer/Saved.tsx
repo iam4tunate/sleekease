@@ -61,7 +61,7 @@ export default function Saved() {
       </div>
       {isLoading ? (
         <div className='grid grid-cols-2 max-lg:grid-cols-1 max-sm:grid-cols-1 gap-x-6 gap-y-6 px-4 max-sm:px-2'>
-          {Array.from({ length: 4 }, (_, index) => (
+          {Array.from({ length: 2 }, (_, index) => (
             <div
               key={index}
               className='min-h-28 border rounded-md py-2.5 pl-2 pr-4 flex max-[400px]:flex-col items-end justify-between gap-y-1.5'>
@@ -100,12 +100,12 @@ export default function Saved() {
               <>
                 <div
                   key={item.$id}
-                  className='min-h-28 border rounded-md py-2.5 pl-2 pr-4 flex max-[400px]:flex-col items-end justify-between gap-y-1.5'>
+                  className='min-h-28 border rounded-md py-2.5 pl-2 pr-4 flex max-[500px]:flex-col items-end max-sm:items-start justify-between gap-y-3'>
                   <div className='flex gap-x-4 w-full'>
                     <img
                       src={item.imageUrl}
                       alt={item.title}
-                      className='h-28 max-[400px]:h-24 rounded-sm'
+                      className='h-28 rounded-sm'
                     />
                     <div className='flex flex-col gap-y-2.5 max-sm:gap-1.5 w-full pt-0.5'>
                       <p className='capitalize font-rubikMedium whitespace-nowrap max-[400px]:whitespace-normal'>
@@ -123,7 +123,7 @@ export default function Saved() {
                     <Link
                       to={`/shop/${item.productId}`}
                       className='bg-gray-200 rounded px-4 py-2 cursor-pointer'>
-                      <span>See Details</span>
+                      See Details
                     </Link>
                     {isDeleting || (isAdding && currentId === item.$id) ? (
                       <Spinner size={20} colored='#E8572A' />
@@ -143,11 +143,11 @@ export default function Saved() {
                             item?.$id
                           )
                         }
-                        className='text-white bg-primary bg-opacity-25 rounded px-4 py-3 cursor-pointer'>
+                        className='text-white bg-primary rounded px-4 py-2 cursor-pointer'>
                         {isDeleting ? (
                           <Spinner size={13} colored='#E8572A' />
                         ) : (
-                          'Add to Cart'
+                          <span>Add to Cart</span>
                         )}
                       </div>
                     )}

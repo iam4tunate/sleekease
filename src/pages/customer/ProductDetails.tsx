@@ -85,7 +85,7 @@ export default function ProductDetails() {
   if (isLoading)
     return (
       <div className='container padX relative'>
-        <div className='grid grid-cols-[66%_30%] max-lg:grid-cols-[60%_40%] justify-between max-md:grid-cols-1 gap-x-6 gap-y-7'>
+        <div className='grid grid-cols-[66%_30%] max-lg:grid-cols-[60%_40%] justify-between max-md:grid-cols-1 gap-x-6 gap-y-4'>
           <div className='grid grid-cols-2 max-lg:grid-cols-1 gap-1'>
             <Skeleton className='w-full h-full max-lg:h-[30rem]' />
             <Skeleton className='w-full h-full max-lg:hidden' />
@@ -142,7 +142,7 @@ export default function ProductDetails() {
 
   return (
     <div className='container padX relative'>
-      <div className='grid grid-cols-[66%_30%] max-lg:grid-cols-[60%_40%] justify-between max-md:grid-cols-1 gap-x-6 gap-y-7'>
+      <div className='grid grid-cols-[66%_30%] max-lg:grid-cols-[60%_40%] justify-between max-md:grid-cols-1 gap-x-6 gap-y-4'>
         <>
           <GalleryThumb images={product?.imageUrls} />
           <div className='grid grid-cols-2 max-lg:grid-cols-1 gap-x-0.5 gap-y-1 max-lg:hidden'>

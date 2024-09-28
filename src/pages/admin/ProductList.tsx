@@ -88,7 +88,7 @@ export default function ProductList() {
                           <span>Delete</span>
                         </span>
                       </AlertDialogTrigger>
-                      <AlertDialogContent>
+                      <AlertDialogContent className='max-sm:max-w-[95%] rounded'>
                         <AlertDialogHeader>
                           <AlertDialogTitle>
                             Are you absolutely sure?

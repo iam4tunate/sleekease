@@ -176,7 +176,7 @@ export default function CartItem({
                   <Eye size={15} />
                 </div>
               </AlertDialogTrigger>
-              <AlertDialogContent>
+              <AlertDialogContent className='max-sm:max-w-[95%] rounded'>
                 <AlertDialogHeader>
                   <AlertDialogTitle>
                     What would you like to do?
@@ -232,7 +232,7 @@ export default function CartItem({
                   )}
                 </div>
               </AlertDialogTrigger>
-              <AlertDialogContent>
+              <AlertDialogContent className='max-sm:max-w-[95%] rounded'>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
