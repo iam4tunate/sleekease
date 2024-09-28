@@ -35,7 +35,6 @@ export default function Saved() {
     documentId: string
   ) => {
     //checking for cart items with isDeleted:false
-    console.log(item, documentId);
     const nonDeletedCartItems = cartItems.filter(
       (item: Models.Document) => !item.isDeleted
     );

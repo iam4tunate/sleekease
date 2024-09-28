@@ -55,7 +55,7 @@ export default function Navbar() {
   const { localCart } = useCartContext();
   const { data: currentUser, isPending: isLoading } = useGetCurrentUser();
   const appwriteCart = currentUser?.cart || null;
-  console.log(user);
+
   //filtered appwrite cart length
   const appwriteCartLength =
     appwriteCart?.filter((item: Models.Document) => !item.isDeleted).length ||

@@ -298,7 +298,6 @@ export async function deleteFromCart(documentId: string) {
 }
 
 export async function saveProduct(savedItem: IWishlist) {
-  console.log(savedItem);
   const newlySaved = await databases.createDocument(
     appwriteConfig.databaseId,
     appwriteConfig.savesCollectionId,

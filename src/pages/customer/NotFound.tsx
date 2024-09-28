@@ -17,7 +17,7 @@ export default function NotFound() {
           don't worry, your next great outfit is just a click away. Browse our
           latest collections and discover something new!
         </p>
-        <div className='flex flex-wrap items-center gap-x-6'>
+        <div className='flex flex-wrap items-center justify-center gap-x-6 gap-y-3'>
           <Button
             variant='outline'
             onClick={goBack}

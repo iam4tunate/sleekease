@@ -1,9 +1,4 @@
-import {
-  CartItem,
-  CartSummary,
-  ShopCta,
-  TopSelling,
-} from '@/components/shared';
+import { CartItem, CartSummary, TopSelling } from '@/components/shared';
 import { useGetCurrentUser } from '@/lib/react-query/queries';
 import { Models } from 'appwrite';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -136,9 +131,6 @@ export default function Cart() {
         <div className='padY'>
           <TopSelling />
         </div>
-      </div>
-      <div className='container mb-8 padX padY'>
-        <ShopCta />
       </div>
     </div>
   );
