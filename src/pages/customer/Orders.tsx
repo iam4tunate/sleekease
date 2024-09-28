@@ -63,7 +63,7 @@ export default function Orders() {
                   </p>
                   <p className=''>
                     <span className='opacity-80 text-[13px] pr-2'>
-                      Delivery Status:
+                      Delivery status:
                     </span>
                     {order.status === false ? (
                       <span className='text-orange'>Pending</span>
