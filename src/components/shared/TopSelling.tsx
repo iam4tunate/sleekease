@@ -1,15 +1,8 @@
-import { useGetProductByCategory } from '@/lib/react-query/queries';
-import ProductGrid from './ProductGrid';
 import { useEffect, useState } from 'react';
+import ProductGrid from './ProductGrid';
+import { useGetProductByCategory } from '@/lib/react-query/queries';
 
-const categories = [
-  't-shirts',
-  'pants',
-  'shirts',
-  'caps',
-  'jackets',
-  'sweatshirts',
-];
+const categories = ['t-shirts', 'pants', 'shirts', 'sweatshirts'];
 
 export default function TopSelling() {
   const [randomCategory, setRandomCategory] = useState<string | null>(null);
@@ -30,7 +23,9 @@ export default function TopSelling() {
 
   return (
     <div className='padY'>
-      <div className='font-lora font-medium text-3xl max-sm:text-2xl pb-6 max-md:pb-4 capitalize'>Our Top Selling {randomCategory}</div>
+      <div className='font-lora font-medium text-3xl max-sm:text-2xl pb-6 max-md:pb-4 capitalize'>
+        Our Top Selling {randomCategory}
+      </div>
 
       <ProductGrid
         isLoading={isLoading}
