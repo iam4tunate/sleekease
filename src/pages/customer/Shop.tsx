@@ -3,7 +3,8 @@ import { useGetRecentProducts } from '@/lib/react-query/queries';
 
 export default function Shop() {
   const { isPending: isLoading, data: products } = useGetRecentProducts();
-  
+  console.log('ffffffffff', products);
+
   return (
     <div className='padY padX container'>
       <div className='font-lora font-medium text-3xl max-sm:text-2xl pb-6 max-md:pb-4 capitalize'>

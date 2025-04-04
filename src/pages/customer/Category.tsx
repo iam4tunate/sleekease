@@ -9,6 +9,7 @@ export default function Category() {
   const { data: products, isPending: isLoading } = useGetProductByCategory(
     category!
   );
+  console.log('ffffffffff', products);
 
   if (!isLoading && !products?.total)
     return (
@@ -23,7 +24,8 @@ export default function Category() {
           </p>
           <Button
             onClick={() => navigate('/shop')}
-            className='rounded-full w-[10rem]'>
+            className='rounded-full w-[10rem]'
+          >
             Return to Shop
           </Button>
         </div>

@@ -86,7 +86,7 @@ export async function createProduct(product: INewProduct) {
     }
 
     const fileUrls = uploadedFiles.map((uploadedFile) => {
-      const previewUrl = getFilePreview(uploadedFile.$id);
+      const previewUrl = getFileView(uploadedFile.$id);
       return previewUrl;
     });
 
@@ -130,16 +130,8 @@ export async function uploadFile(file: File) {
   return uploadedFile;
 }
 
-export function getFilePreview(fileId: string) {
-  const fileUrl = storage.getFilePreview(
-    appwriteConfig.storageId,
-    fileId,
-    2000,
-    2000,
-    // 'top',
-    undefined,
-    100
-  );
+export function getFileView(fileId: string) {
+  const fileUrl = storage.getFileView(appwriteConfig.storageId, fileId);
 
   return fileUrl;
 }
@@ -198,7 +190,7 @@ export async function updateProduct(product: IUpdateProduct) {
       }
 
       const fileUrls = uploadedFiles.map((uploadedFile) => {
-        const previewUrl = getFilePreview(uploadedFile.$id);
+        const previewUrl = getFileView(uploadedFile.$id);
         return previewUrl.toString();
       });
       const fileIds = uploadedFiles.map((uploadedFile) => {
