@@ -15,7 +15,7 @@ import {
   useAddShippingInfo,
   useUpdateShippingInfo,
 } from '@/lib/react-query/queries';
-import { useUserContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import SubmitButton from './SubmitButton';
 import { Models } from 'appwrite';
 
@@ -28,7 +28,7 @@ export default function Shipping({
   shippingInfo?: Models.Document;
   setUpdating?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const { user } = useUserContext();
+  const { user } = useAuth();
 
   const { mutateAsync: addShipping, isPending: isAdding } =
     useAddShippingInfo();

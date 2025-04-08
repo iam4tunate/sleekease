@@ -1,4 +1,4 @@
-import { ID, Models, Query } from 'appwrite';
+import { ID, Query } from 'appwrite';
 import {
   ICartItem,
   INewProduct,
@@ -65,8 +65,8 @@ export async function getCurrentUser() {
   return currentUser.documents[0];
 }
 
-export async function logoutUser(userId: string) {
-  await syncCartOnLogout(userId);
+export async function logoutUser() {
+  // await syncCartOnLogout(userId);
   localStorage.removeItem('recentlyViewed');
   const session = await account.deleteSession('current');
   return session;
@@ -374,43 +374,43 @@ export async function syncCartOnLogin(userId: string) {
   }
 }
 
-export async function syncCartOnLogout(userId: string) {
-  // Fetch cart items from Appwrite
-  const response = await databases.listDocuments(
-    appwriteConfig.databaseId,
-    appwriteConfig.cartCollectionId,
-    [Query.equal('user', userId), Query.equal('isDeleted', false)]
-  );
+// export async function syncCartOnLogout(userId: string) {
+//   // Fetch cart items from Appwrite
+//   const response = await databases.listDocuments(
+//     appwriteConfig.databaseId,
+//     appwriteConfig.cartCollectionId,
+//     [Query.equal('user', userId), Query.equal('isDeleted', false)]
+//   );
 
-  const appwriteCartItems: ICartItem[] = response.documents.map(
-    (doc: Models.Document) => ({
-      productId: doc.productId,
-      title: doc.title,
-      price: doc.price,
-      quantity: doc.quantity,
-      imageUrl: doc.imageUrl,
-      size: doc.size,
-    })
-  );
+//   const appwriteCartItems: ICartItem[] = response.documents.map(
+//     (doc: Models.Document) => ({
+//       productId: doc.productId,
+//       title: doc.title,
+//       price: doc.price,
+//       quantity: doc.quantity,
+//       imageUrl: doc.imageUrl,
+//       size: doc.size,
+//     })
+//   );
 
-  // Get existing cart items from localStorage (if any)
-  const localCart = localStorage.getItem('cart');
-  const existingLocalCart: ICartItem[] = localCart ? JSON.parse(localCart) : [];
+//   // Get existing cart items from localStorage (if any)
+//   const localCart = localStorage.getItem('cart');
+//   const existingLocalCart: ICartItem[] = localCart ? JSON.parse(localCart) : [];
 
-  // Filter out Appwrite cart items that are already in localStorage
-  const newItems = appwriteCartItems.filter(
-    (appwriteItem) =>
-      !existingLocalCart.some(
-        (localItem) => localItem.productId === appwriteItem.productId
-      )
-  );
+//   // Filter out Appwrite cart items that are already in localStorage
+//   const newItems = appwriteCartItems.filter(
+//     (appwriteItem) =>
+//       !existingLocalCart.some(
+//         (localItem) => localItem.productId === appwriteItem.productId
+//       )
+//   );
 
-  // Combine the existing local cart items with the new items from Appwrite
-  const combinedCart = [...existingLocalCart, ...newItems];
+//   // Combine the existing local cart items with the new items from Appwrite
+//   const combinedCart = [...existingLocalCart, ...newItems];
 
-  // Store the updated cart items in localStorage
-  localStorage.setItem('cart', JSON.stringify(combinedCart));
-}
+//   // Store the updated cart items in localStorage
+//   localStorage.setItem('cart', JSON.stringify(combinedCart));
+// }
 
 export function addToRecentlyViewed(product: IRecenltyViewed) {
   const viewedProducts = JSON.parse(
@@ -457,6 +457,7 @@ export async function saveOrder(
   userId: string,
   shippingId: string
 ) {
+  // 1. Create the order
   const newOrder = await databases.createDocument(
     appwriteConfig.databaseId,
     appwriteConfig.ordersCollectionId,
@@ -468,5 +469,25 @@ export async function saveOrder(
       orderId: ID.unique(),
     }
   );
+
+  // 2. Fetch all non-deleted cart items for the user
+  const userCartItems = await databases.listDocuments(
+    appwriteConfig.databaseId,
+    appwriteConfig.cartCollectionId,
+    [Query.equal('user', userId), Query.equal('isDeleted', false)]
+  );
+
+  // 3. Soft-delete each cart item
+  const deletePromises = userCartItems.documents.map((item) =>
+    databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.cartCollectionId,
+      item.$id,
+      { isDeleted: true }
+    )
+  );
+
+  await Promise.all(deletePromises);
+
   return newOrder;
 }

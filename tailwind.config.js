@@ -68,6 +68,15 @@ export default {
           5: 'hsl(var(--chart-5))',
         },
       },
+      keyframes: {
+        zoomInOut: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.2)' },
+        },
+      },
+      animation: {
+        zoomInOut: 'zoomInOut 1.8s ease-in-out infinite',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],

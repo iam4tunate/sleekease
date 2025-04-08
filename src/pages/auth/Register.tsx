@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useLoginUser, useRegisterUser } from '@/lib/react-query/queries';
-import { useUserContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { registerValidation } from '@/lib/validation';
@@ -23,7 +23,7 @@ export default function Register() {
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
 
-  const { checkAuthUser, user, userLoading } = useUserContext();
+  const { checkAuthUser, user, userLoading } = useAuth();
 
   const { mutateAsync: register, isPending: registering } = useRegisterUser();
   const { mutateAsync: login, isPending: loggingIn } = useLoginUser();
@@ -74,7 +74,8 @@ export default function Register() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className='w-full space-y-5'>
+            className='w-full space-y-5'
+          >
             <FormField
               control={form.control}
               name='firstName'
@@ -138,7 +139,8 @@ export default function Register() {
           Already have an account?
           <Link
             to='/login'
-            className='underline font-rubikMedium text-orange pl-1.5 pr-0.5'>
+            className='underline font-rubikMedium text-orange pl-1.5 pr-0.5'
+          >
             Log in{' '}
           </Link>{' '}
           here to stay sleek.

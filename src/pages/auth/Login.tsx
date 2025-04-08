@@ -10,20 +10,19 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useUserContext } from '@/context/AuthContext';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { SubmitButton } from '@/components/shared';
 import { useLoginUser } from '@/lib/react-query/queries';
 import { useEffect } from 'react';
 import { LoginValidation } from '@/lib/validation';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
 
-  const { checkAuthUser, user, userLoading } =
-    useUserContext();
+  const { checkAuthUser, user, userLoading } = useAuth();
 
   const { mutateAsync: login, isPending: loggingIn } = useLoginUser();
 
@@ -51,7 +50,7 @@ export default function Login() {
 
   //! redirecting to the homepage if user already logged in
   useEffect(() => {
-    if (user && !userLoading) navigate(from, { replace: true });
+    if (user) navigate(from, { replace: true });
   }, [navigate, user, userLoading, from]);
 
   return (
@@ -69,7 +68,8 @@ export default function Login() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className='w-full space-y-5'>
+            className='w-full space-y-5'
+          >
             <FormField
               control={form.control}
               name='email'
@@ -107,7 +107,8 @@ export default function Login() {
           New to SLEEKEASE?
           <Link
             to='/register'
-            className='font-rubikMedium text-orange pl-1.5 pr-0.5 underline'>
+            className='font-rubikMedium text-orange pl-1.5 pr-0.5 underline'
+          >
             Register Now
           </Link>{' '}
           for exclusive top styles.

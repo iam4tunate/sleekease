@@ -1,15 +1,15 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import Footer from './Footer';
 import Navbar from './Navbar';
-import { useUserContext } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
 import { Heart, Package2, Shirt, ShoppingBag } from 'lucide-react';
 import { useGetCurrentUser } from '@/lib/react-query/queries';
 import { useCartContext } from '@/context/CartContext';
 import { Models } from 'appwrite';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Rootlayout() {
-  const { isAuthenticated, userLoading } = useUserContext();
+  const { isAuthenticated, userLoading } = useAuth();
 
   const { localCart } = useCartContext();
   const { data: currentUser } = useGetCurrentUser();
@@ -31,7 +31,8 @@ export default function Rootlayout() {
             isAuthenticated && !userLoading
               ? 'pt-[56px] min-h-[calc(100vh-40px)]'
               : 'pt-[104px] min-h-[calc(100vh-44px)]'
-          )}>
+          )}
+        >
           <Outlet />
         </main>
         <Footer />
@@ -43,7 +44,8 @@ export default function Rootlayout() {
             cn('flex flex-col gap-y-0.5 items-center justify-center', {
               'text-destructive': isActive,
             })
-          }>
+          }
+        >
           <Shirt className='h-6 w-6 max-sm:h-[22px] max-sm:w-[22px]' />
           <span className='max-sm:text-xs max-[300px]:hidden'>Shop</span>
         </NavLink>
@@ -53,7 +55,8 @@ export default function Rootlayout() {
             cn('flex flex-col gap-y-0.5 items-center justify-center', {
               'text-destructive': isActive,
             })
-          }>
+          }
+        >
           <span className='relative'>
             <ShoppingBag className='h-6 w-6 max-sm:h-[22px] max-sm:w-[22px]' />
             {(appwriteCartLength || localCartLength) && (
@@ -70,7 +73,8 @@ export default function Rootlayout() {
             cn('flex flex-col gap-y-0.5 items-center justify-center', {
               'text-destructive': isActive,
             })
-          }>
+          }
+        >
           <span className='relative'>
             <Heart className='h-6 w-6 max-sm:h-[22px] max-sm:w-[22px]' />
             {savedItems.length !== 0 && (
@@ -87,7 +91,8 @@ export default function Rootlayout() {
             cn('flex flex-col gap-y-0.5 items-center justify-center', {
               'text-destructive': isActive,
             })
-          }>
+          }
+        >
           <Package2 className='h-6 w-6 max-sm:h-[22px] max-sm:w-[22px]' />
           <span className='max-sm:text-xs max-[300px]:hidden'>Orders</span>
         </NavLink>

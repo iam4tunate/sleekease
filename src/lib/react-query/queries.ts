@@ -23,7 +23,6 @@ import {
   saveOrder,
   saveProduct,
   syncCartOnLogin,
-  syncCartOnLogout,
   updateProduct,
   updateQuantity,
   updateShippingInfo,
@@ -62,7 +61,7 @@ export const useLoginUser = () => {
 export const useLogoutUser = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (userId: string) => logoutUser(userId),
+    mutationFn: logoutUser,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
@@ -287,20 +286,20 @@ export const useSyncCartOnLogin = () => {
   });
 };
 
-export const useSyncCartOnLogout = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (userId: string) => syncCartOnLogout(userId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
-      });
-    },
-    onError: (error) => {
-      toast(error.message);
-    },
-  });
-};
+// export const useSyncCartOnLogout = () => {
+//   const queryClient = useQueryClient();
+//   return useMutation({
+//     mutationFn: (userId: string) => syncCartOnLogout(userId),
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({
+//         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+//       });
+//     },
+//     onError: (error) => {
+//       toast(error.message);
+//     },
+//   });
+// };
 
 export const useAddToRecentlyViewed = () => {};
 

@@ -1,5 +1,5 @@
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useUserContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { cn, formatNumberWithCommas } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -32,7 +32,7 @@ export default function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { dispatch } = useCartContext();
-  const { isAuthenticated, userLoading, user } = useUserContext();
+  const { isAuthenticated, userLoading, user } = useAuth();
   const { data: product, isPending: isLoading } = useGetProductById(id || '');
   const { mutateAsync: addToCart, isPending: isAdding } = useAddToCart();
   const { data: currentUser } = useGetCurrentUser();
@@ -135,7 +135,8 @@ export default function ProductDetails() {
           </p>
           <Button
             onClick={() => navigate('/shop')}
-            className='rounded-full w-[10rem]'>
+            className='rounded-full w-[10rem]'
+          >
             Return to Shop
           </Button>
         </div>
@@ -163,7 +164,8 @@ export default function ProductDetails() {
           className={cn(
             'pb-10 pt-8 max-lg:pt-6 max-w-[30%] max-lg:max-w-[35%] max-md:max-w-full w-full md:fixed right-8 max-md:right-6 max-sm:right-4 2xl:right-[5%] overflow-y-auto remove-scrollbar bottom-0',
             isAuthenticated && !userLoading ? 'top-[56px]' : 'top-[104px]'
-          )}>
+          )}
+        >
           <div className='font-rubikMedium text-[23px] capitalize'>
             {product?.title}
           </div>
@@ -184,7 +186,8 @@ export default function ProductDetails() {
                       <RadioGroup
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        className='flex flex-wrap gap-y-6 gap-x-2 pt-2 pb-2'>
+                        className='flex flex-wrap gap-y-6 gap-x-2 pt-2 pb-2'
+                      >
                         {allSizes.map((size: string) => (
                           <FormItem key={size}>
                             <FormControl>
@@ -200,7 +203,8 @@ export default function ProductDetails() {
                                 availableSizes.includes(size)
                                   ? 'peer-aria-checked:bg-primary'
                                   : 'text-gray-400 cursor-not-allowed'
-                              )}>
+                              )}
+                            >
                               {size}
                             </FormLabel>
                           </FormItem>

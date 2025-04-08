@@ -5,12 +5,12 @@ import {
   TopSelling,
 } from '@/components/shared';
 import { Button } from '@/components/ui/button';
-import { useUserContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 
 export default function Home() {
-  const { isAuthenticated } = useUserContext();
+  const { isAuthenticated } = useAuth();
   return (
     <div className='padY'>
       <div className='container padX pb-6 max-sm:pb-3 pt-6'>
@@ -37,7 +37,8 @@ export default function Home() {
           className={cn(
             'select-none sticky bottom-6 w-[90%] max-sm:w-full max-md:w-full mx-auto z-10 text-white text-center space-y-3 pt-5 pb-8 padX',
             isAuthenticated ? 'top-12' : 'top-24'
-          )}>
+          )}
+        >
           <h2 className='uppercase font-lora text-[6vw] 2xl:text-8xl max-lg:text-6xl max-sm:text-5xl max-[400px]:text-4xl leading-none opacity-80'>
             Effortless Style,
             <br /> Every Day.
@@ -49,7 +50,8 @@ export default function Home() {
           <Link to='/shop'>
             <Button
               size='lg'
-              className='font-lora border bg-transparent rounded-full text-base max-sm:text-sm hover:bg-orange hover:border-none hover:text-dark font-medium'>
+              className='font-lora border bg-transparent rounded-full text-base max-sm:text-sm hover:bg-orange hover:border-none hover:text-dark font-medium'
+            >
               Unlock Your Style
             </Button>
           </Link>

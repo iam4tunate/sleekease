@@ -2,14 +2,6 @@ import { getCurrentUser } from '@/lib/appwrite/api';
 import { IUser } from '@/lib/types';
 import { createContext, useContext, useEffect, useState } from 'react';
 
-// const INITIAL_USER = {
-//   id: '',
-//   firstName: '',
-//   lastName: '',
-//   email: '',
-//   label: '',
-// };
-
 const INITIAL_STATE = {
   user: null as IUser | null,
   userLoading: false,
@@ -19,7 +11,7 @@ const INITIAL_STATE = {
   checkAuthUser: async () => false as boolean,
 };
 
-type IContextType = {
+type AuthContextType = {
   user: IUser | null;
   userLoading: boolean;
   setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
@@ -28,7 +20,7 @@ type IContextType = {
   checkAuthUser: () => Promise<boolean>;
 };
 
-const AuthContext = createContext<IContextType>(INITIAL_STATE);
+const AuthContext = createContext<AuthContextType>(INITIAL_STATE);
 
 export default function AuthProvider({
   children,
@@ -70,6 +62,21 @@ export default function AuthProvider({
     checkAuthUser();
   }, []);
 
+  if (userLoading) {
+    return (
+      <div className='flex items-center justify-center h-screen w-full bg-white'>
+        <div className='grid grid-cols-3 animate-zoomInOut'>
+          <img src='/images/shirt_icon.png' className='w-16' alt='short' />
+          <img src='/images/short_icon.png' className='w-16' alt='short' />
+          <img src='/images/hoodie_icon.png' className='w-16' alt='short' />
+          <img src='/images/pant_icon.png' className='w-16' alt='short' />
+          <img src='/images/shirt_long_icon.png' className='w-16' alt='short' />
+          <img src='/images/cap_icon.png' className='w-16' alt='short' />
+        </div>
+      </div>
+    );
+  }
+
   const value = {
     user,
     setUser,
@@ -82,4 +89,11 @@ export default function AuthProvider({
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-export const useUserContext = () => useContext(AuthContext);
+// Create a custom hook to use the AuthContext with proper error handling
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useUserContext must be used within an AuthProvider');
+  }
+  return context;
+};

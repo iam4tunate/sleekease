@@ -18,7 +18,7 @@ import {
 } from '../ui/dropdown-menu';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { CategoryNav } from '@/lib/constants';
-import { useUserContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
 import {
   useGetCurrentUser,
@@ -42,13 +42,12 @@ import CartSummary from './CartSummary';
 import { Models } from 'appwrite';
 import CartItem from './CartItem';
 import { ICartItem } from '@/lib/types';
-import { toast } from 'sonner';
 
 export default function Navbar() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [isSheetOpen, setSheetOpen] = useState<boolean>(false);
-  const { isAuthenticated, userLoading, user } = useUserContext();
+  const { isAuthenticated, userLoading, user } = useAuth();
   const { mutateAsync: logout, isSuccess } = useLogoutUser();
   const { mutateAsync: syncOnLogin } = useSyncCartOnLogin();
 
@@ -95,14 +94,6 @@ export default function Navbar() {
     runOnLogin();
   }, [syncOnLogin, user?.id]);
 
-  const handleLogout = async () => {
-    if (user?.id) {
-      await logout(user.id);
-    } else {
-      toast.error('User is not logged in or ID is undefined');
-    }
-  };
-
   useEffect(() => {
     if (isSuccess) navigate(0);
   }, [navigate, isSuccess]);
@@ -113,7 +104,8 @@ export default function Navbar() {
         className={cn(
           'bg-gray-100',
           isAuthenticated && !userLoading && 'hidden'
-        )}>
+        )}
+      >
         <div className='container padX h-12 flex flex-wrap gap-x-6 items-center justify-between'>
           <p className='font-rubikMedium'>Welcome to our store</p>
           <div className='flex items-center gap-x-4 max-sm:gap-x-3'>
@@ -166,7 +158,8 @@ export default function Navbar() {
           <div className='flex items-center md:gap-x-6'>
             <Link
               to='/shop'
-              className='border rounded-full px-4 py-1.5 hover:bg-gray-100 max-md:hidden'>
+              className='border rounded-full px-4 py-1.5 hover:bg-gray-100 max-md:hidden'
+            >
               Shop All Styles
             </Link>
             <DropdownMenu>
@@ -209,8 +202,9 @@ export default function Navbar() {
                 <DropdownMenuSeparator />
                 {isAuthenticated && (
                   <DropdownMenuItem
-                    onClick={handleLogout}
-                    className='w-fit mx-auto text-[13px] px-2 bg-red-50 mt-1.5 cursor-pointer'>
+                    onClick={async () => await logout()}
+                    className='w-fit mx-auto text-[13px] px-2 bg-red-50 mt-1.5 cursor-pointer'
+                  >
                     <span>Log out</span>
                   </DropdownMenuItem>
                 )}
@@ -234,7 +228,8 @@ export default function Navbar() {
                 className={cn(
                   'max-sm:min-w-full max-xl:min-w-[50%] max-lg:min-w-[60%] max-md:min-w-[70%] min-w-[40%] overflow-y-auto remove-scrollbar',
                   isAuthenticated && !isLoading ? 'mt-[56px]' : 'mt-[104px]'
-                )}>
+                )}
+              >
                 <SheetHeader>
                   <SheetTitle>
                     <div className='heading'>Your Cart</div>
@@ -247,7 +242,8 @@ export default function Navbar() {
                       Array.from({ length: 2 }, (_, index) => (
                         <div
                           key={index}
-                          className='h-28 max-[400px]:h-full flex max-[400px]:flex-col items-start justify-between pb-5 mb-5 max-sm:pb-8 last-of-type:pb-0 last-of-type:mb-0'>
+                          className='h-28 max-[400px]:h-full flex max-[400px]:flex-col items-start justify-between pb-5 mb-5 max-sm:pb-8 last-of-type:pb-0 last-of-type:mb-0'
+                        >
                           <div className='flex gap-x-4'>
                             <Skeleton className='w-36 h-28 max-sm:w-24' />
                             <div className='flex flex-col gap-y-2.5 w-full'>
@@ -297,7 +293,8 @@ export default function Navbar() {
                           <Button
                             onClick={() => navigate('/checkout')}
                             disabled={!appwriteCartLength}
-                            className='py-2.5 bg-primary text-white rounded-full w-full mt-3.5'>
+                            className='py-2.5 bg-primary text-white rounded-full w-full mt-3.5'
+                          >
                             Proceed to Checkout
                           </Button>
                         </SheetClose>
@@ -305,7 +302,8 @@ export default function Navbar() {
                         <SheetClose asChild>
                           <Button
                             onClick={() => navigate('/checkout')}
-                            className='py-2.5 bg-primary text-white rounded-full w-full mt-3.5'>
+                            className='py-2.5 bg-primary text-white rounded-full w-full mt-3.5'
+                          >
                             Login to Checkout
                           </Button>
                         </SheetClose>

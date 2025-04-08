@@ -1,10 +1,10 @@
-import { useUserContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { AdminDashboardNav, DashboardNav } from '@/lib/constants';
 import { Link, useLocation } from 'react-router-dom';
 
 export default function Sidebar() {
   const location = useLocation();
-  const { user } = useUserContext();
+  const { user } = useAuth();
 
   return (
     <div className='bg-white rounded-sm shadow'>
@@ -15,7 +15,8 @@ export default function Sidebar() {
             to={nav.href}
             className={`first:rounded-t-sm px-3 flex items-center gap-x-4 py-4 ${
               location.pathname === nav.href ? 'bg-gray-100 text-orange' : ''
-            }`}>
+            }`}
+          >
             <nav.icon size={20} />
             <span>{nav.name}</span>
           </Link>
@@ -31,7 +32,8 @@ export default function Sidebar() {
                   location.pathname === nav.href
                     ? 'bg-gray-100 text-orange'
                     : ''
-                }`}>
+                }`}
+              >
                 <nav.icon size={20} />
                 <span>{nav.name}</span>
               </Link>

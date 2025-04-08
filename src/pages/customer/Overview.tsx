@@ -1,14 +1,13 @@
 import { Spinner } from '@/components/shared';
-import { useUserContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { useGetCurrentUser, useLogoutUser } from '@/lib/react-query/queries';
 import { Heart, History, Package2, UserCircle } from 'lucide-react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
 
 export default function Overview() {
   const navigate = useNavigate();
-  const { user } = useUserContext();
+  const { user } = useAuth();
   const { mutateAsync: logout, isSuccess } = useLogoutUser();
   const { data: currentUser, isPending: userLoading } = useGetCurrentUser();
   const viewedItems = JSON.parse(
@@ -19,14 +18,6 @@ export default function Overview() {
   const orders = currentUser?.orders;
   const shipping = currentUser?.shipping[0];
 
-  const handleLogout = async () => {
-    if (user?.id) {
-      await logout(user.id);
-    } else {
-      toast.error('User is not logged in or ID is undefined');
-    }
-  };
-
   useEffect(() => {
     if (isSuccess) navigate(0);
   }, [navigate, isSuccess]);
@@ -36,8 +27,9 @@ export default function Overview() {
       <div className='border-b mb-6 px-4 max-sm:px-2 pb-2 flex items-center justify-between flex-wrap gap-x-4'>
         <p className='text-base font-rubikSemibold'>Account Overview</p>
         <div
-          onClick={handleLogout}
-          className='md:hidden bg-orange bg-opacity-10 text-orange py-2 px-4 rounded-md cursor-pointer'>
+          onClick={async () => logout()}
+          className='md:hidden bg-orange bg-opacity-10 text-orange py-2 px-4 rounded-md cursor-pointer'
+        >
           Logout
         </div>
       </div>

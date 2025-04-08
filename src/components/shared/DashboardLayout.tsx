@@ -11,11 +11,11 @@ import { AdminDashboardNav, DashboardNav } from '@/lib/constants';
 import { Menu } from 'lucide-react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
-import { useUserContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 
 export default function DashboardLayout() {
   const location = useLocation();
-  const { user } = useUserContext();
+  const { user } = useAuth();
 
   return (
     <div className='bg-[#EA7227] bg-opacity-[0.03] h-full py-6 max-sm:py-4 min-h-[calc(100vh-97px)]'>
@@ -34,7 +34,8 @@ export default function DashboardLayout() {
                   to={nav.href}
                   className={
                     location.pathname === nav.href ? 'text-orange' : ''
-                  }>
+                  }
+                >
                   <DropdownMenuItem className='mb-6 last:mb-0'>
                     <nav.icon className='mr-2 h-4 w-4' />
                     <span>{nav.name}</span>
@@ -52,7 +53,8 @@ export default function DashboardLayout() {
                       to={nav.href}
                       className={
                         location.pathname === nav.href ? 'text-orange' : ''
-                      }>
+                      }
+                    >
                       <DropdownMenuItem className='mb-6 last:mb-0'>
                         <nav.icon className='mr-2 h-4 w-4' />
                         <span>{nav.name}</span>

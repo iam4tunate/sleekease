@@ -26,7 +26,7 @@ import { toast } from 'sonner';
 import { CategoryNav, SizesOptions } from '@/lib/constants';
 import { Checkbox } from '../ui/checkbox';
 import { useCreateProduct, useUpdateProduct } from '@/lib/react-query/queries';
-import { useUserContext } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import SubmitButton from './SubmitButton';
 
@@ -37,7 +37,7 @@ type PostFormProps = {
 
 export default function ProductForm({ product, action }: PostFormProps) {
   const navigate = useNavigate();
-  const { user } = useUserContext();
+  const { user } = useAuth();
 
   const { mutateAsync: createProduct, isPending: isCreating } =
     useCreateProduct();
@@ -103,7 +103,8 @@ export default function ProductForm({ product, action }: PostFormProps) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='bg-white px-6 max-md:px-4 max-sm:px-2 py-3 shadow-md rounded-lg'>
+          className='bg-white px-6 max-md:px-4 max-sm:px-2 py-3 shadow-md rounded-lg'
+        >
           <div className='space-y-6 pb-8'>
             <div className='grid grid-cols-3 max-lg:grid-cols-1 max-md:grid-cols-3 max-sm:grid-cols-1 gap-x-2 gap-y-6'>
               <FormField
@@ -127,7 +128,8 @@ export default function ProductForm({ product, action }: PostFormProps) {
                     <FormLabel>Category</FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}>
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder='Select a category' />
@@ -138,7 +140,8 @@ export default function ProductForm({ product, action }: PostFormProps) {
                           <SelectItem
                             key={category.label}
                             value={category.label}
-                            className='capitalize'>
+                            className='capitalize'
+                          >
                             {category.label}
                           </SelectItem>
                         ))}
